@@ -13,36 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Database">
+      <UniqueIdentifier>{c4216cec-726d-4cf3-96aa-3d57c4abab0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Database">
+      <UniqueIdentifier>{fa87940b-acfb-459b-a4fc-ff1af2358ba8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sqlite">
+      <UniqueIdentifier>{f48f1cc6-7813-4c8d-a1b0-5fc34888c395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sqlite">
+      <UniqueIdentifier>{4cf5b470-ac03-4fdd-8a96-b605520e9736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Forms">
+      <UniqueIdentifier>{06963cb5-95fc-4763-a64f-380f26ce1789}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Downloads\Appliance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ApplianceFrom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HomeForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\sqlite-amalgamation-3470000\sqlite-amalgamation-3470000\sqlite3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="db.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\sqlite-amalgamation-3470000\sqlite-amalgamation-3470000\sqlite3.h">
+      <Filter>Header Files\sqlite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ApplianceFrom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HomeForm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="db.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Database</Filter>
     </ClCompile>
     <ClCompile Include="sqlite\sqlite3.c">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="ApplianceFrom.cpp">
+      <Filter>Source Files\Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="HomeForm.cpp">
+      <Filter>Source Files\Forms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
