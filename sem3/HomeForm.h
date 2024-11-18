@@ -1,5 +1,6 @@
 #pragma once
 #include "ApplianceFrom.h"
+
 namespace sem3 {
 
 	using namespace System;

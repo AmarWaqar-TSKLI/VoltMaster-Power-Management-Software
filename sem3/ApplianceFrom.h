@@ -86,6 +86,7 @@ namespace sem3 {
 			}
 		}
 
+		
 	protected:
 		/// <summary>
 		/// Clean up any resources being used.

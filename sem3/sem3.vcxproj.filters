@@ -42,6 +42,18 @@
     <ClInclude Include="..\..\..\sqlite-amalgamation-3470000\sqlite-amalgamation-3470000\sqlite3.h">
       <Filter>Header Files\sqlite</Filter>
     </ClInclude>
+    <ClInclude Include="User .h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Appliance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerConsumption.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Schedule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="db.cpp">
@@ -55,6 +67,9 @@
     </ClCompile>
     <ClCompile Include="HomeForm.cpp">
       <Filter>Source Files\Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="User .cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

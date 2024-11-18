@@ -1,9 +1,12 @@
 #include "HomeForm.h"
 #include "ApplianceFrom.h"
+#include"User .h"
 using namespace System;
 using namespace System::Windows::Forms;
   // Specifies the COM threading model as single-threaded apartment
-void main(array<String^>^ args)
+
+User currentUser("Admin", "Password");
+void main()
 {
     // Enable visual styles for the application
     Application::EnableVisualStyles();
@@ -47,9 +50,10 @@ void main(array<String^>^ args)
 
 
 	db.createUsersTable();
-	db.addUser("Arham", "1234", 13, 20, "Double");
+	/*db.addUser("Arham", "1234", 13, 20, "Double");
 	db.addUser("Ali", "1234", 11, 22, "Single");
-	db.addUser("Haseeb", "Haseeb1234", 17, 19, "Triple");
+	db.addUser("Haseeb", "Haseeb1234", 17, 19, "Triple");*/
+	db.addUser(currentUser.username, currentUser.password,6,12,"Single");
 
 	db.createScheduleTable();
 	db.addSchedule(1, "Daily", 200);
@@ -70,6 +74,7 @@ void main(array<String^>^ args)
 
 
 	db.createSelectedAppliacesTable();
+
 
 	db.close();
 

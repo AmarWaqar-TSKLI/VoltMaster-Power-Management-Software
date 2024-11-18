@@ -138,7 +138,8 @@ bool dbManager::createUsersTable() {
 bool dbManager::addUser(const char* username, const char* password, int peakHoursStart, int peakHoursEnd, const char* meterPhaseType) {
     sqlite3_stmt* statement;
 
-    string query = "INSERT INTO Users (Username, Password, PeakHourStart, PeakHourEnd, meterPhaseType) VALUES (?,?,?,?,?)";
+   // string query = "DELETE FROM Users";
+   string query = "INSERT INTO Users (Username, Password, PeakHourStart, PeakHourEnd, meterPhaseType) VALUES (?,?,?,?,?)";
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
         cout << "Error preparing statement for Adding User" << endl;
