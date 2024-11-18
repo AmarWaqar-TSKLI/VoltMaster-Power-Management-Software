@@ -4,6 +4,7 @@
 #include <msclr\marshal_cppstd.h>
 #include "db.h"
 #include <vector>
+#include "scheduleGenerationForm.h"
 
 namespace sem3 {
 	using namespace System;
@@ -30,10 +31,14 @@ namespace sem3 {
 	private: System::Windows::Forms::Button^ button2;
 	public:
 		Form home;
-		ApplianceFrom(void)
+	private: System::Windows::Forms::Button^ button3;
+	public:
+		int userID;
+		ApplianceFrom(int userID)
 		{
 			InitializeComponent();
 			applianceData = gcnew List<Tuple<int, String^>^>(); // Initialize the list
+			this->userID = userID;
 		}
 
 		// Set appliance data (converting from unmanaged vector to managed list)
@@ -131,8 +136,6 @@ namespace sem3 {
 				this->panel1->Visible = true;
 				label->Visible = true;
 				this->panel1->Controls->Add(label);
-				int id = i + 1;
-				label->Name = id.ToString();
 				// Create a new PictureBox
 				PictureBox^ pictureBox = gcnew PictureBox();
 				pictureBox->Size = System::Drawing::Size(93, 36);
@@ -228,6 +231,7 @@ namespace sem3 {
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -269,11 +273,26 @@ namespace sem3 {
 			this->button2->UseVisualStyleBackColor = false;
 			this->button2->Click += gcnew System::EventHandler(this, &ApplianceFrom::button2_Click);
 			// 
+			// button3
+			// 
+			this->button3->BackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->BorderSize = 0;
+			this->button3->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button3->Location = System::Drawing::Point(59, 360);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(116, 51);
+			this->button3->TabIndex = 2;
+			this->button3->UseVisualStyleBackColor = false;
+			this->button3->Click += gcnew System::EventHandler(this, &ApplianceFrom::button3_Click);
+			// 
 			// ApplianceFrom
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 911);
+			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->panel1);
@@ -293,10 +312,10 @@ namespace sem3 {
 		dbManager db;
 		db.open("test.db");
 		std::vector<std::pair<int, std::string>> appliances;
-		db.readApplianceData(db, appliances);
-		for (const auto& appliance : appliances) {
-			std::cout << "ID: " << appliance.first << ", Name: " << appliance.second << std::endl;
-		}
+		db.readApplianceData(appliances);
+		//for (const auto& appliance : appliances) {
+		//	std::cout << "ID: " << appliance.first << ", Name: " << appliance.second << std::endl;
+		//}
 		setApplianceData(appliances);
 		db.close();
 
@@ -391,50 +410,56 @@ namespace sem3 {
 	}
 		  
 
-		   // Helper function to check all checkboxes, including nested ones
-		   void CheckAllCheckboxes(Control^ parentControl) {
+	// Helper function to check all checkboxes, including nested ones
+	void CheckAllCheckboxes(Control^ parentControl) {
 
-			   dbManager  db;
-			   db.open("test.db");
-			   db.deleteselectedappliances(0, 0);
-			   // Iterate through each control in the parent control
-			   for each (Control ^ control in parentControl->Controls)
-			   {
-				   // If the control is a CheckBox, check its state
-				   CheckBox^ checkBox = dynamic_cast<CheckBox^>(control);
-				   if (checkBox != nullptr)
-				   {
-					   // Check if the checkbox is checked
-					   if (checkBox->Checked)
-					   {
-						   // Checkbox is checked, perform your logic here
+		dbManager  db;
+		db.open("test.db");
+		int currentSchedule = db.getCurrentSID(userID);
+		db.deleteselectedappliances(userID, currentSchedule);
+		// Iterate through each control in the parent control
+		for each (Control ^ control in parentControl->Controls)
+		{
+			// If the control is a CheckBox, check its state
+			CheckBox^ checkBox = dynamic_cast<CheckBox^>(control);
+			if (checkBox != nullptr)
+			{
+				// Check if the checkbox is checked
+				if (checkBox->Checked)
+				{
+					// Checkbox is checked
 						   
-						   Label^ name = safe_cast<Label^>(checkBox->Tag);
-						   Label^ quantity = safe_cast<Label^>(name->Tag);
-						   PictureBox^ priority = safe_cast<PictureBox^>(quantity->Tag);
-						   int Id = Int32::Parse(name->Name);
-						   int prio = Int32::Parse(priority->Tag->ToString());
-						   int quan = Int32::Parse(quantity->Text);
-						   String^ managedString = name->Text;
-						   const char* applianceName = (const char*)(Marshal::StringToHGlobalAnsi(managedString)).ToPointer();
+					Label^ name = safe_cast<Label^>(checkBox->Tag);
+					Label^ quantity = safe_cast<Label^>(name->Tag);
+					PictureBox^ priority = safe_cast<PictureBox^>(quantity->Tag);
+					int prio = Int32::Parse(priority->Tag->ToString());
+					int quan = Int32::Parse(quantity->Text);
+					String^ managedString = name->Text;
+					const char* applianceName = (const char*)(Marshal::StringToHGlobalAnsi(managedString)).ToPointer();
+					int Id = db.getApplianceID(applianceName);
 
-						  // MessageBox::Show("Checkbox '" + name->Text + quantity->Text +priority->Tag+ "' is checked.");
-						   db.addselectedAppliances(0,0 , Id, applianceName, prio, quan);
+					db.addselectedAppliances(userID,currentSchedule , Id, applianceName, prio, quan, 1);
 						   
-					   }
+				}
 					   
-				   }
-				   // If the control has child controls, call the function recursively
-				   if (control->Controls->Count > 0)
-				   {
-					   CheckAllCheckboxes(control);
-				   }
+			}
+			// If the control has child controls, call the function recursively
+			if (control->Controls->Count > 0)
+			{
+				CheckAllCheckboxes(control);
+			}
 
-			   }
-			   db.close();
+		}
+		db.close();
 
-		   }
-	private: System::Void panel1_Paint_1(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	}
+	private: System::Void panel1_Paint_1(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+
+	}
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID);
+	myform->Show();
+	this->Hide();
+}
 };
 }

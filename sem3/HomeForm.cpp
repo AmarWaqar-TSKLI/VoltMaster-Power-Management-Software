@@ -5,20 +5,25 @@ using namespace System;
 using namespace System::Windows::Forms;
   // Specifies the COM threading model as single-threaded apartment
 
-User currentUser("Admin", "Password");
 void main()
 {
+	dbManager db;
+	db.open("test.db");
+
+	db.createUsersTable();
+	User currentUser("Admin", "Password");
+	db.addUser(currentUser.username, currentUser.password, 3, 20, "Single");
+	int userID = db.readUserID(currentUser.username);
+
     // Enable visual styles for the application
     Application::EnableVisualStyles();
 
     // Set compatible text rendering for legacy Windows Forms controls
     Application::SetCompatibleTextRenderingDefault(false);
 
-    sem3::HomeForm form;
+    sem3::HomeForm form(userID);
     Application::Run(% form);
 
-	dbManager db;
-	db.open("test.db");
 
 	db.createApplianceListTable();
 	db.addApplianceToList("Fridge", 450);
@@ -48,35 +53,18 @@ void main()
 	db.addApplianceToList("Stand Mixer", 300);
 	db.addApplianceToList("Food Processor", 250);
 
-
-	db.createUsersTable();
-	/*db.addUser("Arham", "1234", 13, 20, "Double");
-	db.addUser("Ali", "1234", 11, 22, "Single");
-	db.addUser("Haseeb", "Haseeb1234", 17, 19, "Triple");*/
-	db.addUser(currentUser.username, currentUser.password,6,12,"Single");
-
 	db.createScheduleTable();
-	db.addSchedule(1, "Daily", 200);
-	db.addSchedule(2, "Weekly", 342);
-	db.addSchedule(3, "Daily", 142);
+	//db.addSchedule(1, "Daily", 200);
+	//db.addSchedule(1, "Weekly", 342);
+	//db.addSchedule(1, "Daily", 142);
 
 
 	db.createPowerTable();
 	db.addPowerDetail(1, 300, 150, 1500);
 	db.addPowerDetail(2, 400, 230, 10000);
 	db.addPowerDetail(3, 1200, 200, 100);
-	/*std::vector<std::pair<int, std::string>> appliances;
-	db.readApplianceData(db, appliances);
-	for (const auto& appliance : appliances) {
-		std::cout << "ID: " << appliance.first << ", Name: " << appliance.second << std::endl;
-	}
-	form.setApplianceData(appliances)*/;
-
-
+	
 	db.createSelectedAppliacesTable();
 
-
 	db.close();
-
-	
 }

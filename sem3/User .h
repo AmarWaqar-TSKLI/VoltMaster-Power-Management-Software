@@ -10,6 +10,6 @@ public:
     int peakHoursEnd;
     const char* meterPhaseType;
     Appliance* appliances;
-   int ID;
+    int ID;
     User(const char* username, const char* password);
 };

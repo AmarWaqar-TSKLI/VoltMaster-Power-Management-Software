@@ -1,5 +1,6 @@
 #pragma once
 #include "ApplianceFrom.h"
+#include "scheduleGenerationForm.h"
 
 namespace sem3 {
 
@@ -16,12 +17,11 @@ namespace sem3 {
 	public ref class HomeForm : public System::Windows::Forms::Form
 	{
 	public:
-		HomeForm(void)
+		int userID;
+		HomeForm(int userID)
 		{
 			InitializeComponent();
-			//
-			//TODO: Add the constructor code here
-			//
+			this->userID = userID;
 		}
 
 	protected:
@@ -119,6 +119,7 @@ namespace sem3 {
 			this->button5->Size = System::Drawing::Size(137, 40);
 			this->button5->TabIndex = 4;
 			this->button5->UseVisualStyleBackColor = false;
+			this->button5->Click += gcnew System::EventHandler(this, &HomeForm::button5_Click);
 			// 
 			// button6
 			// 
@@ -158,6 +159,8 @@ namespace sem3 {
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button1);
+			this->MaximumSize = System::Drawing::Size(1440, 950);
+			this->MinimumSize = System::Drawing::Size(1440, 950);
 			this->Name = L"HomeForm";
 			this->Text = L"HomeForm";
 			this->Load += gcnew System::EventHandler(this, &HomeForm::HomeForm_Load);
@@ -172,7 +175,12 @@ namespace sem3 {
 		
 	}
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-	ApplianceFrom^ myform = gcnew ApplianceFrom();
+	ApplianceFrom^ myform = gcnew ApplianceFrom(userID);
+	myform->Show();
+	this->Hide();
+}
+private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
+	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID);
 	myform->Show();
 	this->Hide();
 }

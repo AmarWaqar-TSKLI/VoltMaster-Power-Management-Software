@@ -18,8 +18,16 @@ public:
 	bool addUser(const char* username, const char* password, int peakHoursStart, int peakHoursEnd, const char* meterPhaseType);
 	bool createPowerTable();
 	bool addPowerDetail(int userID, int targetUnits, int consumedUnits, int estimatedBill);
-	void readApplianceData(dbManager& db, std::vector<std::pair<int, std::string>>& appliances);
+	void readApplianceData(std::vector<std::pair<int, std::string>>& appliances);
 	bool createSelectedAppliacesTable();
-	bool addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity);
+	bool addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity,int duration);
 	bool deleteselectedappliances(int userID, int scheduleID);
+	int readUserID(const char* username);
+	int getCurrentSID(int userID);
+	void getScheduleGenData(int userID, std::vector<std::tuple<int, int, int,float,int>>& appliances);
+	int getAppliancePower(int applianceID);
+	int getTargetUnits(int userID);
+	int getPeakHoursStart(int userID);
+	int getPeakHoursEnd(int userID);
+	int getApplianceID(const char* applianceName);
 };

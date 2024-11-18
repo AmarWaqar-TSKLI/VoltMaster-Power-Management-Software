@@ -3,6 +3,7 @@
 #include "db.h"
 #include<string>
 #include<vector>
+#include <tuple>
 using namespace std;
 
 
@@ -72,7 +73,7 @@ bool dbManager::addApplianceToList(const char* name, int powerUsage) {
 
 bool dbManager::createScheduleTable() {
     string query = "CREATE TABLE IF NOT EXISTS Schedules ("
-        "SID INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "SID INTEGER PRIMARY KEY, "
         "UID INTEGER  NOT NULL, "
         "Type TEXT NOT NULL,"
         "UnitsSaved INT NOT NULL,"
@@ -92,16 +93,19 @@ bool dbManager::createScheduleTable() {
 bool dbManager::addSchedule(int userID, const char* type, int unitsSaved) {
     sqlite3_stmt* statement;
 
-    string query = "INSERT INTO Schedules (UID, Type, UnitsSaved) VALUES (?,?, ?)";
+    int currentSID = getCurrentSID(userID);
+
+    string query = "INSERT INTO Schedules (SID,UID, Type, UnitsSaved) VALUES (?,?,?, ?)";
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
         cout << "Error preparing statement for Adding schedule" << endl;
         return false;
     }
 
-    sqlite3_bind_int(statement, 1, userID);
-    sqlite3_bind_text(statement, 2, type, -1, SQLITE_STATIC);
-    sqlite3_bind_int(statement, 3, unitsSaved);
+    sqlite3_bind_int(statement, 1, currentSID + 1);
+    sqlite3_bind_int(statement, 2, userID);
+    sqlite3_bind_text(statement, 3, type, -1, SQLITE_STATIC);
+    sqlite3_bind_int(statement, 4, unitsSaved);
 
     if (sqlite3_step(statement) != SQLITE_DONE) {
         cout << "Error executing statement for Adding schedule" << endl;
@@ -138,8 +142,7 @@ bool dbManager::createUsersTable() {
 bool dbManager::addUser(const char* username, const char* password, int peakHoursStart, int peakHoursEnd, const char* meterPhaseType) {
     sqlite3_stmt* statement;
 
-   // string query = "DELETE FROM Users";
-   string query = "INSERT INTO Users (Username, Password, PeakHourStart, PeakHourEnd, meterPhaseType) VALUES (?,?,?,?,?)";
+   string query = "INSERT INTO Users (Username, Password, PeakHourStart, PeakHourEnd, meterPhaseType) VALUES (?,?,?,?,?) ON CONFLICT(Username) DO NOTHING";
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
         cout << "Error preparing statement for Adding User" << endl;
@@ -166,7 +169,7 @@ bool dbManager::addUser(const char* username, const char* password, int peakHour
 
 bool dbManager::createPowerTable() {
     string query = "CREATE TABLE IF NOT EXISTS PowerDetails ("
-        "UID INTEGER NOT NULL, "
+        "UID INTEGER UNIQUE NOT NULL, "
         "targetUnits INT NOT NULL,"
         "consumedUnits INT NOT NULL,"
         "estimatedBill INT NOT NULL,"
@@ -186,7 +189,7 @@ bool dbManager::createPowerTable() {
 bool dbManager::addPowerDetail(int userID, int targetUnits, int consumedUnits, int estimatedBill) {
     sqlite3_stmt* statement;
 
-    string query = "INSERT INTO PowerDetails (UID, targetUnits, consumedUnits, estimatedBill) VALUES (?,?,?,?)";
+    string query = "INSERT INTO PowerDetails (UID, targetUnits, consumedUnits, estimatedBill) VALUES (?,?,?,?) ON CONFLICT(UID) DO NOTHING";
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
         cout << "Error preparing statement for Adding PowerDetails" << endl;
@@ -210,21 +213,14 @@ bool dbManager::addPowerDetail(int userID, int targetUnits, int consumedUnits, i
     return true;
 }
 
-void dbManager::readApplianceData(dbManager& db, std::vector<std::pair<int, std::string>>& appliances) {
-    sqlite3* database = nullptr;
+//review ---------------------
+void dbManager::readApplianceData(std::vector<std::pair<int, std::string>>& appliances) {
     sqlite3_stmt* statement = nullptr;
-
-    // Open the database
-    if (sqlite3_open("test.db", &database) != SQLITE_OK) {
-        std::cerr << "Failed to open the database: " << sqlite3_errmsg(database) << std::endl;
-        return;
-    }
 
     // Prepare and execute SQL query to fetch appliance data
     const char* applianceQuery = "SELECT ID, Name FROM Appliances";
-    if (sqlite3_prepare_v2(database, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
-        std::cerr << "Failed to prepare appliance query: " << sqlite3_errmsg(database) << std::endl;
-        sqlite3_close(database);
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare appliance query: " << sqlite3_errmsg(db) << std::endl;
         return;
     }
 
@@ -237,40 +233,9 @@ void dbManager::readApplianceData(dbManager& db, std::vector<std::pair<int, std:
         }
     }
 
-    // Finalize and close
     sqlite3_finalize(statement);
-    sqlite3_close(database);
 }
-bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity)
-{
-    sqlite3_stmt* statement;
 
-    string query = "INSERT INTO SelectedAppliances (UID, SID,AID,APPLIANCENAME,PRIORITY,QUANTITY) VALUES (?,?,?,?,?,?) ";
-
-    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
-        cout << "Error preparing statement for Adding selected appliance" << endl;
-        return false;
-    }
-
-    sqlite3_bind_int(statement, 1, userID);
-    sqlite3_bind_int(statement, 2, scheduleID);
-    sqlite3_bind_int(statement, 3, applianceID);
-    sqlite3_bind_text(statement, 4, applianceName,-1,SQLITE_STATIC);
-    sqlite3_bind_int(statement, 5, priority);
-    sqlite3_bind_int(statement, 6, quantity);
-   
-
-    if (sqlite3_step(statement) != SQLITE_DONE) {
-        cout << "Error executing statement for Adding selected appliance" << endl;
-        return false;
-    }
-    else {
-        cout << "Data inserted successfully into Selected Appliances table" << endl;
-    }
-
-    sqlite3_finalize(statement);
-    return true;
-}
 bool dbManager::createSelectedAppliacesTable()
 {
     string query = "CREATE TABLE IF NOT EXISTS SelectedAppliances ("
@@ -280,6 +245,7 @@ bool dbManager::createSelectedAppliacesTable()
         "APPLIANCENAME TEXT NOT NULL,"
         "PRIORITY INTEGER NOT NULL,"
         "QUANTITY INTEGER NOT NULL,"
+        "Duration INTEGER NOT NULL,"
         "FOREIGN KEY(UID) REFERENCES Users(UID),"
         "FOREIGN KEY(SID) REFERENCES Schedules(SID));";
 
@@ -294,6 +260,39 @@ bool dbManager::createSelectedAppliacesTable()
     std::cout << "SelectedAppliances Table created successfully!" << std::endl;
     return true;
 }
+
+bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity, int duration)
+{
+    sqlite3_stmt* statement;
+
+    string query = "INSERT INTO SelectedAppliances (UID, SID,AID,APPLIANCENAME,PRIORITY,QUANTITY, DURATION) VALUES (?,?,?,?,?,?,?) ";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for Adding selected appliance" << endl;
+        return false;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+    sqlite3_bind_int(statement, 2, scheduleID);
+    sqlite3_bind_int(statement, 3, applianceID);
+    sqlite3_bind_text(statement, 4, applianceName,-1,SQLITE_STATIC);
+    sqlite3_bind_int(statement, 5, priority);
+    sqlite3_bind_int(statement, 6, quantity);
+    sqlite3_bind_int(statement, 7, duration);
+   
+
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        cout << "Error executing statement for Adding selected appliance" << endl;
+        return false;
+    }
+    else {
+        cout << "Data inserted successfully into Selected Appliances table" << endl;
+    }
+
+    sqlite3_finalize(statement);
+    return true;
+}
+
 bool dbManager::deleteselectedappliances(int userID, int scheduleID)
 {
     sqlite3_stmt* statement;
@@ -314,4 +313,198 @@ bool dbManager::deleteselectedappliances(int userID, int scheduleID)
     }
 
     sqlite3_finalize(statement);
+}
+
+int dbManager::readUserID(const char* username) {
+    sqlite3_stmt* statement;
+    string query = "SELECT UID from Users where Username = ?";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for reading User ID" << endl;
+        return -1;
+    }
+
+    sqlite3_bind_text(statement, 1, username, -1, SQLITE_STATIC);
+
+    // Store userID data
+    int id = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+       id = sqlite3_column_int(statement, 0);
+    }
+    else {
+        cout << "No Users found with the specified username: " << username << endl;
+    }
+
+    sqlite3_finalize(statement);
+    return id;
+}
+
+int dbManager::getCurrentSID(int userID) {
+    sqlite3_stmt* statement;
+    string query = "SELECT MAX(SID) from Schedules where UID = (?)";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for reading Schedule ID from Schedules Table" << endl;
+        return -1;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+
+    // Store userID data
+    int id = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        id = sqlite3_column_int(statement, 0);
+    }
+
+    sqlite3_finalize(statement);
+    return id;
+}
+
+int dbManager::getAppliancePower(int applianceID) {
+    sqlite3_stmt* statement;
+    string query = "SELECT (Power) from Appliances where ID = (?)";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for reading Power from Appliance Table" << endl;
+        return -1;
+    }
+
+    sqlite3_bind_int(statement, 1, applianceID);
+
+    // Store applianceID data
+    int id = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        id = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return 0;
+    }
+
+    sqlite3_finalize(statement);
+    return id;
+}
+
+void dbManager::getScheduleGenData(int userID, std::vector<std::tuple<int, int, int, float,int>>& appliances) {
+    sqlite3_stmt* statement = nullptr;
+    int currentScheduleID = getCurrentSID(userID);
+
+
+    // Prepare and execute SQL query to fetch appliance data
+    const char* applianceQuery = "SELECT AID, QUANTITY, Duration, PRIORITY FROM SelectedAppliances where UID = ? AND SID = ?";
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering schedule generation data: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, userID); 
+    sqlite3_bind_int(statement, 2, currentScheduleID); 
+
+    // Store appliance data in vector
+    while (sqlite3_step(statement) == SQLITE_ROW) {
+        int id = sqlite3_column_int(statement, 0);
+        int quantity = sqlite3_column_int(statement, 1);
+        int duration = sqlite3_column_int(statement, 2);
+        int priority = sqlite3_column_int(statement, 3);
+        int power = getAppliancePower(id);
+        if (power != -1)
+            appliances.push_back(std::make_tuple( id,quantity, duration, power, priority));
+    }
+
+    sqlite3_finalize(statement);
+}
+
+int dbManager::getTargetUnits(int userID) {
+    sqlite3_stmt* statement;
+    string query = "SELECT (targetUnits) from PowerDetails where UID = (?)";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for reading targetUnits from PowerDetails Table" << endl;
+        return -1;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+
+    // Store targetUnits data
+    int units = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        units = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return 0;
+    }
+
+    sqlite3_finalize(statement);
+    return units;
+}
+
+int dbManager::getPeakHoursStart(int userID) {
+    sqlite3_stmt* statement;
+    string query = "SELECT (PeakHourStart) from Users where UID = (?)";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for reading peakHoursStart from Users Table" << endl;
+        return -1;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+
+    // Store peakHoursStart data
+    int peakHoursStart = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        peakHoursStart = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return 0;
+    }
+
+    sqlite3_finalize(statement);
+    return peakHoursStart;
+}
+
+int dbManager::getPeakHoursEnd(int userID) {
+    sqlite3_stmt* statement;
+    string query = "SELECT (PeakHourEnd) from Users where UID = (?)";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for reading peakHoursEnd from Users Table" << endl;
+        return -1;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+
+    // Store peakHoursStart data
+    int peakHoursEnd = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        peakHoursEnd = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return 0;
+    }
+
+    sqlite3_finalize(statement);
+    return peakHoursEnd;
+}
+
+int dbManager::getApplianceID(const char* applianceName) {
+    sqlite3_stmt* statement;
+    string query = "SELECT (ID) from Appliances where Name = (?)";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for reading appliance ID from Appliance Table" << endl;
+        return -1;
+    }
+
+    sqlite3_bind_text(statement, 1, applianceName, -1, SQLITE_STATIC);
+
+    // Store ApplianceID data
+    int applianceID = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        applianceID = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return -1;
+    }
+
+    sqlite3_finalize(statement);
+    return applianceID;
 }
