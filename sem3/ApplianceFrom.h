@@ -13,7 +13,7 @@ namespace sem3 {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using namespace System::Collections::Generic;
-
+	using namespace System::Runtime::InteropServices;
 	
 
 	// Example usage in a managed class:
@@ -130,7 +130,8 @@ namespace sem3 {
 				this->panel1->Visible = true;
 				label->Visible = true;
 				this->panel1->Controls->Add(label);
-
+				int id = i + 1;
+				label->Name = id.ToString();
 				// Create a new PictureBox
 				PictureBox^ pictureBox = gcnew PictureBox();
 				pictureBox->Size = System::Drawing::Size(93, 36);
@@ -153,7 +154,6 @@ namespace sem3 {
 				checkBox->AutoSize = true;  // Automatically resize to fit the text
 				checkBox->Size = System::Drawing::Size(130, 130);
 
-
 				// Add an event handler for the CheckedChanged event
 				checkBox->CheckedChanged += gcnew System::EventHandler(this, &ApplianceFrom::CheckBox_CheckedChanged);
 
@@ -168,6 +168,7 @@ namespace sem3 {
 				lblQuantity->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
 				lblQuantity->ForeColor = System::Drawing::Color::White;
 
+				//Increase btn
 				btnIncrease = gcnew Button();
 				btnIncrease->Text = "+";
 				btnIncrease->Location = System::Drawing::Point(startX + 670, (startY - 7) + (i * verticalSpacing));
@@ -197,6 +198,13 @@ namespace sem3 {
 				btnDecrease->Click += gcnew System::EventHandler(this, &ApplianceFrom::OnDecreaseClick);
 				btnDecrease->Tag = lblQuantity;
 				// Add controls to the custom control
+
+
+				checkBox->Tag = label;
+				label->Tag = lblQuantity;
+				lblQuantity->Tag = pictureBox;
+
+
 				this->panel1->Controls->Add(btnIncrease);
 				this->panel1->Controls->Add(btnDecrease);
 				this->panel1->Controls->Add(lblQuantity);
@@ -223,12 +231,14 @@ namespace sem3 {
 			// 
 			// panel1
 			// 
+			this->panel1->AutoScroll = true;
 			this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(67)), static_cast<System::Int32>(static_cast<System::Byte>(65)),
-			static_cast<System::Int32>(static_cast<System::Byte>(65)));
+				static_cast<System::Int32>(static_cast<System::Byte>(65)));
 			this->panel1->Location = System::Drawing::Point(347, 104);
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(963, 641);
 			this->panel1->TabIndex = 0;
+			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &ApplianceFrom::panel1_Paint_1);
 			// 
 			// button1
 			// 
@@ -259,8 +269,7 @@ namespace sem3 {
 			this->button2->Click += gcnew System::EventHandler(this, &ApplianceFrom::button2_Click);
 			// 
 			// ApplianceFrom
-			//
-			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
+			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 911);
@@ -376,9 +385,55 @@ namespace sem3 {
 		//this->Hide();
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
-
-
-
+		// Iterate over all the controls in the form, including nested ones
+		CheckAllCheckboxes(this);
 	}
-	};
+		  
+
+		   // Helper function to check all checkboxes, including nested ones
+		   void CheckAllCheckboxes(Control^ parentControl) {
+
+			   dbManager  db;
+			   db.open("test.db");
+			   db.deleteselectedappliances(0, 0);
+			   // Iterate through each control in the parent control
+			   for each (Control ^ control in parentControl->Controls)
+			   {
+				   // If the control is a CheckBox, check its state
+				   CheckBox^ checkBox = dynamic_cast<CheckBox^>(control);
+				   if (checkBox != nullptr)
+				   {
+					   // Check if the checkbox is checked
+					   if (checkBox->Checked)
+					   {
+						   // Checkbox is checked, perform your logic here
+						   
+						   Label^ name = safe_cast<Label^>(checkBox->Tag);
+						   Label^ quantity = safe_cast<Label^>(name->Tag);
+						   PictureBox^ priority = safe_cast<PictureBox^>(quantity->Tag);
+						   int Id = Int32::Parse(name->Name);
+						   int prio = Int32::Parse(priority->Tag->ToString());
+						   int quan = Int32::Parse(quantity->Text);
+						   String^ managedString = name->Text;
+						   const char* applianceName = (const char*)(Marshal::StringToHGlobalAnsi(managedString)).ToPointer();
+
+						  // MessageBox::Show("Checkbox '" + name->Text + quantity->Text +priority->Tag+ "' is checked.");
+						   db.addselectedAppliances(0,0 , Id, applianceName, prio, quan);
+						   
+					   }
+					   
+				   }
+				   // If the control has child controls, call the function recursively
+				   if (control->Controls->Count > 0)
+				   {
+					   CheckAllCheckboxes(control);
+				   }
+
+			   }
+			   db.close();
+
+		   }
+	private: System::Void panel1_Paint_1(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+	}
+};
 }

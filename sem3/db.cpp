@@ -32,6 +32,7 @@ bool dbManager::createApplianceListTable() {
         "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
         "Name TEXT UNIQUE NOT NULL, "
         "Power INT NOT NULL);";
+    std::cout << "hello";
 
     char* errorMessage = nullptr;
     int rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &errorMessage);
@@ -238,4 +239,78 @@ void dbManager::readApplianceData(dbManager& db, std::vector<std::pair<int, std:
     // Finalize and close
     sqlite3_finalize(statement);
     sqlite3_close(database);
+}
+bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity)
+{
+    sqlite3_stmt* statement;
+
+    string query = "INSERT INTO SelectedAppliances (UID, SID,AID,APPLIANCENAME,PRIORITY,QUANTITY) VALUES (?,?,?,?,?,?) ";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for Adding selected appliance" << endl;
+        return false;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+    sqlite3_bind_int(statement, 2, scheduleID);
+    sqlite3_bind_int(statement, 3, applianceID);
+    sqlite3_bind_text(statement, 4, applianceName,-1,SQLITE_STATIC);
+    sqlite3_bind_int(statement, 5, priority);
+    sqlite3_bind_int(statement, 6, quantity);
+   
+
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        cout << "Error executing statement for Adding selected appliance" << endl;
+        return false;
+    }
+    else {
+        cout << "Data inserted successfully into Selected Appliances table" << endl;
+    }
+
+    sqlite3_finalize(statement);
+    return true;
+}
+bool dbManager::createSelectedAppliacesTable()
+{
+    string query = "CREATE TABLE IF NOT EXISTS SelectedAppliances ("
+        "UID INTEGER NOT NULL, "
+        "SID INTEGER NOT NULL, "
+        "AID INTEGER NOT NULL,"
+        "APPLIANCENAME TEXT NOT NULL,"
+        "PRIORITY INTEGER NOT NULL,"
+        "QUANTITY INTEGER NOT NULL,"
+        "FOREIGN KEY(UID) REFERENCES Users(UID),"
+        "FOREIGN KEY(SID) REFERENCES Schedules(SID));";
+
+
+    char* errorMessage = nullptr;
+    int rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &errorMessage);
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL error: " << errorMessage << std::endl;
+        sqlite3_free(errorMessage);
+        return false;
+    }
+    std::cout << "SelectedAppliances Table created successfully!" << std::endl;
+    return true;
+}
+bool dbManager::deleteselectedappliances(int userID, int scheduleID)
+{
+    sqlite3_stmt* statement;
+    string query = "DELETE FROM SelectedAppliances WHERE UID = ? AND SID = ?";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing DELETE statement for removing previous data" << endl;
+        return false;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+    sqlite3_bind_int(statement, 2, scheduleID);
+
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        cout << "Error executing DELETE statement" << endl;
+        sqlite3_finalize(statement);
+        return false;
+    }
+
+    sqlite3_finalize(statement);
 }

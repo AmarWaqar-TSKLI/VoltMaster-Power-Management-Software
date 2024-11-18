@@ -19,5 +19,7 @@ public:
 	bool createPowerTable();
 	bool addPowerDetail(int userID, int targetUnits, int consumedUnits, int estimatedBill);
 	void readApplianceData(dbManager& db, std::vector<std::pair<int, std::string>>& appliances);
-
+	bool createSelectedAppliacesTable();
+	bool addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity);
+	bool deleteselectedappliances(int userID, int scheduleID);
 };
