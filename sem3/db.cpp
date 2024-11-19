@@ -4,6 +4,7 @@
 #include<string>
 #include<vector>
 #include <tuple>
+#include <msclr/marshal.h>
 using namespace std;
 
 
@@ -507,4 +508,32 @@ int dbManager::getApplianceID(const char* applianceName) {
 
     sqlite3_finalize(statement);
     return applianceID;
+}
+
+const char* dbManager::getApplianceName(int applianceId,System::String^& str) {
+    sqlite3_stmt* statement;
+
+
+    string query = "SELECT Name FROM Appliances WHERE ID = ?";  // Query to select Name based on ID
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement: " << sqlite3_errmsg(db) << endl;  // Log any error
+        return nullptr;
+    }
+
+    sqlite3_bind_int(statement, 1, applianceId);  // Bind the applianceId to the first parameter (index 1)
+
+    const char* name = nullptr;
+    
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        name = reinterpret_cast<const char*>(sqlite3_column_text(statement, 0));
+        str = msclr::interop::marshal_as<System::String^>(name);
+    }
+    else {
+        cout << "No appliance found with ID: " << applianceId << endl;  // Handle case where no row is returned
+    }
+
+    sqlite3_finalize(statement);
+
+    return name;  // Return the appliance name or nullptr if not found
 }

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <tuple>
-
+#include <msclr/marshal.h>
 namespace sem3 {
 
 	using namespace System;
@@ -105,15 +105,16 @@ namespace sem3 {
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(1424, 911);
 			this->panel1->TabIndex = 1;
+			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &scheduleGenerationForm::panel1_Paint);
 			// 
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Syne SemiBold", 16, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label1->Location = System::Drawing::Point(328, 377);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(0, 32);
+			this->label1->Size = System::Drawing::Size(0, 26);
 			this->label1->TabIndex = 4;
 			// 
 			// textBox1
@@ -121,11 +122,11 @@ namespace sem3 {
 			this->textBox1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
 				static_cast<System::Int32>(static_cast<System::Byte>(155)));
 			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox1->Font = (gcnew System::Drawing::Font(L"Syne SemiBold", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 24, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->textBox1->Location = System::Drawing::Point(955, 277);
 			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(339, 39);
+			this->textBox1->Size = System::Drawing::Size(339, 37);
 			this->textBox1->TabIndex = 3;
 			// 
 			// button8
@@ -342,6 +343,95 @@ namespace sem3 {
 
 		return sum;
 	}
+	void DisplaySchedule(std::tuple<int, int, int, int, int> schedule[24]) {
+		// Create the dynamic panel
+		Panel^ dynamicPanel2 = gcnew Panel();
+		dynamicPanel2->Visible = true;
+		dynamicPanel2->Size = System::Drawing::Size(1440, 950);
+		dynamicPanel2->Location = System::Drawing::Point(0, 0); // Ensure it's positioned at the top-left of the form
+
+		// Set the background image if it exists
+		String^ imagePath = "Images/sg- exists.jpg"; // Update your path
+		if (System::IO::File::Exists(imagePath)) {
+			dynamicPanel2->BackgroundImage = System::Drawing::Image::FromFile(imagePath);
+			//dynamicPanel->BackgroundImageLayout = ImageLayout::Stretch;
+		}
+		else {
+			MessageBox::Show("Background image not found at path: " + imagePath, "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+
+		
+
+
+		Panel^ dynamicPanel = gcnew Panel();
+		dynamicPanel->Visible = true;
+		dynamicPanel->Size = System::Drawing::Size(781, 768);
+		dynamicPanel->Location = System::Drawing::Point(619, 105); // Ensure it's positioned at the top-left of the form
+		dynamicPanel->BackColor = System::Drawing::Color::Transparent;
+		// Set the background image if it exists
+		//String^ imagePath = "Images/sg- exists.jpg"; // Update your path
+		dynamicPanel->AutoScroll = true;
+
+		this->Controls->Add(dynamicPanel2);
+		dynamicPanel2->BringToFront();
+
+		dynamicPanel2->Controls->Add(dynamicPanel);
+		dynamicPanel->BringToFront();
+		// Positioning variables
+		int startX = 40;            // Initial X position
+		int startY = 30;            // Initial Y position
+		int labelSpacingY = 80;      // Space between rows (increased for better spacing)
+		int labelOffsetX = 150;      // Space between labels in the same row (increased for clarity)
+		dbManager db;
+		db.open("test.db");
+		// Iterate through the schedule array
+		for (int i = 0; i < 24; ++i) {
+			auto& t = schedule[i];
+
+			// Create the first label (get<0>(schedule[i]))
+			Label^ label1 = gcnew Label();
+			String^ managedApplianceName;
+			const char* applianceName = db.getApplianceName(std::get<0>(schedule[i]),managedApplianceName);
+			// String^ managedApplianceName = msclr::interop::marshal_as<String^>(applianceName);
+
+			// Set the label text
+			label1->Text = managedApplianceName;
+			label1->Location = System::Drawing::Point(startX+30, startY+10+ + i * labelSpacingY);
+			label1->AutoSize = true;
+			label1->ForeColor = System::Drawing::Color::White;
+			label1->Font = gcnew System::Drawing::Font("Arial", 15.0f, FontStyle::Bold);
+			label1->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
+			// Create the second label (get<3>(schedule[i]))
+
+			int prority = std::get<4>(t);
+			String^ imglocation = "Images/priority";
+			String^ path = imglocation + prority.ToString();
+
+			PictureBox^ pictureBox = gcnew PictureBox();
+			pictureBox->Size = System::Drawing::Size(93, 36);
+
+			pictureBox->Location = System::Drawing::Point(startX + 293, (startY +3) + (i * labelSpacingY));
+
+			pictureBox->Image = System::Drawing::Image::FromFile(path+".png"); // Provide the path to your image file
+		
+			pictureBox->SizeMode = PictureBoxSizeMode::StretchImage;  // Other options: Normal, CenterImage, AutoSize, etc.
+		
+			Label^ label3 = gcnew Label();
+			label3->Text = i.ToString() + " - " + (i + 1).ToString();
+			label3->Location = System::Drawing::Point(startX + 2 * labelOffsetX+250, startY +10+ i * labelSpacingY);
+			label3->AutoSize = true;
+			label3->ForeColor = System::Drawing::Color::White;
+			label3->Font = gcnew System::Drawing::Font("Arial", 15.0f, FontStyle::Bold);
+			label3->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
+			// Add labels to the panel
+			dynamicPanel->Controls->Add(label1);
+			dynamicPanel->Controls->Add(pictureBox);
+			dynamicPanel->Controls->Add(label3);
+		}
+		db.close();
+		// Add the dynamic panel to the form and bring it to the front
+		
+	}
 
 	private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->powerConsumed= Int32::Parse(textBox1->Text);
@@ -432,8 +522,8 @@ namespace sem3 {
 				i++;
 			}
 		}
-
-
+		DisplaySchedule(schedule);
+		
 		// print
 		for (int i = 0; i < 24; ++i) {
 			auto& t = schedule[i];
@@ -444,6 +534,9 @@ namespace sem3 {
 				<< std::get<3>(t) << ", "
 				<< std::get<4>(t) << std::endl;
 		}
+		
 	}
+private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+}
 };
 }

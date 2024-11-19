@@ -111,6 +111,8 @@ namespace sem3 {
 		Button^ btnIncrease;
 		Button^ btnDecrease;
 		Label^ lblQuantity;
+		TextBox^ txtDuration;
+		//Label^ lblDuration;
 	private: System::Windows::Forms::Button^ button1;
 	protected:
 
@@ -119,7 +121,7 @@ namespace sem3 {
 		void addTextBoxesForAppliances()
 		{
 			int startY = 30; // Starting Y position for TextBoxes
-			int startX = 150; // X position for the first TextBox
+			int startX = 115; // X position for the first TextBox
 			int verticalSpacing = 60; // Vertical space between each TextBox
 
 			// Loop through applianceData to create TextBoxes for each appliance
@@ -140,7 +142,7 @@ namespace sem3 {
 				PictureBox^ pictureBox = gcnew PictureBox();
 				pictureBox->Size = System::Drawing::Size(93, 36);
 
-				pictureBox->Location = System::Drawing::Point(startX + 320, (startY - 10) + (i * verticalSpacing));
+				pictureBox->Location = System::Drawing::Point(startX + 275, (startY - 10) + (i * verticalSpacing));
 
 				pictureBox->Image = System::Drawing::Image::FromFile("Images/priority1.png"); // Provide the path to your image file
 				pictureBox->Tag = "1";
@@ -154,7 +156,7 @@ namespace sem3 {
 
 				// Set the properties of the CheckBox
 				checkBox->Text = "";  // Text for the CheckBox
-				checkBox->Location = System::Drawing::Point(startX - 110, (startY + 7) + (i * verticalSpacing)); // Position on the form
+				checkBox->Location = System::Drawing::Point(startX - 75, (startY + 7) + (i * verticalSpacing)); // Position on the form
 				checkBox->AutoSize = true;  // Automatically resize to fit the text
 				checkBox->Size = System::Drawing::Size(130, 130);
 
@@ -166,7 +168,7 @@ namespace sem3 {
 				// Label to show quantity
 				lblQuantity = gcnew Label();
 				lblQuantity->Text = quantity.ToString();
-				lblQuantity->Location = System::Drawing::Point(startX + 604, (startY - 7) + (i * verticalSpacing));
+				lblQuantity->Location = System::Drawing::Point(startX + 484, (startY - 7) + (i * verticalSpacing));
 				lblQuantity->Size = System::Drawing::Size(80, 30);
 				lblQuantity->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 				lblQuantity->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
@@ -175,7 +177,7 @@ namespace sem3 {
 				//Increase btn
 				btnIncrease = gcnew Button();
 				btnIncrease->Text = "+";
-				btnIncrease->Location = System::Drawing::Point(startX + 670, (startY - 7) + (i * verticalSpacing));
+				btnIncrease->Location = System::Drawing::Point(startX + 550, (startY - 7) + (i * verticalSpacing));
 				btnIncrease->Size = System::Drawing::Size(40, 30);
 				btnIncrease->Click += gcnew System::EventHandler(this, &ApplianceFrom::OnIncreaseClick);
 
@@ -189,7 +191,7 @@ namespace sem3 {
 				// Button for Decrease (Minus)
 				btnDecrease = gcnew Button();
 				btnDecrease->Text = "-";
-				btnDecrease->Location = System::Drawing::Point(startX + 580, (startY - 7) + (i * verticalSpacing));
+				btnDecrease->Location = System::Drawing::Point(startX + 460, (startY - 7) + (i * verticalSpacing));
 				btnDecrease->Size = System::Drawing::Size(40, 30);
 				btnDecrease->Click += gcnew System::EventHandler(this, &ApplianceFrom::OnDecreaseClick);
 				btnDecrease->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
@@ -203,15 +205,32 @@ namespace sem3 {
 				btnDecrease->Tag = lblQuantity;
 				// Add controls to the custom control
 
+				// Label to show Duration in Hours
+				txtDuration = gcnew TextBox();
+				txtDuration->Text = "1";
+				txtDuration->Location = System::Drawing::Point(startX + 684, (startY - 7) + (i * verticalSpacing));
+				txtDuration->Size = System::Drawing::Size(80, 30);
+				txtDuration->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+				txtDuration->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
+				txtDuration->ForeColor = System::Drawing::Color::White;
+				txtDuration->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
+
+				txtDuration->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ApplianceFrom::ValidateNumericInput);
+				txtDuration->Leave += gcnew System::EventHandler(this, &ApplianceFrom::ValidateRange);
+				
 
 				checkBox->Tag = label;
 				label->Tag = lblQuantity;
-				lblQuantity->Tag = pictureBox;
+				lblQuantity->Tag = txtDuration;
+				txtDuration->Tag = pictureBox;
 
 
+				// Add controls to the custom control
 				this->panel1->Controls->Add(btnIncrease);
 				this->panel1->Controls->Add(btnDecrease);
 				this->panel1->Controls->Add(lblQuantity);
+				this->panel1->Controls->Add(txtDuration);
+				
 			}
 		}
 	private:
@@ -428,17 +447,19 @@ namespace sem3 {
 				if (checkBox->Checked)
 				{
 					// Checkbox is checked
-						   
 					Label^ name = safe_cast<Label^>(checkBox->Tag);
 					Label^ quantity = safe_cast<Label^>(name->Tag);
-					PictureBox^ priority = safe_cast<PictureBox^>(quantity->Tag);
+					TextBox^ duration = safe_cast<TextBox^>(quantity->Tag);
+					PictureBox^ priority = safe_cast<PictureBox^>(duration->Tag);
+
 					int prio = Int32::Parse(priority->Tag->ToString());
 					int quan = Int32::Parse(quantity->Text);
+					int dura = Int32::Parse(duration->Text);
 					String^ managedString = name->Text;
 					const char* applianceName = (const char*)(Marshal::StringToHGlobalAnsi(managedString)).ToPointer();
 					int Id = db.getApplianceID(applianceName);
 
-					db.addselectedAppliances(userID,currentSchedule , Id, applianceName, prio, quan, 1);
+					db.addselectedAppliances(userID, currentSchedule, Id, applianceName, prio, quan, dura);
 						   
 				}
 					   
@@ -453,6 +474,37 @@ namespace sem3 {
 		db.close();
 
 	}
+	// KeyPress event handler to restrict input to digits only
+	void ValidateNumericInput(System::Object^ sender, System::Windows::Forms::KeyPressEventArgs^ e) {
+		// Only allow digits, backspace, and delete keys
+		if (!Char::IsDigit(e->KeyChar) && e->KeyChar != '\b') {
+			e->Handled = true;
+		}
+	}
+
+	// Leave event handler to validate that the value is between 1 and 24
+	void ValidateRange(System::Object^ sender, System::EventArgs^ e) {
+		TextBox^ textBox = safe_cast<TextBox^>(sender);
+		int value;
+
+		// Validate input when focus leaves the textbox
+		if (Int32::TryParse(textBox->Text, value)) {
+			if (value < 1 || value > 24) {
+				// Display a warning if the value is out of range
+				MessageBox::Show("Please enter a value between 1 and 24.", "Invalid Input", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+
+				// Keep the previous valid value if it exists, or default to 1
+				//textBox->Text = textBox->Tag != nullptr ? textBox->Tag->ToString() : "1";
+			}
+			else {
+				// If input is valid, store it as the previous valid value
+				//textBox->Tag = value.ToString();
+			}
+		}
+		
+	}
+
+
 	private: System::Void panel1_Paint_1(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 
 	}
