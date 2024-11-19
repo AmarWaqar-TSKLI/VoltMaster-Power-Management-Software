@@ -31,4 +31,5 @@ public:
 	int getPeakHoursEnd(int userID);
 	int getApplianceID(const char* applianceName);
 	const char* getApplianceName(int applianceID,System::String^& str);
+	int getApplianceCount(int userID);
 };

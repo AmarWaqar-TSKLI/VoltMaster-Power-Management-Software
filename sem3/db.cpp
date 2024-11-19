@@ -537,3 +537,31 @@ const char* dbManager::getApplianceName(int applianceId,System::String^& str) {
 
     return name;  // Return the appliance name or nullptr if not found
 }
+
+int dbManager::getApplianceCount(int userID) {
+    sqlite3_stmt* statement = nullptr;
+    int currentScheduleID = getCurrentSID(userID);
+
+
+    // Prepare and execute SQL query to fetch appliance data
+    const char* applianceQuery = "SELECT COUNT(*) FROM SelectedAppliances where UID = ? AND SID = ?";
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering appliance count data: " << sqlite3_errmsg(db) << std::endl;
+        return -1;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+    sqlite3_bind_int(statement, 2, currentScheduleID);
+
+    // Store appliance Count data
+    int applianceCount = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        applianceCount = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return -1;
+    }
+
+    sqlite3_finalize(statement);
+    return applianceCount;
+}

@@ -482,16 +482,16 @@ namespace sem3 {
 		}
 	}
 
-	// Leave event handler to validate that the value is between 1 and 24
+	// Leave event handler to validate that the value is between 1 and 1440
 	void ValidateRange(System::Object^ sender, System::EventArgs^ e) {
 		TextBox^ textBox = safe_cast<TextBox^>(sender);
 		int value;
 
 		// Validate input when focus leaves the textbox
 		if (Int32::TryParse(textBox->Text, value)) {
-			if (value < 1 || value > 24) {
+			if (value < 1 || value > 1440) {
 				// Display a warning if the value is out of range
-				MessageBox::Show("Please enter a value between 1 and 24.", "Invalid Input", MessageBoxButtons::OK, MessageBoxIcon::Warning);
+				MessageBox::Show("Please enter a value between 1 and 1440 minutes.", "Invalid Input", MessageBoxButtons::OK, MessageBoxIcon::Warning);
 
 				// Keep the previous valid value if it exists, or default to 1
 				//textBox->Text = textBox->Tag != nullptr ? textBox->Tag->ToString() : "1";

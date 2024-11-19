@@ -4,6 +4,8 @@
 #include <string>
 #include <tuple>
 #include <msclr/marshal.h>
+#include <sstream>
+#include <iomanip>
 namespace sem3 {
 
 	using namespace System;
@@ -268,7 +270,7 @@ namespace sem3 {
 	
 	// Function to calculate the power consumption of an appliance
 	float calculatePowerConsumption(float appliancePower, float applianceDuration, float applianceQuantity) {
-		return ((appliancePower * applianceDuration) / 3600 ) * applianceQuantity;
+		return ((appliancePower * applianceDuration / 60) / 3600 ) * applianceQuantity;
 	}
 
 	// function to sort tuple of appliances based on power
@@ -343,7 +345,7 @@ namespace sem3 {
 
 		return sum;
 	}
-	void DisplaySchedule(std::tuple<int, int, int, int, int> schedule[24]) {
+	void DisplaySchedule(std::tuple<int, int, int, float, int, int, int>** schedule, int rowSize, int colSize) {
 		// Create the dynamic panel
 		Panel^ dynamicPanel2 = gcnew Panel();
 		dynamicPanel2->Visible = true;
@@ -384,112 +386,195 @@ namespace sem3 {
 		int labelOffsetX = 150;      // Space between labels in the same row (increased for clarity)
 		dbManager db;
 		db.open("test.db");
-		// Iterate through the schedule array
-		for (int i = 0; i < 24; ++i) {
-			auto& t = schedule[i];
+		// Iterate through the schedule tuples
+		for (int i = 0; i < rowSize; ++i) {
+			for (int currentCol = 0; currentCol < colSize; currentCol++) {
+				auto& t = schedule[i][currentCol];
+				if (std::get<0>(t) == 0)
+					continue;
 
-			// Create the first label (get<0>(schedule[i]))
-			Label^ label1 = gcnew Label();
-			String^ managedApplianceName;
-			const char* applianceName = db.getApplianceName(std::get<0>(schedule[i]),managedApplianceName);
-			// String^ managedApplianceName = msclr::interop::marshal_as<String^>(applianceName);
+				// Create the first label (get<0>(schedule[i]))
+				Label^ label1 = gcnew Label();
+				String^ managedApplianceName;
+				const char* applianceName = db.getApplianceName(std::get<0>(schedule[i][currentCol]), managedApplianceName);
+				// String^ managedApplianceName = msclr::interop::marshal_as<String^>(applianceName);
 
-			// Set the label text
-			label1->Text = managedApplianceName;
-			label1->Location = System::Drawing::Point(startX+30, startY+10+ + i * labelSpacingY);
-			label1->AutoSize = true;
-			label1->ForeColor = System::Drawing::Color::White;
-			label1->Font = gcnew System::Drawing::Font("Arial", 15.0f, FontStyle::Bold);
-			label1->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
-			// Create the second label (get<3>(schedule[i]))
+				// Set the label text
+				label1->Text = managedApplianceName;
+				label1->Location = System::Drawing::Point(startX + 30, startY + 10 + +i * labelSpacingY);
+				label1->AutoSize = true;
+				label1->ForeColor = System::Drawing::Color::White;
+				label1->Font = gcnew System::Drawing::Font("Arial", 15.0f, FontStyle::Bold);
+				label1->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
+				// Create the second label (get<3>(schedule[i]))
 
-			int prority = std::get<4>(t);
-			String^ imglocation = "Images/priority";
-			String^ path = imglocation + prority.ToString();
+				int prority = std::get<4>(t);
+				String^ imglocation = "Images/priority";
+				String^ path = imglocation + prority.ToString();
 
-			PictureBox^ pictureBox = gcnew PictureBox();
-			pictureBox->Size = System::Drawing::Size(93, 36);
+				PictureBox^ pictureBox = gcnew PictureBox();
+				pictureBox->Size = System::Drawing::Size(93, 36);
 
-			pictureBox->Location = System::Drawing::Point(startX + 293, (startY +3) + (i * labelSpacingY));
+				pictureBox->Location = System::Drawing::Point(startX + 293, (startY + 3) + (i * labelSpacingY));
 
-			pictureBox->Image = System::Drawing::Image::FromFile(path+".png"); // Provide the path to your image file
-		
-			pictureBox->SizeMode = PictureBoxSizeMode::StretchImage;  // Other options: Normal, CenterImage, AutoSize, etc.
-		
-			Label^ label3 = gcnew Label();
-			label3->Text = i.ToString() + " - " + (i + 1).ToString();
-			label3->Location = System::Drawing::Point(startX + 2 * labelOffsetX+250, startY +10+ i * labelSpacingY);
-			label3->AutoSize = true;
-			label3->ForeColor = System::Drawing::Color::White;
-			label3->Font = gcnew System::Drawing::Font("Arial", 15.0f, FontStyle::Bold);
-			label3->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
-			// Add labels to the panel
-			dynamicPanel->Controls->Add(label1);
-			dynamicPanel->Controls->Add(pictureBox);
-			dynamicPanel->Controls->Add(label3);
+				pictureBox->Image = System::Drawing::Image::FromFile(path + ".png"); // Provide the path to your image file
+
+				pictureBox->SizeMode = PictureBoxSizeMode::StretchImage;  // Other options: Normal, CenterImage, AutoSize, etc.
+
+				Label^ label3 = gcnew Label();
+				label3->Text = gcnew String((convertMinutesToTime(std::get<5>(schedule[i][currentCol])) + "-" +
+					convertMinutesToTime(std::get<6>(schedule[i][currentCol]))).c_str());
+				label3->Location = System::Drawing::Point(startX + 2 * labelOffsetX + 230, startY + 10 + i * labelSpacingY);
+				label3->AutoSize = true;
+				label3->ForeColor = System::Drawing::Color::White;
+				label3->Font = gcnew System::Drawing::Font("Arial", 15.0f, FontStyle::Bold);
+				label3->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
+				// Add labels to the panel
+				dynamicPanel->Controls->Add(label1);
+				dynamicPanel->Controls->Add(pictureBox);
+				dynamicPanel->Controls->Add(label3);
+			}
 		}
 		db.close();
 		// Add the dynamic panel to the form and bring it to the front
 		
 	}
 
+	// helper function to convert minutes into 24 hour format
+	std::string convertMinutesToTime(int minutes) {
+		// Ensure the input is non-negative
+		if (minutes < 0) {
+			return "Invalid input";  // Return an error string for negative input
+		}
+
+		// Calculate hours and minutes
+		int hours = minutes / 60;
+		int remainingMinutes = minutes % 60;
+
+		// Format the time in 24-hour format (HH:MM)
+		std::stringstream timeStream;
+		timeStream << std::setw(2) << std::setfill('0') << hours << ":"
+			<< std::setw(2) << std::setfill('0') << remainingMinutes;
+
+		return timeStream.str();
+	}
+
 	private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
 		this->powerConsumed= Int32::Parse(textBox1->Text);
-		if (button8->BackgroundImage == System::Drawing::Image::FromFile("Images/sg-daily.png")) {
-			this->type = "daily";
-		}
-		//else if (nullptr){
-		//	// weekly
+		//if (button8->BackgroundImage == System::Drawing::Image::FromFile("Images/sg-daily.png")) {
+		//	this->type = "daily";
 		//}
-		else {
-			label1->Text = "Error: Select from Daily or Weekly Schedule Type";
-		}
-		// validation ----------------------------------------
+		////else if (nullptr){
+		////	// weekly
+		////}
+		//else {
+		//	label1->Text = "Error: Select from Daily or Weekly Schedule Type";
+		//}
 
-
+		// development notes
 		// schedule type, meter phase type, peak hours, targetPowerUnits, power consumed units, 
 		// selectedAppliances, priority, quantity, usageDuration, appliancePower
 	
 		// peak hours, selectedAppliances, priority, quatity, usageDuration (assumed to be 1h), appliancePower
 
-		// BISMILLAH
 		std::vector<std::tuple<int, int, int, float,int>> appliances;
 		dbManager db;
 		db.open("test.db");
 		db.getScheduleGenData(userID, appliances);
 		float sum = calculateTotalPower(appliances);
+		int applianceCount = db.getApplianceCount(userID);
 
-		std::tuple<int, int, int, int, int > schedule[24];
-		for (int i = 0; i < 24; i++) {
-			schedule[i] = std::make_tuple(0, 0, 0, 0, 0);
+
+		std::tuple<int, int, int, float, int, int, int>** schedule = new std::tuple<int, int, int, float, int, int, int>* [applianceCount];
+
+		for (int i = 0; i < applianceCount; ++i) {
+			schedule[i] = new std::tuple<int, int, int, float, int, int, int>[5];  // Allocating memory for each tuple
+		}
+
+
+		for (int i = 0; i < applianceCount; i++) {
+			for (int j = 0; j < 5; j++)
+				schedule[i][j] = std::make_tuple(0, 0, 0, 0.00, 0, 0, 0);
 		}
 		int peakHourStart = db.getPeakHoursStart(userID);
 		int peakHourEnd = db.getPeakHoursEnd(userID);
 		int targetUnits = db.getTargetUnits(userID);
 
-		if (sum  <= targetUnits && appliances.size() <= 24) {
+		if (sum  <= targetUnits) {
 			bubbleSortPower(appliances, appliances.size());
-			int size = appliances.size();
-			int index = 0;
-			for (int i = 0; i < size; i++) {
-				if (index == 24) {
+			for (int currentCol = 0; currentCol < 5;) {
+				int currMins = 0;
+				int startTime = 0;
+				bool isColumnFilled = false;
+				bool fillPeakHours = false;
+				bool terminate = false;
+				for (int i = 0; i < applianceCount;i++) {
+					if (appliances.empty()) {
+						terminate = true;
+						break;
+					}
+					else {
+						if (currMins > 1440) {
+							currentCol++;
+							break;
+						}
+						else if (currMins <= 1440) {
+							if (isColumnFilled) {
+								currentCol++;
+								break;
+							}
+						}
+					}
+					// code to insert before and after peak hours
+					if (!fillPeakHours && (startTime < peakHourStart * 60 || startTime >= peakHourEnd * 60)) {
+						auto& appliance = appliances.back();
+						if (startTime + std::get<2>(appliance) > 1440) {
+							fillPeakHours = true;
+							i--;
+						}
+						else {
+							std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+							std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+							std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+							std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+							std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+							std::get<5>(schedule[i][currentCol]) = startTime;
+							std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+							startTime += std::get<2>(appliance);
+							currMins += std::get<2>(appliance);
+							appliances.pop_back();
+						}
+					}
+					else if (!fillPeakHours && (startTime >= peakHourStart * 60)) {
+						startTime = peakHourEnd * 60;
+						i--;
+					}
+					else if (fillPeakHours) {
+						// code to insert between peak hours
+						startTime = peakHourStart * 60;
+						while (!appliances.empty()) {
+							if (startTime >= peakHourEnd * 60) {
+								isColumnFilled = true;
+								break;
+							}
+							auto& appliance = appliances.front();
+							std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+							std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+							std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+							std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+							std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+							std::get<5>(schedule[i][currentCol]) = startTime;
+							std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+							startTime += std::get<2>(appliance);
+							currMins += std::get<2>(appliance);
+							appliances.erase(appliances.begin());
+							i++;
+						}
+					}
+				}
+				if (terminate)
 					break;
-				}
-				if (index < peakHourStart || index >= peakHourEnd) {
-					schedule[index++] = appliances.back();
-					appliances.pop_back();
-				}
-				else if(index == peakHourStart) {
-					index += (peakHourEnd - peakHourStart);
-					i--;
-				}
-			}
-
-			int i = 0;
-			while (!appliances.empty()) {
-				schedule[peakHourStart + i] = appliances.front();
-				appliances.erase(appliances.begin());
-				i++;
+				
 			}
 		}
 		else {
@@ -499,43 +584,93 @@ namespace sem3 {
 			}
 
 			bubbleSortPower(appliances, appliances.size());
-			int size = appliances.size();
-			int index = 0;
-			for (int i = 0; i < size; i++) {
-				if (index == 24) {
+			for (int currentCol = 0; currentCol < 5;) {
+				int currMins = 0;
+				int startTime = 0;
+				bool isColumnFilled = false;
+				bool fillPeakHours = false;
+				bool terminate = false;
+				for (int i = 0; i < applianceCount; i++) {
+					if (appliances.empty()) {
+						terminate = true;
+						break;
+					}
+					else {
+						if (currMins > 1440) {
+							currentCol++;
+							break;
+						}
+						else if (currMins <= 1440) {
+							if (isColumnFilled) {
+								currentCol++;
+								break;
+							}
+						}
+					}
+					// code to insert before and after peak hours
+					if (!fillPeakHours && (startTime < peakHourStart * 60 || startTime >= peakHourEnd * 60)) {
+						auto& appliance = appliances.back();
+						std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+						std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+						std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+						std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+						std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+						std::get<5>(schedule[i][currentCol]) = startTime;
+						std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+						startTime += std::get<2>(appliance);
+						currMins += std::get<2>(appliance);
+						appliances.pop_back();
+						if (startTime >= 1440) {
+							fillPeakHours = true;
+						}
+					}
+					else if (!fillPeakHours && (startTime >= peakHourStart * 60)) {
+						startTime = peakHourEnd * 60;
+						i--;
+					}
+					else if (fillPeakHours) {
+						// code to insert between peak hours
+						startTime = peakHourStart * 60;
+						while (!appliances.empty()) {
+							if (startTime >= peakHourEnd * 60) {
+								isColumnFilled = true;
+								break;
+							}
+							auto& appliance = appliances.front();
+							std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+							std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+							std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+							std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+							std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+							std::get<5>(schedule[i][currentCol]) = startTime;
+							std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+							startTime += std::get<2>(appliance);
+							currMins += std::get<2>(appliance);
+							appliances.erase(appliances.begin());
+							i++;
+						}
+					}
+				}
+				if (terminate)
 					break;
-				}
-				if (index < peakHourStart || index >= peakHourEnd) {
-					schedule[index++] = appliances.back();
-					appliances.pop_back();
-				}
-				else if (index == peakHourStart) {
-					index += (peakHourEnd - peakHourStart);
-					i--;
-				}
-			}
-
-			int i = 0;
-			while (!appliances.empty()) {
-				schedule[peakHourStart + i] = appliances.front();
-				appliances.erase(appliances.begin());
-				i++;
 			}
 		}
-		DisplaySchedule(schedule);
+		DisplaySchedule(schedule, applianceCount, 5);
 		
 		// print
-		for (int i = 0; i < 24; ++i) {
-			auto& t = schedule[i];
-			std::cout << "Time: (" << i << "-" << i+1<< "): "
-				<< std::get<0>(t) << ", "
-				<< std::get<1>(t) << ", "
-				<< std::get<2>(t) << ", "
-				<< std::get<3>(t) << ", "
-				<< std::get<4>(t) << std::endl;
+		for (int i = 0; i < applianceCount; ++i) {
+			for (int currentCol = 0; currentCol < 5; currentCol++) {
+				auto& t = schedule[i][currentCol];
+				std::cout << "Time: (" << convertMinutesToTime(std::get<5>(schedule[i][currentCol])) << "-" << convertMinutesToTime(std::get<6>(schedule[i][currentCol])) << "): "
+					<< std::get<0>(t) << ", "
+					<< std::get<1>(t) << ", "
+					<< std::get<2>(t) << ", "
+					<< std::get<3>(t) << ", "
+					<< std::get<4>(t) << std::endl;
+			}
 		}
-		
 	}
+
 private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
 };
