@@ -603,7 +603,32 @@ std::vector<std::string> dbManager::getApplianceNamesWithDuplicateAID() {
     return applianceNames;
 }
 
-void updateDuration(const char* applianceName, int newDuration) {
+void dbManager::updateDuration(const char* applianceName, int newDuration) {
+    sqlite3_stmt* statement = nullptr;
 
+    // SQL query to update the duration of the appliance with the given name
+    const char* updateQuery = "UPDATE SelectedAppliances SET Duration = ? WHERE APPLIANCENAME = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    // Bind the new duration and appliance name to the query
+    sqlite3_bind_int(statement, 1, newDuration); // Bind the new duration
+    sqlite3_bind_text(statement, 2, applianceName, -1, SQLITE_STATIC); // Bind the appliance name
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query: " << sqlite3_errmsg(db) << std::endl;
+    }
+    else {
+        std::cout << "Updated duration for appliance: " << applianceName << " to " << newDuration << " hours." << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
 }
+
 

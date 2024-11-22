@@ -513,9 +513,10 @@ namespace sem3 {
 
 
 			// Add controls to the custom control
-			dynamicPanel->Controls->Add(label);
-			label->BringToFront();
+			
 			label->Tag = txtDuration;
+			label->BringToFront();
+			dynamicPanel->Controls->Add(label);
 			dynamicPanel->Controls->Add(txtDuration);
 			txtDuration->BringToFront();
 
@@ -524,23 +525,28 @@ namespace sem3 {
 
 		// traverse
 
+		dbManager db;
+		db.open("test.db");
 		for each (Label ^ control in dynamicPanel->Controls)
 		{
 			// If the control is a CheckBox, check its state
 			Label^ label = dynamic_cast<Label^>(control);
 			if (label != nullptr) {
-				TextBox^ crntBox = dynamic_cast<TextBox^>(label->Tag);
+				
+				String ^ labelText = label->Text; // Get the text from the label
+				const char* applianceName = (const char*)(Marshal::StringToHGlobalAnsi(labelText)).ToPointer();
+				TextBox^ crntBox = safe_cast<TextBox^>(label->Tag);
 				// Retrieve the Text from the TextBox
 				String^ text = crntBox->Text;
 
 				// Convert the managed String^ to an integer
 				int duration = Int32::Parse(text);
-
-			
+				db.updateDuration(applianceName, duration);			
 
 			}
 
 		}
+		db.close();
 
 		
 	}
@@ -554,7 +560,7 @@ namespace sem3 {
 			std::cout << res[i] << std::endl;
 		}
 		takeNewDurationAppliancesShow(res);
-
+		db.close();
 
 	}
 		  
