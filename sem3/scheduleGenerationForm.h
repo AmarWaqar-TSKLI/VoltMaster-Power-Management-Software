@@ -672,6 +672,7 @@ namespace sem3 {
 	}
 
 private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
+
 }
 };
 }

@@ -111,7 +111,8 @@ namespace sem3 {
 		Button^ btnIncrease;
 		Button^ btnDecrease;
 		Label^ lblQuantity;
-		TextBox^ txtDuration;
+		 TextBox^ txtDuration;
+		 Panel^ dynamicPanle1;
 		//Label^ lblDuration;
 	private: System::Windows::Forms::Button^ button1;
 	protected:
@@ -276,7 +277,6 @@ namespace sem3 {
 			this->button1->Size = System::Drawing::Size(116, 51);
 			this->button1->TabIndex = 1;
 			this->button1->UseVisualStyleBackColor = false;
-			//this->button1->Click += gcnew System::EventHandler(this, &ApplianceFrom::button1_Click);
 			// 
 			// button2
 			// 
@@ -310,7 +310,7 @@ namespace sem3 {
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1424, 911);
+			this->ClientSize = System::Drawing::Size(1422, 903);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
@@ -427,11 +427,41 @@ namespace sem3 {
 
 	// Event handler for saveBtn Click
 
+	
 	void ApplianceFrom::saveBtn_Click(System::Object^ sender, System::EventArgs^ e) {
-			   // Code to execute when the button is clicked
-			   MessageBox::Show("Save button clicked!");
+		// traverse		
+		saveDurations();	
+
+	}
+	void saveDurations() {
+		dbManager db;
+		db.open("test.db");
+		for each (Control ^ control in this->dynamicPanle1->Controls)
+		{
+			// If the control is a CheckBox, check its state
+			Label^ label = dynamic_cast<Label^>(control);
+			if (label != nullptr) {
+
+				String^ labelText = label->Text; // Get the text from the label
+				const char* applianceName = (const char*)(Marshal::StringToHGlobalAnsi(labelText)).ToPointer();
+				TextBox^ crntBox = safe_cast<TextBox^>(label->Tag);
+				// Retrieve the Text from the TextBox
+				String^ text = crntBox->Text;
+
+				// Convert the managed String^ to an integer
+				int duration = Int32::Parse(text);
+				std::cout << duration << std::endl;
+				db.updateDuration(applianceName, duration);
+
+			}
+		}
+		db.close();
+
 	}
 	void takeNewDurationAppliancesShow(std::vector<std::string> res) {
+		if (res.size() == 0) {
+			return;
+		}
 		int startY = 22; // Starting Y position for TextBoxes
 		int startX = 40; // X position for the first TextBox
 		int verticalSpacing = 60; // Vertical space between each TextBox
@@ -471,16 +501,16 @@ namespace sem3 {
 		dynamicPanel2->BringToFront();
 
 
-		Panel^ dynamicPanel = gcnew Panel();
-		dynamicPanel->Visible = true;
-		dynamicPanel->Size = System::Drawing::Size(961, 640);
-		dynamicPanel->Location = System::Drawing::Point(348, 105); // Ensure it's positioned at the top-left of the form
-		dynamicPanel->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
+		dynamicPanle1 = gcnew Panel();
+		dynamicPanle1->Visible = true;
+		dynamicPanle1->Size = System::Drawing::Size(961, 640);
+		dynamicPanle1->Location = System::Drawing::Point(348, 105); // Ensure it's positioned at the top-left of the form
+		dynamicPanle1->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
 		// Set the background image if it exists
 		//String^ imagePath = "Images/sg- exists.jpg"; // Update your path
-		dynamicPanel->AutoScroll = true;
-		dynamicPanel->BringToFront();
-		dynamicPanel2->Controls->Add(dynamicPanel);
+		dynamicPanle1->AutoScroll = true;
+		dynamicPanle1->BringToFront();
+		dynamicPanel2->Controls->Add(dynamicPanle1);
 
 		for (int i = 0; i < res.size(); ++i)
 		{
@@ -516,37 +546,11 @@ namespace sem3 {
 			
 			label->Tag = txtDuration;
 			label->BringToFront();
-			dynamicPanel->Controls->Add(label);
-			dynamicPanel->Controls->Add(txtDuration);
+			dynamicPanle1->Controls->Add(label);
+			dynamicPanle1->Controls->Add(txtDuration);
 			txtDuration->BringToFront();
 
 		}
-
-
-		// traverse
-
-		dbManager db;
-		db.open("test.db");
-		for each (Label ^ control in dynamicPanel->Controls)
-		{
-			// If the control is a CheckBox, check its state
-			Label^ label = dynamic_cast<Label^>(control);
-			if (label != nullptr) {
-				
-				String ^ labelText = label->Text; // Get the text from the label
-				const char* applianceName = (const char*)(Marshal::StringToHGlobalAnsi(labelText)).ToPointer();
-				TextBox^ crntBox = safe_cast<TextBox^>(label->Tag);
-				// Retrieve the Text from the TextBox
-				String^ text = crntBox->Text;
-
-				// Convert the managed String^ to an integer
-				int duration = Int32::Parse(text);
-				db.updateDuration(applianceName, duration);			
-
-			}
-
-		}
-		db.close();
 
 		
 	}
