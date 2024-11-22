@@ -20,7 +20,7 @@ public:
 	bool addPowerDetail(int userID, int targetUnits, int consumedUnits, int estimatedBill);
 	void readApplianceData(std::vector<std::pair<int, std::string>>& appliances);
 	bool createSelectedAppliacesTable();
-	bool addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity,int duration);
+	bool addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity,int duration, int offsetId);
 	bool deleteselectedappliances(int userID, int scheduleID);
 	int readUserID(const char* username);
 	int getCurrentSID(int userID);
@@ -32,4 +32,9 @@ public:
 	int getApplianceID(const char* applianceName);
 	const char* getApplianceName(int applianceID,System::String^& str);
 	int getApplianceCount(int userID);
+
+
+
+	std::vector<std::string> getApplianceNamesWithDuplicateAID();
+	void updateDuration(const char* applianceName, int newDuration);
 };

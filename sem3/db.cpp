@@ -247,6 +247,7 @@ bool dbManager::createSelectedAppliacesTable()
         "PRIORITY INTEGER NOT NULL,"
         "QUANTITY INTEGER NOT NULL,"
         "Duration INTEGER NOT NULL,"
+        "offsetId INTEGER NOT NULL,"
         "FOREIGN KEY(UID) REFERENCES Users(UID),"
         "FOREIGN KEY(SID) REFERENCES Schedules(SID));";
 
@@ -262,11 +263,11 @@ bool dbManager::createSelectedAppliacesTable()
     return true;
 }
 
-bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity, int duration)
+bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity, int duration, int offsetId)
 {
     sqlite3_stmt* statement;
 
-    string query = "INSERT INTO SelectedAppliances (UID, SID,AID,APPLIANCENAME,PRIORITY,QUANTITY, DURATION) VALUES (?,?,?,?,?,?,?) ";
+    string query = "INSERT INTO SelectedAppliances (UID, SID,AID,APPLIANCENAME,PRIORITY,QUANTITY, DURATION, offsetId) VALUES (?,?,?,?,?,?,?,?) ";
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
         cout << "Error preparing statement for Adding selected appliance" << endl;
@@ -280,6 +281,7 @@ bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceI
     sqlite3_bind_int(statement, 5, priority);
     sqlite3_bind_int(statement, 6, quantity);
     sqlite3_bind_int(statement, 7, duration);
+    sqlite3_bind_int(statement, 8, offsetId);
    
 
     if (sqlite3_step(statement) != SQLITE_DONE) {
@@ -391,7 +393,7 @@ void dbManager::getScheduleGenData(int userID, std::vector<std::tuple<int, int, 
 
 
     // Prepare and execute SQL query to fetch appliance data
-    const char* applianceQuery = "SELECT AID, QUANTITY, Duration, PRIORITY FROM SelectedAppliances where UID = ? AND SID = ?";
+    const char* applianceQuery = "SELECT offsetId, QUANTITY, Duration, PRIORITY FROM SelectedAppliances where UID = ? AND SID = ?";
     if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
         std::cerr << "Failed to prepare query for gathering schedule generation data: " << sqlite3_errmsg(db) << std::endl;
         return;
@@ -514,7 +516,7 @@ const char* dbManager::getApplianceName(int applianceId,System::String^& str) {
     sqlite3_stmt* statement;
 
 
-    string query = "SELECT Name FROM Appliances WHERE ID = ?";  // Query to select Name based on ID
+    string query = "SELECT APPLIANCENAME FROM SelectedAppliances WHERE offsetId = ?";  // Query to select Name based on ID
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
         cout << "Error preparing statement: " << sqlite3_errmsg(db) << endl;  // Log any error
@@ -530,7 +532,7 @@ const char* dbManager::getApplianceName(int applianceId,System::String^& str) {
         str = msclr::interop::marshal_as<System::String^>(name);
     }
     else {
-        cout << "No appliance found with ID: " << applianceId << endl;  // Handle case where no row is returned
+        cout << "No appliance found with offsetId: " << applianceId << endl;  // Handle case where no row is returned
     }
 
     sqlite3_finalize(statement);
@@ -565,3 +567,43 @@ int dbManager::getApplianceCount(int userID) {
     sqlite3_finalize(statement);
     return applianceCount;
 }
+
+
+std::vector<std::string> dbManager::getApplianceNamesWithDuplicateAID() {
+    sqlite3_stmt* statement = nullptr;
+    std::vector<std::string> applianceNames;
+
+    // SQL query to find duplicate AIDs and get their corresponding appliance names
+    const char* query = R"(
+        SELECT APPLIANCENAME 
+        FROM SelectedAppliances 
+        WHERE AID IN (
+            SELECT AID 
+            FROM SelectedAppliances 
+            GROUP BY AID 
+            HAVING COUNT(AID) > 1
+        )
+    )";
+
+    if (sqlite3_prepare_v2(db, query, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for finding duplicate AIDs: " << sqlite3_errmsg(db) << std::endl;
+        return applianceNames;
+    }
+
+    // Iterate through rows and store appliance names in the vector
+    while (sqlite3_step(statement) == SQLITE_ROW) {
+        const char* name = reinterpret_cast<const char*>(sqlite3_column_text(statement, 0));
+        if (name) {
+            applianceNames.push_back(std::string(name));
+        }
+    }
+
+    sqlite3_finalize(statement);
+
+    return applianceNames;
+}
+
+void updateDuration(const char* applianceName, int newDuration) {
+
+}
+

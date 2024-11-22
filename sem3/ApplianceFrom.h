@@ -276,7 +276,7 @@ namespace sem3 {
 			this->button1->Size = System::Drawing::Size(116, 51);
 			this->button1->TabIndex = 1;
 			this->button1->UseVisualStyleBackColor = false;
-			this->button1->Click += gcnew System::EventHandler(this, &ApplianceFrom::button1_Click);
+			//this->button1->Click += gcnew System::EventHandler(this, &ApplianceFrom::button1_Click);
 			// 
 			// button2
 			// 
@@ -416,16 +416,146 @@ namespace sem3 {
 	private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 
 	}
-	private: System::Void hScrollBar1_Scroll(System::Object^ sender, System::Windows::Forms::ScrollEventArgs^ e) {	}
+	private: System::Void hScrollBar1_Scroll(System::Object^ sender, System::Windows::Forms::ScrollEventArgs^ e) {	
+	}
 
-	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		//HomeForm^ form = gcnew HomeForm();
-		//home->Show();
-		//this->Hide();
+	//private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+	//	//HomeForm^ form = gcnew HomeForm();
+	//	//home->Show();
+	//	//this->Hide();
+	//}
+
+	// Event handler for saveBtn Click
+
+	void ApplianceFrom::saveBtn_Click(System::Object^ sender, System::EventArgs^ e) {
+			   // Code to execute when the button is clicked
+			   MessageBox::Show("Save button clicked!");
+	}
+	void takeNewDurationAppliancesShow(std::vector<std::string> res) {
+		int startY = 22; // Starting Y position for TextBoxes
+		int startX = 40; // X position for the first TextBox
+		int verticalSpacing = 60; // Vertical space between each TextBox
+		// Loop through applianceData to create TextBoxes for each appliance
+
+		Panel^ dynamicPanel2 = gcnew Panel();
+		dynamicPanel2->Visible = true;
+		dynamicPanel2->Size = System::Drawing::Size(1440, 950);
+		dynamicPanel2->Location = System::Drawing::Point(0, 0); // Ensure it's positioned at the top-left of the form
+
+		// Set the background image if it exists
+		String^ imagePath = "Images/Quantity Appliance selection.jpg"; // Update your path
+		if (System::IO::File::Exists(imagePath)) {
+			dynamicPanel2->BackgroundImage = System::Drawing::Image::FromFile(imagePath);
+			//dynamicPanel->BackgroundImageLayout = ImageLayout::Stretch;
+		}
+		else {
+			MessageBox::Show("Background image not found at path: " + imagePath, "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		}
+
+		// save button
+		Button^ saveBtn;
+		saveBtn = gcnew Button();
+		saveBtn->Text = "";
+		saveBtn->Location = System::Drawing::Point(681, 797);
+		saveBtn->Size = System::Drawing::Size(259, 42);
+		saveBtn->BackColor = System::Drawing::Color::Transparent;
+		saveBtn->FlatStyle = FlatStyle::Flat; // Make the button flat
+		saveBtn->FlatAppearance->BorderSize = 0; // No border
+		saveBtn->Click += gcnew System::EventHandler(this, &ApplianceFrom::saveBtn_Click);
+		// Ensure button's border and mouse effects are transparent
+		saveBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent; // Transparent on hover
+		saveBtn->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent; // Transparent on click
+		dynamicPanel2->Controls->Add(saveBtn);
+
+		this->Controls->Add(dynamicPanel2);
+		dynamicPanel2->BringToFront();
+
+
+		Panel^ dynamicPanel = gcnew Panel();
+		dynamicPanel->Visible = true;
+		dynamicPanel->Size = System::Drawing::Size(961, 640);
+		dynamicPanel->Location = System::Drawing::Point(348, 105); // Ensure it's positioned at the top-left of the form
+		dynamicPanel->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
+		// Set the background image if it exists
+		//String^ imagePath = "Images/sg- exists.jpg"; // Update your path
+		dynamicPanel->AutoScroll = true;
+		dynamicPanel->BringToFront();
+		dynamicPanel2->Controls->Add(dynamicPanel);
+
+		for (int i = 0; i < res.size(); ++i)
+		{
+			// Create a Label for each appliance
+			Label^ label = gcnew Label();
+
+			std::string stdString = res[i]; // res[i] is a std::string
+			label->Text = msclr::interop::marshal_as<System::String^>(stdString);
+
+			label->Location = System::Drawing::Point(startX + 140, startY + (i * verticalSpacing));
+			label->AutoSize = true;
+			label->ForeColor = System::Drawing::Color::White;
+			//label->BackColor = System::Drawing::Color::Aqua;
+			label->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
+			this->panel1->Visible = true;
+			label->Visible = true;
+			
+			// Label to show Duration in Hours
+			txtDuration = gcnew TextBox();
+			txtDuration->Text = "1";
+			txtDuration->Location = System::Drawing::Point(startX + 655, (startY - 4) + (i * verticalSpacing));
+			txtDuration->Size = System::Drawing::Size(80, 30);
+			txtDuration->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+			txtDuration->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
+			txtDuration->ForeColor = System::Drawing::Color::White;
+			txtDuration->BackColor = System::Drawing::Color::FromArgb(67, 65, 65);
+
+			txtDuration->KeyPress += gcnew System::Windows::Forms::KeyPressEventHandler(this, &ApplianceFrom::ValidateNumericInput);
+			txtDuration->Leave += gcnew System::EventHandler(this, &ApplianceFrom::ValidateRange);
+
+
+			// Add controls to the custom control
+			dynamicPanel->Controls->Add(label);
+			label->BringToFront();
+			label->Tag = txtDuration;
+			dynamicPanel->Controls->Add(txtDuration);
+			txtDuration->BringToFront();
+
+		}
+
+
+		// traverse
+
+		for each (Label ^ control in dynamicPanel->Controls)
+		{
+			// If the control is a CheckBox, check its state
+			Label^ label = dynamic_cast<Label^>(control);
+			if (label != nullptr) {
+				TextBox^ crntBox = dynamic_cast<TextBox^>(label->Tag);
+				// Retrieve the Text from the TextBox
+				String^ text = crntBox->Text;
+
+				// Convert the managed String^ to an integer
+				int duration = Int32::Parse(text);
+
+			
+
+			}
+
+		}
+
+		
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		// Iterate over all the controls in the form, including nested ones
 		CheckAllCheckboxes(this);
+		dbManager db;
+		db.open("test.db");
+		std::vector<std::string> res = db.getApplianceNamesWithDuplicateAID();
+		for (int i = 0; i < res.size(); i++) {
+			std::cout << res[i] << std::endl;
+		}
+		takeNewDurationAppliancesShow(res);
+
+
 	}
 		  
 
@@ -437,6 +567,7 @@ namespace sem3 {
 		int currentSchedule = db.getCurrentSID(userID);
 		db.deleteselectedappliances(userID, currentSchedule);
 		// Iterate through each control in the parent control
+		int offsetId = 1;
 		for each (Control ^ control in parentControl->Controls)
 		{
 			// If the control is a CheckBox, check its state
@@ -455,11 +586,68 @@ namespace sem3 {
 					int prio = Int32::Parse(priority->Tag->ToString());
 					int quan = Int32::Parse(quantity->Text);
 					int dura = Int32::Parse(duration->Text);
+
 					String^ managedString = name->Text;
 					const char* applianceName = (const char*)(Marshal::StringToHGlobalAnsi(managedString)).ToPointer();
 					int Id = db.getApplianceID(applianceName);
 
-					db.addselectedAppliances(userID, currentSchedule, Id, applianceName, prio, quan, dura);
+					// we need to make an offsetId for slected Appliance table
+					// we will not play with real id of appliance
+					// when getting sceduleGeneration Data we will get  Offset Id
+					// OffsetId will be like 1, 2, 3, ... depending upon number of appliances
+					// like computer , fridges(3)
+					// Then 1.Computer 2.Fridhes1 3.Fridhes2
+					// 
+
+					if (quan > 1) {
+						System::Windows::Forms::DialogResult result = MessageBox::Show(
+							"Do you want to run " + name->Text +" Appliance on same time",         // Message text
+							"Confirmation",                    // Caption
+							MessageBoxButtons::YesNo,          // Buttons
+							MessageBoxIcon::Question           // Icon
+						);
+
+						// Perform actions based on the result
+						
+						if (result == System::Windows::Forms::DialogResult::No) {
+							//int Id = db.getApplianceID(appendedName);
+
+							for (int i = 1; i <= quan; i++) {
+								// Convert managed string to unmanaged char*
+								String^ managedString1 = name->Text;
+								const char* applianceName1 = (const char*)(Marshal::StringToHGlobalAnsi(managedString1)).ToPointer();
+
+								// Calculate new string length (original length + the number of digits in i + null terminator)
+								size_t originalLength = strlen(applianceName1);
+
+								// Convert the current digit (i) to a string
+								std::string applianceNameStr(applianceName1); // Managed string converted to std::string
+								applianceNameStr += " "; // Append the integer i as a string
+								applianceNameStr += std::to_string(i); // Append the integer i as a string
+
+								// Convert the resulting std::string back to a char array for the database operation
+								const char* appendedName = applianceNameStr.c_str();
+
+								// Get ID and perform database operation
+								int q = 1;
+								db.addselectedAppliances(userID, currentSchedule, Id, appendedName, prio, q, dura, offsetId);
+								offsetId++;
+
+								// Clean up allocated memory
+								Marshal::FreeHGlobal(IntPtr((void*)applianceName1));
+							}
+						}
+						else if (result == System::Windows::Forms::DialogResult::Yes) {
+							db.addselectedAppliances(userID, currentSchedule, Id, applianceName, prio, quan, dura, offsetId);
+							offsetId++;
+						}
+					}
+					else {
+						db.addselectedAppliances(userID, currentSchedule, Id, applianceName, prio, quan, dura, offsetId);
+						offsetId++;
+					}
+
+					
 						   
 				}
 					   
