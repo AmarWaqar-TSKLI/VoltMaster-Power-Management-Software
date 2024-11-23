@@ -133,6 +133,7 @@ namespace sem3 {
 			this->button6->Size = System::Drawing::Size(137, 40);
 			this->button6->TabIndex = 5;
 			this->button6->UseVisualStyleBackColor = false;
+			this->button6->Click += gcnew System::EventHandler(this, &HomeForm::button6_Click);
 			// 
 			// button7
 			// 
@@ -152,7 +153,7 @@ namespace sem3 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1424, 911);
+			this->ClientSize = System::Drawing::Size(1424, 881);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button5);
@@ -160,7 +161,7 @@ namespace sem3 {
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button1);
 			this->MaximumSize = System::Drawing::Size(1440, 950);
-			this->MinimumSize = System::Drawing::Size(1440, 950);
+			this->MinimumSize = System::Drawing::Size(1440, 858);
 			this->Name = L"HomeForm";
 			this->Text = L"HomeForm";
 			this->Load += gcnew System::EventHandler(this, &HomeForm::HomeForm_Load);
@@ -183,6 +184,8 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID);
 	myform->Show();
 	this->Hide();
+}
+private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

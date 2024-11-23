@@ -131,6 +131,9 @@
     <ClInclude Include="HomeForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Login.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="PowerConsumption.h" />
     <ClInclude Include="Schedule.h" />
     <ClInclude Include="scheduleGenerationForm.h">
@@ -149,6 +152,7 @@
     <ClCompile Include="ApplianceFrom.cpp" />
     <ClCompile Include="db.cpp" />
     <ClCompile Include="HomeForm.cpp" />
+    <ClCompile Include="Login.cpp" />
     <ClCompile Include="scheduleGenerationForm.cpp" />
     <ClCompile Include="sqlite\sqlite3.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
@@ -165,6 +169,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="HomeForm.resx">
       <DependentUpon>HomeForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="scheduleGenerationForm.resx">
       <DependentUpon>scheduleGenerationForm.h</DependentUpon>

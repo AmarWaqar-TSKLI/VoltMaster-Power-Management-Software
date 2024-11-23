@@ -57,6 +57,9 @@
     <ClInclude Include="scheduleGenerationForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Login.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="db.cpp">
@@ -74,8 +77,11 @@
     <ClCompile Include="User .cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Login.cpp">
+      <Filter>Source Files\Forms</Filter>
+    </ClCompile>
     <ClCompile Include="scheduleGenerationForm.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Forms</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -105,7 +105,7 @@ namespace sem3 {
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1424, 911);
+			this->panel1->Size = System::Drawing::Size(1424, 881);
 			this->panel1->TabIndex = 1;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &scheduleGenerationForm::panel1_Paint);
 			// 
@@ -229,7 +229,7 @@ namespace sem3 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1424, 911);
+			this->ClientSize = System::Drawing::Size(1424, 881);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->button2);
@@ -238,7 +238,7 @@ namespace sem3 {
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button6);
 			this->MaximumSize = System::Drawing::Size(1440, 950);
-			this->MinimumSize = System::Drawing::Size(1440, 950);
+			this->MinimumSize = System::Drawing::Size(1440, 858);
 			this->Name = L"scheduleGenerationForm";
 			this->Text = L"scheduleGenerationForm";
 			this->Load += gcnew System::EventHandler(this, &scheduleGenerationForm::scheduleGenerationForm_Load);

@@ -310,7 +310,7 @@ namespace sem3 {
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1422, 903);
+			this->ClientSize = System::Drawing::Size(1424, 881);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
@@ -318,7 +318,7 @@ namespace sem3 {
 			this->DoubleBuffered = true;
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximumSize = System::Drawing::Size(1440, 950);
-			this->MinimumSize = System::Drawing::Size(1440, 950);
+			this->MinimumSize = System::Drawing::Size(1440, 858);
 			this->Name = L"ApplianceFrom";
 			this->Text = L"ApplianceFrom";
 			this->Load += gcnew System::EventHandler(this, &ApplianceFrom::ApplianceFrom_Load);

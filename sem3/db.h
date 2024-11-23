@@ -37,4 +37,5 @@ public:
 
 	std::vector<std::string> getApplianceNamesWithDuplicateAID();
 	void updateDuration(const char* applianceName, int newDuration);
+	bool authenticateUser(const std::string& uname, const std::string& pass);
 };

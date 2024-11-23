@@ -318,7 +318,8 @@ bool dbManager::deleteselectedappliances(int userID, int scheduleID)
     sqlite3_finalize(statement);
 }
 
-int dbManager::readUserID(const char* username) {
+int dbManager::readUserID(const char* username)
+{
     sqlite3_stmt* statement;
     string query = "SELECT UID from Users where Username = ?";
 
@@ -630,5 +631,34 @@ void dbManager::updateDuration(const char* applianceName, int newDuration) {
     // Finalize the statement to clean up
     sqlite3_finalize(statement);
 }
+bool dbManager::authenticateUser(const std::string& uname, const std::string& pass) {
+    sqlite3_stmt* statement = nullptr;
+
+    // SQL query to check if the username and password match a user in the database
+    const char* query = "SELECT 1 FROM users WHERE Username = ? AND Password = ? LIMIT 1";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, query, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare authentication query: " << sqlite3_errmsg(db) << std::endl;
+        return false;
+    }
+
+    // Bind the username and password to the query
+    sqlite3_bind_text(statement, 1, uname.c_str(), -1, SQLITE_STATIC); // Bind username
+    sqlite3_bind_text(statement, 2, pass.c_str(), -1, SQLITE_STATIC); // Bind password
+
+    // Execute the query
+    bool isAuthenticated = false;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        // If a row is returned, the username and password matched
+        isAuthenticated = true;
+    }
+
+    // Finalize the statement to free up resources
+    sqlite3_finalize(statement);
+
+    return isAuthenticated;
+}
+
 
 
