@@ -570,17 +570,18 @@ int dbManager::getApplianceCount(int userID) {
 }
 
 
-std::vector<std::string> dbManager::getApplianceNamesWithDuplicateAID() {
+std::vector<std::string> dbManager::getApplianceNamesWithDuplicateAID(int userID, int scheduleID) {
     sqlite3_stmt* statement = nullptr;
     std::vector<std::string> applianceNames;
 
-    // SQL query to find duplicate AIDs and get their corresponding appliance names
+    // SQL query to find duplicate AIDs for the given UID and SID and get their corresponding appliance names
     const char* query = R"(
         SELECT APPLIANCENAME 
         FROM SelectedAppliances 
-        WHERE AID IN (
+        WHERE UID = ? AND SID = ? AND AID IN (
             SELECT AID 
             FROM SelectedAppliances 
+            WHERE UID = ? AND SID = ? 
             GROUP BY AID 
             HAVING COUNT(AID) > 1
         )
@@ -590,6 +591,12 @@ std::vector<std::string> dbManager::getApplianceNamesWithDuplicateAID() {
         std::cerr << "Failed to prepare query for finding duplicate AIDs: " << sqlite3_errmsg(db) << std::endl;
         return applianceNames;
     }
+
+    // Bind userID and scheduleID parameters to the SQL query
+    sqlite3_bind_int(statement, 1, userID);   // Bind UID for the outer query
+    sqlite3_bind_int(statement, 2, scheduleID); // Bind SID for the outer query
+    sqlite3_bind_int(statement, 3, userID);   // Bind UID for the subquery
+    sqlite3_bind_int(statement, 4, scheduleID); // Bind SID for the subquery
 
     // Iterate through rows and store appliance names in the vector
     while (sqlite3_step(statement) == SQLITE_ROW) {
@@ -603,6 +610,7 @@ std::vector<std::string> dbManager::getApplianceNamesWithDuplicateAID() {
 
     return applianceNames;
 }
+
 
 void dbManager::updateDuration(const char* applianceName, int newDuration) {
     sqlite3_stmt* statement = nullptr;
@@ -658,6 +666,38 @@ bool dbManager::authenticateUser(const std::string& uname, const std::string& pa
     sqlite3_finalize(statement);
 
     return isAuthenticated;
+}
+
+
+bool dbManager::insertIntoSchedules(int uid, const std::string& type, int unitsSaved) {
+    std::string query = "INSERT INTO Schedules (UID, Type, UnitsSaved) VALUES (?, ?, ?);";
+    sqlite3_stmt* stmt = nullptr;
+
+    // Prepare the SQL statement
+    int rc = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        return false;
+    }
+
+    // Bind the parameters
+    sqlite3_bind_int(stmt, 1, uid);                  // Bind UID to the first placeholder
+    sqlite3_bind_text(stmt, 2, type.c_str(), -1, SQLITE_STATIC); // Bind Type to the second placeholder
+    sqlite3_bind_int(stmt, 3, unitsSaved);          // Bind UnitsSaved to the third placeholder
+
+    // Execute the SQL statement
+    rc = sqlite3_step(stmt);
+    if (rc != SQLITE_DONE) {
+        std::cerr << "Failed to execute statement: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_finalize(stmt); // Clean up prepared statement
+        return false;
+    }
+
+    std::cout << "Record inserted into Schedules table successfully!" << std::endl;
+
+    // Clean up prepared statement
+    sqlite3_finalize(stmt);
+    return true;
 }
 
 

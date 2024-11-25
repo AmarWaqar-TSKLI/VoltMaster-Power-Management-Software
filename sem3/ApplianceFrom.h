@@ -559,7 +559,7 @@ namespace sem3 {
 		CheckAllCheckboxes(this);
 		dbManager db;
 		db.open("test.db");
-		std::vector<std::string> res = db.getApplianceNamesWithDuplicateAID();
+		std::vector<std::string> res = db.getApplianceNamesWithDuplicateAID(userID, 1);
 		for (int i = 0; i < res.size(); i++) {
 			std::cout << res[i] << std::endl;
 		}
@@ -656,9 +656,6 @@ namespace sem3 {
 						db.addselectedAppliances(userID, currentSchedule, Id, applianceName, prio, quan, dura, offsetId);
 						offsetId++;
 					}
-
-					
-						   
 				}
 					   
 			}

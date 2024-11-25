@@ -35,7 +35,8 @@ public:
 
 
 
-	std::vector<std::string> getApplianceNamesWithDuplicateAID();
+	std::vector<std::string> getApplianceNamesWithDuplicateAID(int userID, int scheduleID);
 	void updateDuration(const char* applianceName, int newDuration);
 	bool authenticateUser(const std::string& uname, const std::string& pass);
+	bool insertIntoSchedules(int uid, const std::string& type, int unitsSaved);
 };

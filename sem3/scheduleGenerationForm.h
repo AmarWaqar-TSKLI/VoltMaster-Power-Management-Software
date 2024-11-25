@@ -345,6 +345,30 @@ namespace sem3 {
 
 		return sum;
 	}
+
+	std::string getTodayDate() {
+		// Get the current date using .NET DateTime
+		System::DateTime today = System::DateTime::Now;
+
+		// Format the date
+		int day = today.Day;
+		System::String^ monthName = today.ToString("MMMM"); // Get full month name
+		int year = today.Year;
+
+		// Combine into desired format
+		System::String^ formattedDate = " " + day + " - " + monthName + " - " + year;
+
+		// Convert System::String^ to std::string
+		using namespace System::Runtime::InteropServices;
+		const char* dateChars = (const char*)(Marshal::StringToHGlobalAnsi(formattedDate)).ToPointer();
+		std::string dateString(dateChars);
+		Marshal::FreeHGlobal(System::IntPtr((void*)dateChars));
+
+		return dateString;
+	}
+
+
+
 	void DisplaySchedule(std::tuple<int, int, int, float, int, int, int>** schedule, int rowSize, int colSize) {
 		// Create the dynamic panel
 		Panel^ dynamicPanel2 = gcnew Panel();
@@ -386,6 +410,27 @@ namespace sem3 {
 		int labelOffsetX = 150;      // Space between labels in the same row (increased for clarity)
 		dbManager db;
 		db.open("test.db");
+		// showing date
+
+		std::string date = getTodayDate();
+		std::cout << date << std::endl;
+		Label^ labelDate = gcnew Label();
+		String^ dateName = gcnew String(date.c_str());
+		// String^ managedApplianceName = msclr::interop::marshal_as<String^>(applianceName);
+
+		// Set the label text
+		labelDate->Text = dateName;
+		labelDate->Location = System::Drawing::Point(383, 620);
+		labelDate->AutoSize = true;
+		labelDate->ForeColor = System::Drawing::Color::White;
+		labelDate->Font = gcnew System::Drawing::Font("Syne", 14.0f, FontStyle::Bold);
+		labelDate->BackColor = System::Drawing::Color::Transparent;
+		dynamicPanel2->Controls->Add(labelDate);
+		labelDate->Visible = true;
+		labelDate->BringToFront();
+		// Create the second label (get<3>(schedule[i]))
+
+		
 		// Iterate through the schedule tuples
 		for (int i = 0; i < rowSize; ++i) {
 			for (int currentCol = 0; currentCol < colSize; currentCol++) {
@@ -657,6 +702,12 @@ namespace sem3 {
 		}
 		DisplaySchedule(schedule, applianceCount, 5);
 		
+		// save scedule id and type and units saved
+
+		db.insertIntoSchedules(userID, "Daily", 0);
+
+		db.close();
+
 		// print
 		for (int i = 0; i < applianceCount; ++i) {
 			for (int currentCol = 0; currentCol < 5; currentCol++) {
@@ -670,6 +721,7 @@ namespace sem3 {
 			}
 		}
 	}
+
 
 private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 
