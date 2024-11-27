@@ -60,7 +60,11 @@
     <ClInclude Include="Login.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="historyForm.h">
+=======
+    <ClInclude Include="Settings.h">
+>>>>>>> sidework
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -86,7 +90,11 @@
     <ClCompile Include="scheduleGenerationForm.cpp">
       <Filter>Source Files\Forms</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="historyForm.cpp">
+=======
+    <ClCompile Include="Settings.cpp">
+>>>>>>> sidework
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

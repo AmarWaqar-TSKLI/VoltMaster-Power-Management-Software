@@ -48,4 +48,26 @@ public:
 	void getScheduleGenDataForHistory(int userID, int sid, std::vector<std::tuple<int, int, int, float, int>>& appliances);
 	int getApplianceCountForHistory(int userId, int sid);
 	std::string getScheduleDate(int uid, int sid);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	void setPeakHoursStart(int userID, int peakHoursStart);
+	void setPeakHoursEnd(int userID, int peakHoursEnd);
+	void setMeterPhaseType(int userID, std::string meterPhase);
+	std::string getMeterPhaseType(int userID);
+	void setTargetUnits(int userID, int targetUnits);
 };

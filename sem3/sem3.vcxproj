@@ -142,6 +142,9 @@
     <ClInclude Include="scheduleGenerationForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Settings.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="User .h" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +161,7 @@
     <ClCompile Include="HomeForm.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="scheduleGenerationForm.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="sqlite\sqlite3.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
@@ -182,6 +186,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="scheduleGenerationForm.resx">
       <DependentUpon>scheduleGenerationForm.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+      <DependentUpon>Settings.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
