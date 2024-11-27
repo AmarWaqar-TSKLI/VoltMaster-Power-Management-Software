@@ -1127,3 +1127,254 @@ void dbManager::setTargetUnits(int userID, int targetUnits) {
     // Finalize the statement to clean up
     sqlite3_finalize(statement);
 }
+
+void dbManager::createAdminTable()
+{
+    string query = "CREATE TABLE IF NOT EXISTS Admins ("
+        "AID INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "Username TEXT UNIQUE NOT NULL,"
+        "Password TEXT NOT NULL,"
+        "singlePrice INT NOT NULL,"
+        "doublePrice INT NOT NULL,"
+        "triplePrice INT NOT NULL);";
+
+    char* errorMessage = nullptr;
+    int rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &errorMessage);
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL error: " << errorMessage << std::endl;
+        sqlite3_free(errorMessage);
+        return;
+    }
+    std::cout << "Admin Table created successfully!" << std::endl;
+    return;
+}
+
+void dbManager::addAdmin(const char* username, const char* password)
+{
+    int singlePrice = getSingleMeterPrice();
+    int doublePrice = getDoubleMeterPrice();
+    int triplePrice = getTripleMeterPrice();
+
+    sqlite3_stmt* statement;
+
+    string query = "INSERT OR IGNORE INTO Admins (Username, Password, singlePrice, doublePrice, triplePrice) VALUES (?,?,?,?,?)";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for Adding Admin" << endl;
+        return;
+    }
+
+    sqlite3_bind_text(statement, 1, username, -1, SQLITE_STATIC);
+    sqlite3_bind_text(statement, 2, password, -1, SQLITE_STATIC);
+    sqlite3_bind_int(statement, 3, singlePrice);
+    sqlite3_bind_int(statement, 4, doublePrice);
+    sqlite3_bind_int(statement, 5, triplePrice);
+
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        cout << "Error executing statement for Adding Admin" << endl;
+        return;
+    }
+    else {
+        cout << "Data inserted successfully into Admin table" << endl;
+    }
+
+    sqlite3_finalize(statement);
+}
+
+int dbManager::getSingleMeterPrice()
+{
+    sqlite3_stmt* statement = nullptr;
+
+    // Prepare and execute SQL query to fetch appliance changed data
+    const char* applianceQuery = "SELECT singlePrice FROM Admins";
+
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering single meter price: " << sqlite3_errmsg(db) << std::endl;
+        return 1;
+    }
+
+    int singleMeterPrice = 1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        singleMeterPrice = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return 1;
+    }
+
+    sqlite3_finalize(statement);
+    return singleMeterPrice;
+}
+
+int dbManager::getDoubleMeterPrice()
+{
+    sqlite3_stmt* statement = nullptr;
+
+    // Prepare and execute SQL query to fetch appliance changed data
+    const char* applianceQuery = "SELECT doublePrice FROM Admins";
+
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering double meter price: " << sqlite3_errmsg(db) << std::endl;
+        return 1;
+    }
+
+    int singleMeterPrice = 1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        singleMeterPrice = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return 1;
+    }
+
+    sqlite3_finalize(statement);
+    return singleMeterPrice;
+}
+
+int dbManager::getTripleMeterPrice()
+{
+    sqlite3_stmt* statement = nullptr;
+
+    // Prepare and execute SQL query to fetch appliance changed data
+    const char* applianceQuery = "SELECT triplePrice FROM Admins";
+
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering triple meter price: " << sqlite3_errmsg(db) << std::endl;
+        return 1;
+    }
+
+    int singleMeterPrice = 1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        singleMeterPrice = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return 1;
+    }
+
+    sqlite3_finalize(statement);
+    return singleMeterPrice;
+}
+
+void dbManager::setSingleMeterPrice(int singlePrice)
+{
+    sqlite3_stmt* statement = nullptr;
+
+    const char* updateQuery = "UPDATE Admins SET singlePrice = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting single Meter Price: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, singlePrice);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting single Meter Price: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+
+void dbManager::setDoubleMeterPrice(int doublePrice)
+{
+    sqlite3_stmt* statement = nullptr;
+
+    const char* updateQuery = "UPDATE Admins SET doublePrice = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting double Meter Price: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, doublePrice);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting double Meter Price: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+
+void dbManager::setTripleMeterPrice(int triplePrice)
+{
+    sqlite3_stmt* statement = nullptr;
+
+    const char* updateQuery = "UPDATE Admins SET triplePrice = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting triple Meter Price: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, triplePrice);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting triple Meter Price: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+
+bool dbManager::authenticateAdmin(const std::string& uname, const std::string& pass)
+{
+    sqlite3_stmt* statement = nullptr;
+
+    // SQL query to check if the username and password match a user in the database
+    const char* query = "SELECT 1 FROM Admins WHERE Username = ? AND Password = ? LIMIT 1";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, query, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare authentication query for admin: " << sqlite3_errmsg(db) << std::endl;
+        return false;
+    }
+
+    // Bind the username and password to the query
+    sqlite3_bind_text(statement, 1, uname.c_str(), -1, SQLITE_STATIC); // Bind username
+    sqlite3_bind_text(statement, 2, pass.c_str(), -1, SQLITE_STATIC); // Bind password
+
+    // Execute the query
+    bool isAuthenticated = false;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        // If a row is returned, the username and password matched
+        isAuthenticated = true;
+    }
+
+    // Finalize the statement to free up resources
+    sqlite3_finalize(statement);
+
+    return isAuthenticated;
+}
+
+int dbManager::readAdminID(const char* username)
+{
+    sqlite3_stmt* statement;
+    string query = "SELECT AID from Admins where Username = ?";
+
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        cout << "Error preparing statement for reading Admin ID" << endl;
+        return -1;
+    }
+
+    sqlite3_bind_text(statement, 1, username, -1, SQLITE_STATIC);
+
+    // Store userID data
+    int id = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        id = sqlite3_column_int(statement, 0);
+    }
+    else {
+        cout << "No Admins found with the specified username: " << username << endl;
+    }
+
+    sqlite3_finalize(statement);
+    return id;
+}
+
+

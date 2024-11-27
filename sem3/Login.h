@@ -37,10 +37,18 @@ namespace sem3 {
 
 	private: System::Windows::Forms::Button^ linkLabel1;
 	private: System::Windows::Forms::Button^ linklabel2;
+	private: System::Windows::Forms::Button^ button1;
+	private: System::Windows::Forms::Panel^ panel1;
+	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::TextBox^ textBox2;
+	private: System::Windows::Forms::Button^ button3;
+	private: System::Windows::Forms::TextBox^ textBox1;
 
 
 	public:
 		int loggedInUserID; // Store the authenticated user's ID
+		int loggedInAdminID;
+		bool isAdmin;
 		//Login(void)
 		//{
 		//	InitializeComponent();
@@ -51,6 +59,7 @@ namespace sem3 {
 		Login(dbManager& dbManager) : db(dbManager) 
 		{
 			InitializeComponent();
+			isAdmin = false;
 		}
 
 	protected:
@@ -99,7 +108,14 @@ namespace sem3 {
 			this->P1_TB = (gcnew System::Windows::Forms::TextBox());
 			this->UNAME_TB = (gcnew System::Windows::Forms::TextBox());
 			this->linkLabel1 = (gcnew System::Windows::Forms::Button());
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->SIGNUP_PANEL->SuspendLayout();
+			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// LOG
@@ -230,12 +246,91 @@ namespace sem3 {
 			this->linkLabel1->UseVisualStyleBackColor = false;
 			this->linkLabel1->Click += gcnew System::EventHandler(this, &Login::linkLabel1_Click);
 			// 
+			// button1
+			// 
+			this->button1->BackColor = System::Drawing::Color::Transparent;
+			this->button1->FlatAppearance->BorderSize = 0;
+			this->button1->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button1->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button1->Location = System::Drawing::Point(565, 850);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(127, 23);
+			this->button1->TabIndex = 9;
+			this->button1->UseVisualStyleBackColor = false;
+			this->button1->Click += gcnew System::EventHandler(this, &Login::button1_Click);
+			// 
+			// panel1
+			// 
+			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
+			this->panel1->Controls->Add(this->textBox2);
+			this->panel1->Controls->Add(this->button3);
+			this->panel1->Controls->Add(this->textBox1);
+			this->panel1->Controls->Add(this->button2);
+			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel1->Location = System::Drawing::Point(0, 0);
+			this->panel1->Name = L"panel1";
+			this->panel1->Size = System::Drawing::Size(1424, 901);
+			this->panel1->TabIndex = 10;
+			this->panel1->Visible = false;
+			// 
+			// textBox2
+			// 
+			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->textBox2->Location = System::Drawing::Point(831, 463);
+			this->textBox2->Name = L"textBox2";
+			this->textBox2->Size = System::Drawing::Size(326, 25);
+			this->textBox2->TabIndex = 12;
+			this->textBox2->UseSystemPasswordChar = true;
+			// 
+			// button3
+			// 
+			this->button3->BackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->BorderSize = 0;
+			this->button3->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button3->Location = System::Drawing::Point(823, 576);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(340, 44);
+			this->button3->TabIndex = 11;
+			this->button3->UseVisualStyleBackColor = false;
+			this->button3->Click += gcnew System::EventHandler(this, &Login::button3_Click);
+			// 
+			// textBox1
+			// 
+			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->textBox1->Location = System::Drawing::Point(831, 366);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(326, 25);
+			this->textBox1->TabIndex = 10;
+			// 
+			// button2
+			// 
+			this->button2->BackColor = System::Drawing::Color::Transparent;
+			this->button2->FlatAppearance->BorderSize = 0;
+			this->button2->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button2->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button2->Location = System::Drawing::Point(1352, 846);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(60, 23);
+			this->button2->TabIndex = 9;
+			this->button2->UseVisualStyleBackColor = false;
+			this->button2->Click += gcnew System::EventHandler(this, &Login::button2_Click);
+			// 
 			// Login
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 901);
+			this->Controls->Add(this->panel1);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->SIGNUP_PANEL);
 			this->Controls->Add(this->L_PASS);
 			this->Controls->Add(this->L_NAME);
@@ -247,6 +342,8 @@ namespace sem3 {
 			this->Text = L"Login";
 			this->SIGNUP_PANEL->ResumeLayout(false);
 			this->SIGNUP_PANEL->PerformLayout();
+			this->panel1->ResumeLayout(false);
+			this->panel1->PerformLayout();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -258,6 +355,14 @@ namespace sem3 {
 		int getLoggedInUserID()
 		{
 			return loggedInUserID;
+		}
+		int getLoggedInAdminID()
+		{
+			return loggedInAdminID;
+		}
+		bool getIsAdmin()
+		{
+			return isAdmin;
 		}
 	private: System::Void LOG_Click(System::Object^ sender, System::EventArgs^ e) {
 		// Get input from textboxes
@@ -279,6 +384,7 @@ namespace sem3 {
 		{
 			MessageBox::Show("Incorrect username or password");
 		}
+		db.close();
 	}
 private: System::Void SIGN_UP_BTN_Click(System::Object^ sender, System::EventArgs^ e)
 {
@@ -312,7 +418,7 @@ private: System::Void SIGN_UP_BTN_Click(System::Object^ sender, System::EventArg
 	std::string uname = msclr::interop::marshal_as<std::string>(username);
 	std::string pass = msclr::interop::marshal_as<std::string>(password);
 	db.addUser(uname.c_str(), pass.c_str(), 3, 9, "single");
-
+	db.close();
 }
 
 private: System::Void linkLabel1_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -320,6 +426,36 @@ private: System::Void linkLabel1_Click(System::Object^ sender, System::EventArgs
 }
 private: System::Void linklabel2_Click(System::Object^ sender, System::EventArgs^ e) {
 	SIGNUP_PANEL->Visible = false;
+}
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+	panel1->Visible = true;
+}
+private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+	panel1->Visible = false;
+	SIGNUP_PANEL->Visible = false;
+}
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	// Get input from textboxes
+	String^ username = textBox1->Text;
+	String^ password = textBox2->Text;
+
+	// Convert System::String to std::string
+	std::string uname = msclr::interop::marshal_as<std::string>(username);
+	std::string pass = msclr::interop::marshal_as<std::string>(password);
+	dbManager db;
+	db.open("test.db");
+	if (db.authenticateAdmin(uname, pass))
+	{
+		loggedInAdminID = db.readAdminID(uname.c_str()); // Get the user's ID
+		isAdmin = true;
+		this->DialogResult = System::Windows::Forms::DialogResult::OK; // Notify successful login
+		this->Close(); // Close the LoginForm
+	}
+	else
+	{
+		MessageBox::Show("Incorrect username or password");
+	}
+	db.close();
 }
 };
 }

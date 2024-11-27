@@ -1,6 +1,7 @@
 #include "HomeForm.h"
 #include "Login.h"
 #include "User .h"
+#include "Admin.h"
 using namespace System;
 using namespace System::Windows::Forms;
 
@@ -21,9 +22,6 @@ void main()
 
     // Show the LoginForm as a modal dialog
     if (loginForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
-        // Retrieve the authenticated user's ID from the LoginForm
-        int userID = loginForm->getLoggedInUserID();
-
         // Initialize the database (if needed)
         db.createApplianceListTable();
         db.addApplianceToList("Fridge", 450);
@@ -62,12 +60,22 @@ void main()
         db.addPowerDetail(2, 400, 230, 10000);
         db.addPowerDetail(3, 1200, 200, 100);
         db.createSelectedAppliacesTable();
+        db.createAdminTable();
+        db.addAdmin("admin", "admin");
 
-        // Proceed to the HomeForm with the user ID
-        sem3::HomeForm^ homeForm = gcnew sem3::HomeForm(userID);
-        Application::Run(homeForm);
+
+        if (!loginForm->getIsAdmin()) {
+            // Retrieve the authenticated user's ID from the LoginForm
+            int userID = loginForm->getLoggedInUserID();
+            sem3::HomeForm^ homeForm = gcnew sem3::HomeForm(userID);
+            Application::Run(homeForm);
+        }
+        else {
+            int adminID = loginForm->getLoggedInAdminID();
+            sem3::Admin^ adminForm = gcnew sem3::Admin(adminID);
+            Application::Run(adminForm);
+        }
     }
-
     // Close the database connection
     db.close();
 }

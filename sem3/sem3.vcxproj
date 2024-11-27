@@ -123,6 +123,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\sqlite-amalgamation-3470000\sqlite-amalgamation-3470000\sqlite3.h" />
+    <ClInclude Include="Admin.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="Appliance.h" />
     <ClInclude Include="ApplianceFrom.h">
       <FileType>CppForm</FileType>
@@ -142,6 +145,9 @@
     <ClInclude Include="scheduleGenerationForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="Settings.h">
+		<FileType>CppForm</FileType>
+	</ClInclude>
     <ClInclude Include="User .h" />
   </ItemGroup>
   <ItemGroup>
@@ -152,12 +158,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Admin.cpp" />
     <ClCompile Include="ApplianceFrom.cpp" />
     <ClCompile Include="db.cpp" />
     <ClCompile Include="historyForm.cpp" />
     <ClCompile Include="HomeForm.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="scheduleGenerationForm.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="sqlite\sqlite3.c">
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">CompileAsC</CompileAs>
       <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">CompileAsC</CompileAs>
@@ -167,6 +175,9 @@
     <ClCompile Include="User .cpp" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Admin.resx">
+      <DependentUpon>Admin.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ApplianceFrom.resx">
       <DependentUpon>ApplianceFrom.h</DependentUpon>
       <SubType>Designer</SubType>
@@ -183,6 +194,9 @@
     <EmbeddedResource Include="scheduleGenerationForm.resx">
       <DependentUpon>scheduleGenerationForm.h</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Settings.resx">
+		<DependentUpon>Settings.h</DependentUpon>
+	</EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
