@@ -878,3 +878,219 @@ bool dbManager::isApplianceChangedTableEmpty() {
 
     return isEmpty;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void dbManager::setPeakHoursStart(int userID, int peakHoursStart) {
+    sqlite3_stmt* statement = nullptr;
+
+    const char* updateQuery = "UPDATE Users SET PeakHourStart = ? where UID = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting PeakHourStart: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, peakHoursStart);
+    sqlite3_bind_int(statement, 2, userID);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting PeakHourStart: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+void dbManager::setPeakHoursEnd(int userID, int peakHoursEnd) {
+    sqlite3_stmt* statement = nullptr;
+
+    const char* updateQuery = "UPDATE Users SET PeakHourEnd = ? where UID = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting PeakHourEnd: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, peakHoursEnd);
+    sqlite3_bind_int(statement, 2, userID);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting PeakHourEnd: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+
+void dbManager::setMeterPhaseType(int userID, std::string meterPhase) {
+    sqlite3_stmt* statement = nullptr;
+
+    const char* updateQuery = "UPDATE Users SET meterPhaseType = ? where UID = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting meterPhaseType: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_text(statement, 1, meterPhase.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_int(statement, 2, userID);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting meterPhaseType: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+
+std::string dbManager::getMeterPhaseType(int userID) {
+    sqlite3_stmt* statement = nullptr;
+
+    // Prepare and execute SQL query to fetch appliance changed data
+    const char* applianceQuery = "SELECT meterPhaseType FROM Users where UID = ?";
+
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering Meter Phase Type: " << sqlite3_errmsg(db) << std::endl;
+        return "";
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+
+    std::string meterPhaseType;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        const unsigned char* text = sqlite3_column_text(statement, 0);
+        if (text) {
+            meterPhaseType = reinterpret_cast<const char*>(text);
+        }
+        else {
+            meterPhaseType = ""; // Handle null value from database
+        }
+    }
+
+    sqlite3_finalize(statement);
+    return meterPhaseType;
+}
+
+void dbManager::setTargetUnits(int userID, int targetUnits) {
+    sqlite3_stmt* statement = nullptr;
+
+    const char* updateQuery = "UPDATE PowerDetails SET targetUnits = ? where UID = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting targetUnits: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, targetUnits);
+    sqlite3_bind_int(statement, 2, userID);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting targetUnits: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+
+
+
+

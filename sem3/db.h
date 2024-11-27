@@ -43,4 +43,26 @@ public:
 	int getApplianceChanged();
 	void insertApplianceChanged();
 	bool isApplianceChangedTableEmpty();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+
+	void setPeakHoursStart(int userID, int peakHoursStart);
+	void setPeakHoursEnd(int userID, int peakHoursEnd);
+	void setMeterPhaseType(int userID, std::string meterPhase);
+	std::string getMeterPhaseType(int userID);
+	void setTargetUnits(int userID, int targetUnits);
 };

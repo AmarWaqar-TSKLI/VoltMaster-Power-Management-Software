@@ -1,6 +1,7 @@
 #pragma once
 #include "ApplianceFrom.h"
 #include "scheduleGenerationForm.h"
+#include "Settings.h"
 
 namespace sem3 {
 
@@ -186,6 +187,9 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 	this->Hide();
 }
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
+	Settings^ myform = gcnew Settings(userID);
+	myform->Show();
+	this->Hide();
 }
 };
 }
