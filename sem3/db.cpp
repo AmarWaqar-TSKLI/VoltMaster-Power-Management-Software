@@ -398,7 +398,8 @@ void dbManager::getScheduleGenData(int userID, std::vector<std::tuple<int, int, 
     
     bool isEmpty = false;
     int currentScheduleID = getCurrentSID(userID, isEmpty);
-
+    if (!isEmpty && currentScheduleID >= 1 && getApplianceChanged() == 1)
+        currentScheduleID++;
 
     // Prepare and execute SQL query to fetch appliance data
     const char* applianceQuery = "SELECT offsetId, QUANTITY, Duration, PRIORITY FROM SelectedAppliances where UID = ? AND SID = ?";
@@ -520,29 +521,41 @@ int dbManager::getApplianceID(const char* applianceName) {
     return applianceID;
 }
 
-const char* dbManager::getApplianceName(int applianceId,System::String^& str) {
-    sqlite3_stmt* statement;
+const char* dbManager::getApplianceName(int uid, int sid, int applianceIdOffset, System::String^& str) {
+    sqlite3_stmt* statement = nullptr;
 
+    // Correct SQL query with proper WHERE clause using AND
+    std::string query = "SELECT APPLIANCENAME FROM SelectedAppliances WHERE offsetId = ? AND SID = ? AND UID = ?";
 
-    string query = "SELECT APPLIANCENAME FROM SelectedAppliances WHERE offsetId = ?";  // Query to select Name based on ID
-
+    // Prepare the SQL statement
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
-        cout << "Error preparing statement: " << sqlite3_errmsg(db) << endl;  // Log any error
+        std::cerr << "Error preparing statement: " << sqlite3_errmsg(db) << std::endl;  // Log error
         return nullptr;
     }
 
-    sqlite3_bind_int(statement, 1, applianceId);  // Bind the applianceId to the first parameter (index 1)
+    // Bind parameters: offsetId, SID, and UID
+    sqlite3_bind_int(statement, 1, applianceIdOffset);  // Bind applianceIdOffset to the first parameter
+    sqlite3_bind_int(statement, 2, sid);               // Bind SID to the second parameter
+    sqlite3_bind_int(statement, 3, uid);               // Bind UID to the third parameter
 
     const char* name = nullptr;
-    
+
+    // Execute the query and fetch the result
     if (sqlite3_step(statement) == SQLITE_ROW) {
+        // Get the APPLIANCENAME from the query result
         name = reinterpret_cast<const char*>(sqlite3_column_text(statement, 0));
-        str = msclr::interop::marshal_as<System::String^>(name);
+
+        // Convert to System::String^ for compatibility with WinForms
+        if (name) {
+            str = msclr::interop::marshal_as<System::String^>(name);
+        }
     }
     else {
-        cout << "No appliance found with offsetId: " << applianceId << endl;  // Handle case where no row is returned
+        std::cout << "No appliance found for offsetId: " << applianceIdOffset
+            << ", SID: " << sid << ", and UID: " << uid << std::endl;  // Log if no result
     }
 
+    // Finalize the SQLite statement
     sqlite3_finalize(statement);
 
     return name;  // Return the appliance name or nullptr if not found
@@ -553,7 +566,8 @@ int dbManager::getApplianceCount(int userID) {
 
     bool isEmpty = false;
     int currentScheduleID = getCurrentSID(userID, isEmpty);
-
+    if (!isEmpty && currentScheduleID >= 1 && getApplianceChanged() == 1)
+        currentScheduleID++;
 
     // Prepare and execute SQL query to fetch appliance data
     const char* applianceQuery = "SELECT COUNT(*) FROM SelectedAppliances where UID = ? AND SID = ?";
@@ -840,3 +854,27 @@ void dbManager::insertApplianceChanged() {
     sqlite3_finalize(statement);
 }
 
+bool dbManager::isApplianceChangedTableEmpty() {
+    sqlite3_stmt* statement = nullptr;
+    bool isEmpty = true; // Default to true, assuming the table is empty
+
+    // SQL query to check if the table has any rows
+    std::string query = "SELECT EXISTS(SELECT 1 FROM ApplianceChanged LIMIT 1);";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query to check table emptiness: " << sqlite3_errmsg(db) << std::endl;
+        return false; // Error handling: Assume not empty to avoid misbehavior
+    }
+
+    // Execute the query
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        // Retrieve the result (0 means empty, 1 means not empty)
+        isEmpty = sqlite3_column_int(statement, 0) == 0;
+    }
+
+    // Finalize the statement
+    sqlite3_finalize(statement);
+
+    return isEmpty;
+}

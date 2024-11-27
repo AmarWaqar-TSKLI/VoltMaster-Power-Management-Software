@@ -30,7 +30,7 @@ public:
 	int getPeakHoursStart(int userID);
 	int getPeakHoursEnd(int userID);
 	int getApplianceID(const char* applianceName);
-	const char* getApplianceName(int applianceID,System::String^& str);
+	const char* getApplianceName(int uid, int sid, int applianceIdOffset, System::String^& str);
 	int getApplianceCount(int userID);
 	std::vector<std::string> getApplianceNamesWithDuplicateAID(int userID, int scheduleID);
 	void updateDuration(const char* applianceName, int newDuration);
@@ -42,4 +42,5 @@ public:
 	void setApplianceChanged(int value);
 	int getApplianceChanged();
 	void insertApplianceChanged();
+	bool isApplianceChangedTableEmpty();
 };

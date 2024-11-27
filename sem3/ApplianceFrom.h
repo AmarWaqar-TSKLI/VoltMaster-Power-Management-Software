@@ -576,7 +576,7 @@ namespace sem3 {
 		db.open("test.db");
 		bool isEmpty = false;
 		int currentSchedule = db.getCurrentSID(userID, isEmpty);
-		if (!isEmpty)
+		if (!isEmpty && currentSchedule >= 1)
 			currentSchedule += 1;
 		db.deleteselectedappliances(userID, currentSchedule);
 		// Iterate through each control in the parent control

@@ -55,7 +55,9 @@ void main()
         db.createScheduleTable();
         db.createPowerTable();
         db.createApplianceChangedTable();
-        db.insertApplianceChanged();
+        if (db.isApplianceChangedTableEmpty()) {
+            db.insertApplianceChanged();
+        }
         db.addPowerDetail(1, 300, 150, 1500);
         db.addPowerDetail(2, 400, 230, 10000);
         db.addPowerDetail(3, 1200, 200, 100);

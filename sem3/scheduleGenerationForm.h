@@ -448,7 +448,11 @@ namespace sem3 {
 				// Create the first label (get<0>(schedule[i]))
 				Label^ label1 = gcnew Label();
 				String^ managedApplianceName;
-				const char* applianceName = db.getApplianceName(std::get<0>(schedule[i][currentCol]), managedApplianceName);
+				bool isEmpty = false;
+				int sid = db.getCurrentSID(userID, isEmpty);
+				if (!isEmpty && sid >= 1 && db.getApplianceChanged() == 1)
+					sid++;
+				const char* applianceName = db.getApplianceName(userID, sid, std::get<0>(schedule[i][currentCol]), managedApplianceName);
 				// String^ managedApplianceName = msclr::interop::marshal_as<String^>(applianceName);
 
 				// Set the label text
