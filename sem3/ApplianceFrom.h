@@ -574,7 +574,10 @@ namespace sem3 {
 
 		dbManager  db;
 		db.open("test.db");
-		int currentSchedule = db.getCurrentSID(userID);
+		bool isEmpty = false;
+		int currentSchedule = db.getCurrentSID(userID, isEmpty);
+		if (!isEmpty)
+			currentSchedule += 1;
 		db.deleteselectedappliances(userID, currentSchedule);
 		// Iterate through each control in the parent control
 		int offsetId = 1;
@@ -641,6 +644,7 @@ namespace sem3 {
 								// Get ID and perform database operation
 								int q = 1;
 								db.addselectedAppliances(userID, currentSchedule, Id, appendedName, prio, q, dura, offsetId);
+								db.setApplianceChanged(1);
 								offsetId++;
 
 								// Clean up allocated memory
@@ -650,11 +654,13 @@ namespace sem3 {
 						else if (result == System::Windows::Forms::DialogResult::Yes) {
 							db.addselectedAppliances(userID, currentSchedule, Id, applianceName, prio, quan, dura, offsetId);
 							offsetId++;
+							db.setApplianceChanged(1);
 						}
 					}
 					else {
 						db.addselectedAppliances(userID, currentSchedule, Id, applianceName, prio, quan, dura, offsetId);
 						offsetId++;
+						db.setApplianceChanged(1);
 					}
 				}
 					   

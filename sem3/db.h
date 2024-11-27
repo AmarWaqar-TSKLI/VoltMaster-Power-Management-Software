@@ -23,7 +23,7 @@ public:
 	bool addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity,int duration, int offsetId);
 	bool deleteselectedappliances(int userID, int scheduleID);
 	int readUserID(const char* username);
-	int getCurrentSID(int userID);
+	int getCurrentSID(int userID, bool& isEmpty);
 	void getScheduleGenData(int userID, std::vector<std::tuple<int, int, int,float,int>>& appliances);
 	int getAppliancePower(int applianceID);
 	int getTargetUnits(int userID);
@@ -32,11 +32,14 @@ public:
 	int getApplianceID(const char* applianceName);
 	const char* getApplianceName(int applianceID,System::String^& str);
 	int getApplianceCount(int userID);
-
-
-
 	std::vector<std::string> getApplianceNamesWithDuplicateAID(int userID, int scheduleID);
 	void updateDuration(const char* applianceName, int newDuration);
 	bool authenticateUser(const std::string& uname, const std::string& pass);
 	bool insertIntoSchedules(int uid, const std::string& type, int unitsSaved);
+	void setConsumedUnits(int userID, int powerConsumed);
+	int getConsumedUnits(int userID);
+	bool createApplianceChangedTable();
+	void setApplianceChanged(int value);
+	int getApplianceChanged();
+	void insertApplianceChanged();
 };

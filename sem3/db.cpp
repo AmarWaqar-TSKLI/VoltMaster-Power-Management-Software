@@ -94,7 +94,8 @@ bool dbManager::createScheduleTable() {
 bool dbManager::addSchedule(int userID, const char* type, int unitsSaved) {
     sqlite3_stmt* statement;
 
-    int currentSID = getCurrentSID(userID);
+    bool isEmpty = false;
+    int currentSID = getCurrentSID(userID, isEmpty);
 
     string query = "INSERT INTO Schedules (SID,UID, Type, UnitsSaved) VALUES (?,?,?, ?)";
 
@@ -343,7 +344,7 @@ int dbManager::readUserID(const char* username)
     return id;
 }
 
-int dbManager::getCurrentSID(int userID) {
+int dbManager::getCurrentSID(int userID, bool& isEmpty) {
     sqlite3_stmt* statement;
     string query = "SELECT MAX(SID) from Schedules where UID = (?)";
 
@@ -354,13 +355,17 @@ int dbManager::getCurrentSID(int userID) {
 
     sqlite3_bind_int(statement, 1, userID);
 
-    // Store userID data
+    // Store current SID data
     int id = -1;
     if (sqlite3_step(statement) == SQLITE_ROW) {
         id = sqlite3_column_int(statement, 0);
     }
 
     sqlite3_finalize(statement);
+    if (id == 0) {
+        id++;
+        isEmpty = true;
+    }
     return id;
 }
 
@@ -390,7 +395,9 @@ int dbManager::getAppliancePower(int applianceID) {
 
 void dbManager::getScheduleGenData(int userID, std::vector<std::tuple<int, int, int, float,int>>& appliances) {
     sqlite3_stmt* statement = nullptr;
-    int currentScheduleID = getCurrentSID(userID);
+    
+    bool isEmpty = false;
+    int currentScheduleID = getCurrentSID(userID, isEmpty);
 
 
     // Prepare and execute SQL query to fetch appliance data
@@ -543,7 +550,9 @@ const char* dbManager::getApplianceName(int applianceId,System::String^& str) {
 
 int dbManager::getApplianceCount(int userID) {
     sqlite3_stmt* statement = nullptr;
-    int currentScheduleID = getCurrentSID(userID);
+
+    bool isEmpty = false;
+    int currentScheduleID = getCurrentSID(userID, isEmpty);
 
 
     // Prepare and execute SQL query to fetch appliance data
@@ -699,6 +708,135 @@ bool dbManager::insertIntoSchedules(int uid, const std::string& type, int unitsS
     sqlite3_finalize(stmt);
     return true;
 }
+void dbManager::setConsumedUnits(int userID, int powerConsumed) {
+    sqlite3_stmt* statement = nullptr;
+
+    // SQL query to update the duration of the appliance with the given name
+    const char* updateQuery = "UPDATE PowerDetails SET consumedUnits = ? WHERE UID = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting consumed Units: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, powerConsumed);
+    sqlite3_bind_int(statement, 2, userID);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting consumed units: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+int dbManager::getConsumedUnits(int userID) {
+    sqlite3_stmt* statement = nullptr;
 
 
+    // Prepare and execute SQL query to fetch consumed Units data
+    const char* applianceQuery = "SELECT consumedUnits FROM PowerDetails where UID = ?";
+
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering consumed units: " << sqlite3_errmsg(db) << std::endl;
+        return -1;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+
+    // store consumed Units data
+    int consumedUnits = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        consumedUnits = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return -1;
+    }
+
+    sqlite3_finalize(statement);
+    return consumedUnits;
+}
+
+bool dbManager::createApplianceChangedTable() {
+    string query = "CREATE TABLE IF NOT EXISTS ApplianceChanged" 
+                   "(ID INTEGER PRIMARY KEY);";
+
+    char* errorMessage = nullptr;
+    int rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &errorMessage);
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL error: " << errorMessage << std::endl;
+        sqlite3_free(errorMessage);
+        return false;
+    }
+    std::cout << "Appliances Changed Table created successfully!" << std::endl;
+    return true;
+}
+
+void dbManager::setApplianceChanged(int value) {
+    sqlite3_stmt* statement = nullptr;
+
+    // SQL query to update the duration of the appliance with the given name
+    const char* updateQuery = "UPDATE ApplianceChanged SET ID = ?";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting Appliance Changed: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, value);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting Appliance Changed: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
+int dbManager::getApplianceChanged() {
+    sqlite3_stmt* statement = nullptr;
+
+    // Prepare and execute SQL query to fetch appliance changed data
+    const char* applianceQuery = "SELECT ID FROM ApplianceChanged";
+
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering Appliance Changed: " << sqlite3_errmsg(db) << std::endl;
+        return -1;
+    }
+
+    int applianceChanged = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        applianceChanged = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return -1;
+    }
+
+    sqlite3_finalize(statement);
+    return applianceChanged;
+}
+
+void dbManager::insertApplianceChanged() {
+    sqlite3_stmt* statement = nullptr;
+
+    const char* updateQuery = "INSERT INTO ApplianceChanged (ID) VALUES(?)";
+
+    // Prepare the query
+    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare update query for setting Appliance Changed: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, 0);
+
+    // Execute the query to update the record
+    if (sqlite3_step(statement) != SQLITE_DONE) {
+        std::cerr << "Failed to execute update query for setting Appliance Changed: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    // Finalize the statement to clean up
+    sqlite3_finalize(statement);
+}
 

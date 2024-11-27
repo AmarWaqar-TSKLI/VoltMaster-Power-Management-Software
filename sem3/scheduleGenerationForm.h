@@ -6,6 +6,7 @@
 #include <msclr/marshal.h>
 #include <sstream>
 #include <iomanip>
+#include <msclr/marshal_cppstd.h>
 namespace sem3 {
 
 	using namespace System;
@@ -89,11 +90,12 @@ namespace sem3 {
 			this->button1->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 			this->button1->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button1->Location = System::Drawing::Point(298, 716);
+			this->button1->Location = System::Drawing::Point(675, 791);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(266, 45);
 			this->button1->TabIndex = 0;
 			this->button1->UseVisualStyleBackColor = false;
+			this->button1->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button1_Click);
 			// 
 			// panel1
 			// 
@@ -107,6 +109,7 @@ namespace sem3 {
 			this->panel1->Name = L"panel1";
 			this->panel1->Size = System::Drawing::Size(1424, 881);
 			this->panel1->TabIndex = 1;
+			this->panel1->Visible = false;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &scheduleGenerationForm::panel1_Paint);
 			// 
 			// label1
@@ -252,19 +255,23 @@ namespace sem3 {
 	private: System::Void scheduleGenerationForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		dbManager db;
 		db.open("test.db");
-		if (db.getCurrentSID(userID) == 0) {
-			this->BackgroundImage = System::Drawing::Image::FromFile("Images/sg- notExists.jpg");
-
+		bool isEmpty = false;
+		int SID = db.getCurrentSID(userID, isEmpty);
+		if (SID == 1 && isEmpty) {
+			BackgroundImage = System::Drawing::Image::FromFile("Images/sg- notExists.jpg");
+			panel1->Visible = false;
 		}
 		else {
-			this->BackgroundImage = System::Drawing::Image::FromFile("Images/sg- exists.jpg");
-			this->button1->Location = System::Drawing::Point(298, 716);
+			BackgroundImage = System::Drawing::Image::FromFile("Images/sg- exists.jpg");
+			button1->Location = System::Drawing::Point(298, 716);
+			panel1->Visible = false;
 		}
 		db.close();
 	}
 
 	private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
 		button8->BackgroundImage = System::Drawing::Image::FromFile("Images/sg-daily.png");
+		button8->Tag = "1";
 	}
 	
 	
@@ -505,16 +512,27 @@ namespace sem3 {
 	}
 
 	private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
-		this->powerConsumed= Int32::Parse(textBox1->Text);
-		//if (button8->BackgroundImage == System::Drawing::Image::FromFile("Images/sg-daily.png")) {
-		//	this->type = "daily";
-		//}
-		////else if (nullptr){
-		////	// weekly
-		////}
-		//else {
-		//	label1->Text = "Error: Select from Daily or Weekly Schedule Type";
-		//}
+		if (button8->Tag=="1") {
+			this->type = "daily";
+		}
+		/*if (button8->Tag=="2") { ------------------- WEEKLY
+			this->type = "weekly";
+		}*/
+		else
+		{
+			label1->Text = "Please select schedule type";
+			return;
+		}
+
+		if (textBox1->Text == "") {
+			label1->Text = "Error: Current Units cannot be empty!";
+			return;
+		}
+		this->powerConsumed = Int32::Parse(textBox1->Text);
+		if (powerConsumed < 0) {
+			label1->Text = "Error: power Consumed should be positive";
+			return;
+		}
 
 		// development notes
 		// schedule type, meter phase type, peak hours, targetPowerUnits, power consumed units, 
@@ -525,6 +543,12 @@ namespace sem3 {
 		std::vector<std::tuple<int, int, int, float,int>> appliances;
 		dbManager db;
 		db.open("test.db");
+		if (db.getApplianceCount(userID) == 0) {
+			label1->Text = "Error: No Appliances selected";
+			return;
+		}
+		db.setConsumedUnits(userID, powerConsumed);
+
 		db.getScheduleGenData(userID, appliances);
 		float sum = calculateTotalPower(appliances);
 		int applianceCount = db.getApplianceCount(userID);
@@ -545,7 +569,7 @@ namespace sem3 {
 		int peakHourEnd = db.getPeakHoursEnd(userID);
 		int targetUnits = db.getTargetUnits(userID);
 
-		if (sum  <= targetUnits) {
+		if (powerConsumed + (30 * sum)  <= targetUnits) {
 			bubbleSortPower(appliances, appliances.size());
 			for (int currentCol = 0; currentCol < 5;) {
 				int currMins = 0;
@@ -702,9 +726,14 @@ namespace sem3 {
 		}
 		DisplaySchedule(schedule, applianceCount, 5);
 		
-		// save scedule id and type and units saved
 
-		db.insertIntoSchedules(userID, "Daily", 0);
+		if (db.getApplianceChanged() == 1) {
+			// save scedule id and type and units saved
+			System::String^ managedString = type;
+			std::string nativeString = msclr::interop::marshal_as<std::string>(managedString);
+			db.insertIntoSchedules(userID,nativeString, 0);
+			db.setApplianceChanged(0);
+		}
 
 		db.close();
 
@@ -725,6 +754,9 @@ namespace sem3 {
 
 private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 
+}
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+	panel1->Visible = true;
 }
 };
 }
