@@ -2,6 +2,7 @@
 #include "sqlite3.h"
 #include<vector>
 #include<string>
+using namespace std;
 class dbManager
 {
 private:
@@ -35,7 +36,7 @@ public:
 	std::vector<std::string> getApplianceNamesWithDuplicateAID(int userID, int scheduleID);
 	void updateDuration(const char* applianceName, int newDuration);
 	bool authenticateUser(const std::string& uname, const std::string& pass);
-	bool insertIntoSchedules(int uid, const std::string& type, int unitsSaved);
+	bool insertIntoSchedules(int uid, const std::string& type, int unitsSaved, std::string date);
 	void setConsumedUnits(int userID, int powerConsumed);
 	int getConsumedUnits(int userID);
 	bool createApplianceChangedTable();
@@ -43,4 +44,8 @@ public:
 	int getApplianceChanged();
 	void insertApplianceChanged();
 	bool isApplianceChangedTableEmpty();
+	void getScheduleTypeAndSavedUnits(int userId, int sid, int& unitsSaved, std::string& type);
+	void getScheduleGenDataForHistory(int userID, int sid, std::vector<std::tuple<int, int, int, float, int>>& appliances);
+	int getApplianceCountForHistory(int userId, int sid);
+	std::string getScheduleDate(int uid, int sid);
 };

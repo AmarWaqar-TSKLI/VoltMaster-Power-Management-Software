@@ -5,6 +5,7 @@
 #include "db.h"
 #include <vector>
 #include "scheduleGenerationForm.h"
+#include "historyForm.h"
 
 namespace sem3 {
 	using namespace System;
@@ -32,6 +33,7 @@ namespace sem3 {
 	public:
 		Form home;
 	private: System::Windows::Forms::Button^ button3;
+	private: System::Windows::Forms::Button^ button4;
 	public:
 		int userID;
 		ApplianceFrom(int userID)
@@ -252,6 +254,7 @@ namespace sem3 {
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -306,11 +309,26 @@ namespace sem3 {
 			this->button3->UseVisualStyleBackColor = false;
 			this->button3->Click += gcnew System::EventHandler(this, &ApplianceFrom::button3_Click);
 			// 
+			// button4
+			// 
+			this->button4->BackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatAppearance->BorderSize = 0;
+			this->button4->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button4->Location = System::Drawing::Point(57, 447);
+			this->button4->Name = L"button4";
+			this->button4->Size = System::Drawing::Size(117, 48);
+			this->button4->TabIndex = 3;
+			this->button4->UseVisualStyleBackColor = false;
+			this->button4->Click += gcnew System::EventHandler(this, &ApplianceFrom::button4_Click);
+			// 
 			// ApplianceFrom
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1424, 881);
+			this->ClientSize = System::Drawing::Size(1422, 881);
+			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
@@ -713,6 +731,11 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID);
 	myform->Show();
 	this->Hide();
+}
+private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+	historyForm^ myHForm = gcnew historyForm(userID);
+	this->Hide();
+	myHForm->Show();
 }
 };
 }

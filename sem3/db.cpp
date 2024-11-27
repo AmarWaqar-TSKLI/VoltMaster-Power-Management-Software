@@ -78,6 +78,7 @@ bool dbManager::createScheduleTable() {
         "UID INTEGER  NOT NULL, "
         "Type TEXT NOT NULL,"
         "UnitsSaved INT NOT NULL,"
+        "Date TEXT NOT NULL,"
         "FOREIGN KEY(UID) REFERENCES Users(UID));";
 
     char* errorMessage = nullptr;
@@ -108,6 +109,7 @@ bool dbManager::addSchedule(int userID, const char* type, int unitsSaved) {
     sqlite3_bind_int(statement, 2, userID);
     sqlite3_bind_text(statement, 3, type, -1, SQLITE_STATIC);
     sqlite3_bind_int(statement, 4, unitsSaved);
+
 
     if (sqlite3_step(statement) != SQLITE_DONE) {
         cout << "Error executing statement for Adding schedule" << endl;
@@ -692,8 +694,8 @@ bool dbManager::authenticateUser(const std::string& uname, const std::string& pa
 }
 
 
-bool dbManager::insertIntoSchedules(int uid, const std::string& type, int unitsSaved) {
-    std::string query = "INSERT INTO Schedules (UID, Type, UnitsSaved) VALUES (?, ?, ?);";
+bool dbManager::insertIntoSchedules(int uid, const std::string& type, int unitsSaved, std::string date) {
+    std::string query = "INSERT INTO Schedules (UID, Type, UnitsSaved, Date) VALUES (?, ?, ?, ?);";
     sqlite3_stmt* stmt = nullptr;
 
     // Prepare the SQL statement
@@ -707,6 +709,8 @@ bool dbManager::insertIntoSchedules(int uid, const std::string& type, int unitsS
     sqlite3_bind_int(stmt, 1, uid);                  // Bind UID to the first placeholder
     sqlite3_bind_text(stmt, 2, type.c_str(), -1, SQLITE_STATIC); // Bind Type to the second placeholder
     sqlite3_bind_int(stmt, 3, unitsSaved);          // Bind UnitsSaved to the third placeholder
+    sqlite3_bind_text(stmt, 4, date.c_str(), -1, SQLITE_STATIC); // Bind Type to the second placeholder
+
 
     // Execute the SQL statement
     rc = sqlite3_step(stmt);
@@ -877,4 +881,131 @@ bool dbManager::isApplianceChangedTableEmpty() {
     sqlite3_finalize(statement);
 
     return isEmpty;
+}
+
+void dbManager::getScheduleTypeAndSavedUnits(int userId, int sid, int& unitsSaved, std::string& type) {
+    sqlite3_stmt* statement = nullptr;
+
+    // SQL query to fetch UnitsSaved and Type for the given userId and sid
+    std::string query = "SELECT UnitsSaved, Type FROM Schedules WHERE UID = ? AND SID = ?";
+
+    // Prepare the SQL statement
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Error preparing statement: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    // Bind parameters: userId and sid
+    sqlite3_bind_int(statement, 1, userId); // Bind userId to the first placeholder
+    sqlite3_bind_int(statement, 2, sid);   // Bind sid to the second placeholder
+
+    // Execute the query and fetch the result
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        // Retrieve UnitsSaved as an integer
+        unitsSaved = sqlite3_column_int(statement, 0);
+
+        // Retrieve Type as a string
+        const char* typeText = reinterpret_cast<const char*>(sqlite3_column_text(statement, 1));
+        if (typeText) {
+            type = std::string(typeText); // Convert to std::string
+        }
+    }
+    else {
+        std::cout << "No matching record found for UID: " << userId << " and SID: " << sid << std::endl;
+    }
+
+    // Finalize the SQLite statement
+    sqlite3_finalize(statement);
+}
+
+void dbManager::getScheduleGenDataForHistory(int userID, int sid, std::vector<std::tuple<int, int, int, float, int>>& appliances) {
+    sqlite3_stmt* statement = nullptr;
+
+   
+
+    // Prepare and execute SQL query to fetch appliance data
+    const char* applianceQuery = "SELECT offsetId, QUANTITY, Duration, PRIORITY FROM SelectedAppliances where UID = ? AND SID = ?";
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering schedule generation data: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(statement, 1, userID);
+    sqlite3_bind_int(statement, 2, sid);
+
+    // Store appliance data in vector
+    while (sqlite3_step(statement) == SQLITE_ROW) {
+        int id = sqlite3_column_int(statement, 0);
+        int quantity = sqlite3_column_int(statement, 1);
+        int duration = sqlite3_column_int(statement, 2);
+        int priority = sqlite3_column_int(statement, 3);
+        int power = getAppliancePower(id);
+        if (power != -1)
+            appliances.push_back(std::make_tuple(id, quantity, duration, power, priority));
+    }
+
+    sqlite3_finalize(statement);
+}
+
+int dbManager::getApplianceCountForHistory(int userId, int sid) {
+    sqlite3_stmt* statement = nullptr;
+
+
+    // Prepare and execute SQL query to fetch appliance data
+    const char* applianceQuery = "SELECT COUNT(*) FROM SelectedAppliances where UID = ? AND SID = ?";
+    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare query for gathering appliance count data: " << sqlite3_errmsg(db) << std::endl;
+        return -1;
+    }
+
+    sqlite3_bind_int(statement, 1, userId);
+    sqlite3_bind_int(statement, 2, sid);
+
+    // Store appliance Count data
+    int applianceCount = -1;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        applianceCount = sqlite3_column_int(statement, 0);
+    }
+    else {
+        return -1;
+    }
+
+    sqlite3_finalize(statement);
+    return applianceCount;
+}
+
+std::string dbManager::getScheduleDate(int uid, int sid) {
+    sqlite3_stmt* statement = nullptr;
+
+    // SQL query to fetch Date for the given UID and SID
+    std::string query = "SELECT Date FROM Schedules WHERE UID = ? AND SID = ?";
+
+    // Prepare the SQL statement
+    if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
+        std::cerr << "Error preparing statement: " << sqlite3_errmsg(db) << std::endl;
+        return ""; // Return empty string on error
+    }
+
+    // Bind parameters: UID and SID
+    sqlite3_bind_int(statement, 1, uid); // Bind UID to the first placeholder
+    sqlite3_bind_int(statement, 2, sid); // Bind SID to the second placeholder
+
+    std::string result;
+
+    // Execute the query and fetch the result
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        // Retrieve Date as a string
+        const char* dateText = reinterpret_cast<const char*>(sqlite3_column_text(statement, 0));
+        if (dateText) {
+            result = std::string(dateText); // Convert to std::string
+        }
+    }
+    else {
+        std::cout << "No matching record found for UID: " << uid << " and SID: " << sid << std::endl;
+    }
+
+    // Finalize the SQLite statement
+    sqlite3_finalize(statement);
+
+    return result; // Return the retrieved Date
 }

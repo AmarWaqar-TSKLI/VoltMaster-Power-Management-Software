@@ -728,6 +728,9 @@ namespace sem3 {
 					break;
 			}
 		}
+		// getdate
+
+
 		DisplaySchedule(schedule, applianceCount, 5);
 		
 
@@ -735,7 +738,9 @@ namespace sem3 {
 			// save scedule id and type and units saved
 			System::String^ managedString = type;
 			std::string nativeString = msclr::interop::marshal_as<std::string>(managedString);
-			db.insertIntoSchedules(userID,nativeString, 0);
+			std::string date = getTodayDate();
+
+			db.insertIntoSchedules(userID,nativeString, 0, date);
 			db.setApplianceChanged(0);
 		}
 
