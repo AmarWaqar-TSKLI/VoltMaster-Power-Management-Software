@@ -24,6 +24,8 @@ namespace sem3 {
 	public:
 		int userID;
 		int powerConsumed;
+	private: System::Windows::Forms::Button^ button9;
+	public:
 		String^ type;
 		scheduleGenerationForm(int userID)
 		{
@@ -80,6 +82,7 @@ namespace sem3 {
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -100,6 +103,7 @@ namespace sem3 {
 			// panel1
 			// 
 			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
+			this->panel1->Controls->Add(this->button9);
 			this->panel1->Controls->Add(this->label1);
 			this->panel1->Controls->Add(this->textBox1);
 			this->panel1->Controls->Add(this->button8);
@@ -229,6 +233,20 @@ namespace sem3 {
 			this->button6->Size = System::Drawing::Size(111, 36);
 			this->button6->TabIndex = 6;
 			this->button6->UseVisualStyleBackColor = false;
+			// 
+			// button9
+			// 
+			this->button9->BackColor = System::Drawing::Color::Transparent;
+			this->button9->FlatAppearance->BorderSize = 0;
+			this->button9->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button9->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button9->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button9->Location = System::Drawing::Point(1142, 143);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(177, 37);
+			this->button9->TabIndex = 5;
+			this->button9->UseVisualStyleBackColor = false;
+			this->button9->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button9_Click);
 			// 
 			// scheduleGenerationForm
 			// 
@@ -396,8 +414,39 @@ namespace sem3 {
 			MessageBox::Show("Background image not found at path: " + imagePath, "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 		}
 
+		Label^ labelcurr = gcnew Label();
 		
+		// String^ managedApplianceName = msclr::interop::marshal_as<String^>(applianceName);
 
+		// Set the label text
+		labelcurr->Text = powerConsumed.ToString();
+		labelcurr->Location = System::Drawing::Point(380, 185);
+		labelcurr->AutoSize = true;
+		labelcurr->ForeColor = System::Drawing::Color::White;
+		labelcurr->Font = gcnew System::Drawing::Font("Syne", 18.0f, FontStyle::Bold);
+		labelcurr->BackColor = System::Drawing::Color::Transparent;
+		dynamicPanel2->Controls->Add(labelcurr);
+		labelcurr->Visible = true;
+		labelcurr->BringToFront();
+		dbManager db;
+		db.open("test.db");
+		int units = 0;
+		int bill = 0;
+		db.gettargetunitsestimatedbill(userID, units, bill);
+		Label^ labelbill = gcnew Label();
+
+		// String^ managedApplianceName = msclr::interop::marshal_as<String^>(applianceName);
+
+		// Set the label text
+		labelbill->Text = bill.ToString();
+		labelbill->Location = System::Drawing::Point(410, 355);
+		labelbill->AutoSize = true;
+		labelbill->ForeColor = System::Drawing::Color::White;
+		labelbill->Font = gcnew System::Drawing::Font("Syne", 18.0f, FontStyle::Bold);
+		labelbill->BackColor = System::Drawing::Color::Transparent;
+		dynamicPanel2->Controls->Add(labelbill);
+		labelbill->Visible = true;
+		labelbill->BringToFront();
 
 		Panel^ dynamicPanel = gcnew Panel();
 		dynamicPanel->Visible = true;
@@ -418,8 +467,7 @@ namespace sem3 {
 		int startY = 30;            // Initial Y position
 		int labelSpacingY = 80;      // Space between rows (increased for better spacing)
 		int labelOffsetX = 150;      // Space between labels in the same row (increased for clarity)
-		dbManager db;
-		db.open("test.db");
+
 		// showing date
 
 		std::string date = getTodayDate();
@@ -522,9 +570,9 @@ namespace sem3 {
 		if (button8->Tag=="1") {
 			this->type = "daily";
 		}
-		/*if (button8->Tag=="2") { ------------------- WEEKLY
+		if (button9->Tag=="1") {
 			this->type = "weekly";
-		}*/
+		}
 		else
 		{
 			label1->Text = "Please select schedule type";
@@ -769,6 +817,10 @@ private: System::Void panel1_Paint(System::Object^ sender, System::Windows::Form
 }
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = true;
+}
+private: System::Void button9_Click(System::Object^ sender, System::EventArgs^ e) {
+	button9->BackgroundImage = System::Drawing::Image::FromFile("Images/sg-weekly.png");
+	button9->Tag = "1";
 }
 };
 }

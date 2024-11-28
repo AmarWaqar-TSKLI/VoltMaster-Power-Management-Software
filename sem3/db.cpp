@@ -1376,5 +1376,107 @@ int dbManager::readAdminID(const char* username)
     sqlite3_finalize(statement);
     return id;
 }
+void dbManager::gettargetunitsestimatedbill( int uid, int& uits, int& bill) {
+    sqlite3_stmt* stmt;
+    const char* sql = "SELECT targetUnits, estimatedBill FROM PowerDetails WHERE UID = ?";
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, uid);  // Bind the uid to the SQL statement
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        uits = sqlite3_column_int(stmt, 0);  // First column (index 0) is targetUnits
+        bill = sqlite3_column_int(stmt, 1);  // Second column (index 1) is estimatedBill
+    }
+    else {
+        std::cerr << "No results found for uid: " << uid << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
+}
+void dbManager::getpeakhoursandmeter(int uid, int& start, int& end, string& meter)
+{
+    sqlite3_stmt* stmt;
+    const char* sql = "SELECT PeakHourStart, PeakHourEnd ,meterPhaseType FROM Users WHERE UID = ?";
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, uid);  // Bind the uid to the SQL statement
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        start = sqlite3_column_int(stmt, 0);  // First column (index 0) is targetUnits
+        end = sqlite3_column_int(stmt, 1);  // Second column (index 1) is estimatedBill
+        meter = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        // Second column (index 1) is estimatedBill
+    }
+    else {
+        std::cerr << "No results found for uid: " << uid << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
+}
 
 
+std::string* dbManager::getAllApplianceNames(int& size) {
+    sqlite3_stmt* stmt;
+    const char* countSql = "SELECT COUNT(*) FROM Appliances";
+    const char* selectSql = "SELECT Name FROM Appliances";
+
+    // Step 1: Get the count of appliances
+    size = 0;
+    if (sqlite3_prepare_v2(db, countSql, -1, &stmt, nullptr) == SQLITE_OK) {
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
+            size = sqlite3_column_int(stmt, 0);
+        }
+    }
+    sqlite3_finalize(stmt);
+
+    if (size == 0) {
+        return nullptr;  // No appliances found
+    }
+
+    // Step 2: Allocate memory for the array
+    std::string* applianceNames = new std::string[size];
+
+    // Step 3: Fetch appliance names
+    if (sqlite3_prepare_v2(db, selectSql, -1, &stmt, nullptr) == SQLITE_OK) {
+        int index = 0;
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            applianceNames[index] = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 0));
+            index++;
+        }
+    }
+    sqlite3_finalize(stmt);
+
+    return applianceNames;
+}
+void dbManager::deleteAppliance(const char* appliance) {
+    sqlite3_stmt* stmt;
+    const char* sql = "DELETE FROM Appliances WHERE Name = ?";
+
+    // Prepare the SQL statement
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr) != SQLITE_OK) {
+        std::cerr << "Failed to prepare statement: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    // Bind the appliance name to the prepared statement
+    sqlite3_bind_text(stmt, 1, appliance, -1, SQLITE_STATIC);
+
+    // Execute the statement
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        std::cerr << "Failed to delete appliance: " << sqlite3_errmsg(db) << std::endl;
+    }
+    else {
+        std::cout << "Appliance deleted successfully." << std::endl;
+    }
+
+    // Finalize the statement
+    sqlite3_finalize(stmt);
+}

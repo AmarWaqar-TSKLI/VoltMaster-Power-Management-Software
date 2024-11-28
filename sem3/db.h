@@ -63,4 +63,8 @@ public:
 	void setTripleMeterPrice(int triplePrice);
 	bool authenticateAdmin(const std::string& uname, const std::string& pass);
 	int readAdminID(const char* username);
+	void gettargetunitsestimatedbill(int uid, int&units, int&bill);
+	void getpeakhoursandmeter(int uid, int& start, int& end, string& meter);
+	std::string* getAllApplianceNames(int& size);
+	void deleteAppliance(const char* appliance);
 };

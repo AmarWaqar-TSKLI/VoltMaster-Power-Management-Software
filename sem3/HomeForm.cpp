@@ -24,7 +24,7 @@ void main()
     if (loginForm->ShowDialog() == System::Windows::Forms::DialogResult::OK) {
         // Initialize the database (if needed)
         db.createApplianceListTable();
-        db.addApplianceToList("Fridge", 450);
+    /*    db.addApplianceToList("Fridge", 450);
         db.addApplianceToList("AC", 350);
         db.addApplianceToList("TV", 150);
         db.addApplianceToList("Charger", 50);
@@ -49,7 +49,7 @@ void main()
         db.addApplianceToList("Dehumidifier", 350);
         db.addApplianceToList("Space Heater", 500);
         db.addApplianceToList("Stand Mixer", 300);
-        db.addApplianceToList("Food Processor", 250);
+        db.addApplianceToList("Food Processor", 250);*/
         db.createScheduleTable();
         db.createPowerTable();
         db.createApplianceChangedTable();

@@ -44,6 +44,10 @@ namespace sem3 {
 	private: System::Windows::Forms::Button^ button5;
 	private: System::Windows::Forms::Button^ button6;
 	private: System::Windows::Forms::Button^ button7;
+	private: System::Windows::Forms::Label^ label1;
+	private: System::Windows::Forms::Label^ label2;
+	private: System::Windows::Forms::Label^ label3;
+	private: System::Windows::Forms::Label^ label4;
 
 	private:
 		/// <summary>
@@ -65,6 +69,10 @@ namespace sem3 {
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
+			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->label3 = (gcnew System::Windows::Forms::Label());
+			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// button1
@@ -149,12 +157,65 @@ namespace sem3 {
 			this->button7->TabIndex = 6;
 			this->button7->UseVisualStyleBackColor = false;
 			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->BackColor = System::Drawing::Color::Transparent;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label1->Location = System::Drawing::Point(317, 262);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(0, 29);
+			this->label1->TabIndex = 7;
+			this->label1->Click += gcnew System::EventHandler(this, &HomeForm::label1_Click);
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->BackColor = System::Drawing::Color::Transparent;
+			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label2->Location = System::Drawing::Point(704, 403);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(0, 29);
+			this->label2->TabIndex = 8;
+			// 
+			// label3
+			// 
+			this->label3->AutoSize = true;
+			this->label3->BackColor = System::Drawing::Color::Transparent;
+			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label3->Location = System::Drawing::Point(337, 403);
+			this->label3->Name = L"label3";
+			this->label3->Size = System::Drawing::Size(0, 29);
+			this->label3->TabIndex = 9;
+			// 
+			// label4
+			// 
+			this->label4->AutoSize = true;
+			this->label4->BackColor = System::Drawing::Color::Transparent;
+			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label4->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label4->Location = System::Drawing::Point(337, 549);
+			this->label4->Name = L"label4";
+			this->label4->Size = System::Drawing::Size(0, 29);
+			this->label4->TabIndex = 10;
+			// 
 			// HomeForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 881);
+			this->Controls->Add(this->label4);
+			this->Controls->Add(this->label3);
+			this->Controls->Add(this->label2);
+			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button5);
@@ -167,6 +228,7 @@ namespace sem3 {
 			this->Text = L"HomeForm";
 			this->Load += gcnew System::EventHandler(this, &HomeForm::HomeForm_Load);
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
@@ -174,7 +236,22 @@ namespace sem3 {
 		
 	}
 	private: System::Void HomeForm_Load(System::Object^ sender, System::EventArgs^ e) {
-		
+		dbManager db;
+		db.open("test.db");
+		int units=0;
+		int bill = 0;
+		db.gettargetunitsestimatedbill(userID, units, bill);
+		label1->Text = units.ToString();
+		label2->Text = bill.ToString();
+		int start = 0;
+		int end = 0;
+		string meter;
+		db.getpeakhoursandmeter(userID, start, end, meter);
+		label4->Text = start.ToString() + " - " + end.ToString();
+		label3->Text = gcnew System::String(meter.c_str());
+
+
+		db.close();
 	}
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 	ApplianceFrom^ myform = gcnew ApplianceFrom(userID);
@@ -190,6 +267,8 @@ private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e
 	Settings^ myform = gcnew Settings(userID);
 	myform->Show();
 	this->Hide();
+}
+private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
