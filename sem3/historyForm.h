@@ -1,8 +1,8 @@
 #pragma once
 #include<string>
 //#include"HomeForm.h"
-//#include"ApplianceFrom.h"
-//#include"scheduleGenerationForm.h"
+#include"ApplianceFrom.h"
+#include"scheduleGenerationForm.h"
 #include"db.h"
 #include <msclr/marshal_cppstd.h>
 #include <iostream>
@@ -10,7 +10,7 @@
 #include <msclr/marshal.h>
 #include <sstream>
 #include <iomanip>
-
+#include"Settings.h"
 using namespace std;
 namespace sem3 {
 
@@ -28,10 +28,16 @@ namespace sem3 {
 	{
 	public:
 		int userId;
-		historyForm(int userid)
+	private: System::Windows::Forms::Button^ button2;
+	private: System::Windows::Forms::Button^ button3;
+	private: System::Windows::Forms::Button^ button4;
+	public:
+		Form^ oldForm;
+		historyForm(int userid, Form^ old)
 		{
 			InitializeComponent();
 			this->userId = userid;
+			oldForm = old;
 		}
 
 	protected:
@@ -63,6 +69,9 @@ namespace sem3 {
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(historyForm::typeid));
 			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// button1
@@ -79,12 +88,57 @@ namespace sem3 {
 			this->button1->UseVisualStyleBackColor = false;
 			this->button1->Click += gcnew System::EventHandler(this, &historyForm::button1_Click);
 			// 
+			// button2
+			// 
+			this->button2->BackColor = System::Drawing::Color::Transparent;
+			this->button2->FlatAppearance->BorderSize = 0;
+			this->button2->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button2->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button2->Location = System::Drawing::Point(56, 538);
+			this->button2->Name = L"button2";
+			this->button2->Size = System::Drawing::Size(123, 39);
+			this->button2->TabIndex = 1;
+			this->button2->UseVisualStyleBackColor = false;
+			this->button2->Click += gcnew System::EventHandler(this, &historyForm::button2_Click);
+			// 
+			// button3
+			// 
+			this->button3->BackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->BorderSize = 0;
+			this->button3->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button3->Location = System::Drawing::Point(55, 625);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(123, 39);
+			this->button3->TabIndex = 2;
+			this->button3->UseVisualStyleBackColor = false;
+			this->button3->Click += gcnew System::EventHandler(this, &historyForm::button3_Click);
+			// 
+			// button4
+			// 
+			this->button4->BackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatAppearance->BorderSize = 0;
+			this->button4->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button4->Location = System::Drawing::Point(56, 369);
+			this->button4->Name = L"button4";
+			this->button4->Size = System::Drawing::Size(123, 39);
+			this->button4->TabIndex = 3;
+			this->button4->UseVisualStyleBackColor = false;
+			this->button4->Click += gcnew System::EventHandler(this, &historyForm::button4_Click);
+			// 
 			// historyForm
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->BackgroundImageLayout = System::Windows::Forms::ImageLayout::Stretch;
 			this->ClientSize = System::Drawing::Size(1385, 912);
+			this->Controls->Add(this->button4);
+			this->Controls->Add(this->button3);
+			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button1);
 			this->DoubleBuffered = true;
 			this->Name = L"historyForm";
@@ -95,9 +149,9 @@ namespace sem3 {
 		}
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-		/*HomeForm^ myHome = gcnew HomeForm(userId);
+		//Home Form
+		oldForm->Show();
 		this->Hide();
-		myHome->Show();*/
 	}
 
 	
@@ -616,5 +670,21 @@ namespace sem3 {
 		db.close();
 		// here get max scedule id
 	}
-	};
+	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+		// sjow Appliance
+		ApplianceFrom^ myApForm = gcnew ApplianceFrom(userId, this);
+		this->Hide();
+		myApForm->Show();
+	}
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	Settings^ setForm = gcnew Settings(userId, this);
+	this->Hide();
+	setForm->Show();
+}
+private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+	scheduleGenerationForm^ schForm = gcnew scheduleGenerationForm(userId, this);
+	this->Hide();
+	schForm->Show();
+}
+};
 }

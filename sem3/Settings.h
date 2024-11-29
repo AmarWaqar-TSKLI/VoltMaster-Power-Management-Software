@@ -22,10 +22,14 @@ namespace sem3 {
 		int peakStart;
 		int peakEnd;
 		String^ meterPhase;
-		Settings(int userID)
+	private: System::Windows::Forms::Button^ button3;
+	public:
+		Form^ oldForm;
+		Settings(int userID, Form^ old)
 		{
 			InitializeComponent();
 			this->userID = userID;
+			oldForm = old;
 		}
 
 	protected:
@@ -72,6 +76,7 @@ namespace sem3 {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
+			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -182,12 +187,27 @@ namespace sem3 {
 			this->label1->Size = System::Drawing::Size(0, 26);
 			this->label1->TabIndex = 11;
 			// 
+			// button3
+			// 
+			this->button3->BackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->BorderSize = 0;
+			this->button3->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button3->Location = System::Drawing::Point(56, 451);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(123, 39);
+			this->button3->TabIndex = 12;
+			this->button3->UseVisualStyleBackColor = false;
+			this->button3->Click += gcnew System::EventHandler(this, &Settings::button3_Click);
+			// 
 			// Settings
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 911);
+			this->Controls->Add(this->button3);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button2);
@@ -307,6 +327,10 @@ private: System::Void Settings_Load(System::Object^ sender, System::EventArgs^ e
 		this->meterPhase = "Triple";
 	}
 	db.close();
+}
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	oldForm->Show();
+	this->Hide();
 }
 };
 }

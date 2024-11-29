@@ -693,11 +693,12 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 
 			   // Call the deleteAppliance function from dbManager
 			   db.deleteAppliance(applianceStdStr.c_str());
+			   MessageBox::Show("Deleted appliance: " + applianceName, "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
+
 			   panel3->Controls->Clear();
 			   displayAppliances();
 			   // Show confirmation message
-			   MessageBox::Show("Deleted appliance: " + applianceName, "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
-
+			  
 		   }
 		   db.close(); 
 	   }

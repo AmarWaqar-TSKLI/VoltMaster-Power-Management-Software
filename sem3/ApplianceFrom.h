@@ -5,7 +5,7 @@
 #include "db.h"
 #include <vector>
 #include "scheduleGenerationForm.h"
-#include "historyForm.h"
+//#include "historyForm.h"
 
 namespace sem3 {
 	using namespace System;
@@ -36,11 +36,13 @@ namespace sem3 {
 	private: System::Windows::Forms::Button^ button4;
 	public:
 		int userID;
-		ApplianceFrom(int userID)
+		Form^ oldForm;
+		ApplianceFrom(int userID, Form^ OldForm)
 		{
 			InitializeComponent();
 			applianceData = gcnew List<Tuple<int, String^>^>(); // Initialize the list
 			this->userID = userID;
+			this->oldForm = OldForm;
 		}
 
 		// Set appliance data (converting from unmanaged vector to managed list)
@@ -437,11 +439,11 @@ namespace sem3 {
 	private: System::Void hScrollBar1_Scroll(System::Object^ sender, System::Windows::Forms::ScrollEventArgs^ e) {	
 	}
 
-	//private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	//	//HomeForm^ form = gcnew HomeForm();
-	//	//home->Show();
-	//	//this->Hide();
-	//}
+	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+		// go to home
+		oldForm->Show();
+		this->Hide();
+	}
 
 	// Event handler for saveBtn Click
 
@@ -728,14 +730,14 @@ namespace sem3 {
 
 	}
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID);
+	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID, this);
 	myform->Show();
 	this->Hide();
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-	historyForm^ myHForm = gcnew historyForm(userID);
+	// historyForm
+	oldForm->Show();
 	this->Hide();
-	myHForm->Show();
 }
 };
 }

@@ -2,7 +2,7 @@
 #include "ApplianceFrom.h"
 #include "scheduleGenerationForm.h"
 #include "Settings.h"
-
+#include"historyForm.h"
 namespace sem3 {
 
 	using namespace System;
@@ -115,6 +115,7 @@ namespace sem3 {
 			this->button4->Size = System::Drawing::Size(137, 40);
 			this->button4->TabIndex = 3;
 			this->button4->UseVisualStyleBackColor = false;
+			this->button4->Click += gcnew System::EventHandler(this, &HomeForm::button4_Click);
 			// 
 			// button5
 			// 
@@ -254,21 +255,26 @@ namespace sem3 {
 		db.close();
 	}
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-	ApplianceFrom^ myform = gcnew ApplianceFrom(userID);
+	ApplianceFrom^ myform = gcnew ApplianceFrom(userID, this);
 	myform->Show();
 	this->Hide();
 }
 private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
-	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID);
+	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID, this);
 	myform->Show();
 	this->Hide();
 }
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
-	Settings^ myform = gcnew Settings(userID);
+	Settings^ myform = gcnew Settings(userID, this);
 	myform->Show();
 	this->Hide();
 }
 private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+	historyForm^ myHForm = gcnew historyForm(userID, this);
+	this->Hide();
+	myHForm->Show();
 }
 };
 }
