@@ -28,6 +28,8 @@ namespace sem3 {
 		int powerConsumed;
 		Panel^ dynamicPanelGen;
 		Form^ old;
+		void OnNextButtonClick(System::Object^ sender, System::EventArgs^ e);
+
 	private: System::Windows::Forms::Button^ button9;
 	public:
 		String^ type;
@@ -37,6 +39,7 @@ namespace sem3 {
 			this->userID = userID;
 			old = o;
 		}
+		
 
 	protected:
 		/// <summary>
@@ -981,13 +984,13 @@ void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System
 		// button to next generate
 
 		Button^ nextGenBtn = gcnew Button;
-		nextGenBtn->BackColor = System::Drawing::Color::Aqua;
+		nextGenBtn->BackColor = System::Drawing::Color::Transparent;
 		nextGenBtn->FlatAppearance->BorderSize = 0;
 		nextGenBtn->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 		nextGenBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 		nextGenBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		nextGenBtn->Location = System::Drawing::Point(682, 831);
-		nextGenBtn->Size = System::Drawing::Size(137, 40);
+		nextGenBtn->Location = System::Drawing::Point(690, 795);
+		nextGenBtn->Size = System::Drawing::Size(220, 40);
 		nextGenBtn->TabIndex = 0;
 		nextGenBtn->UseVisualStyleBackColor = false;
 		nextGenBtn->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnNextGenButtonClick);

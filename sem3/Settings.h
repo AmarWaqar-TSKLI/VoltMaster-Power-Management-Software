@@ -48,7 +48,7 @@ namespace sem3 {
 	private: System::Windows::Forms::TextBox^ textBox2;
 	private: System::Windows::Forms::TextBox^ textBox3;
 	private: System::Windows::Forms::Button^ button8;
-	private: System::Windows::Forms::Button^ button1;
+
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::Button^ button7;
 	private: System::Windows::Forms::Label^ label1;
@@ -72,7 +72,6 @@ namespace sem3 {
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
 			this->button8 = (gcnew System::Windows::Forms::Button());
-			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
@@ -125,26 +124,12 @@ namespace sem3 {
 			this->button8->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 			this->button8->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button8->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button8->Location = System::Drawing::Point(753, 601);
+			this->button8->Location = System::Drawing::Point(952, 602);
 			this->button8->Name = L"button8";
 			this->button8->Size = System::Drawing::Size(177, 37);
 			this->button8->TabIndex = 7;
 			this->button8->UseVisualStyleBackColor = false;
 			this->button8->Click += gcnew System::EventHandler(this, &Settings::button8_Click);
-			// 
-			// button1
-			// 
-			this->button1->BackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatAppearance->BorderSize = 0;
-			this->button1->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button1->Location = System::Drawing::Point(950, 601);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(177, 37);
-			this->button1->TabIndex = 8;
-			this->button1->UseVisualStyleBackColor = false;
-			this->button1->Click += gcnew System::EventHandler(this, &Settings::button1_Click);
 			// 
 			// button2
 			// 
@@ -211,7 +196,6 @@ namespace sem3 {
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button2);
-			this->Controls->Add(this->button1);
 			this->Controls->Add(this->button8);
 			this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->textBox2);
@@ -240,7 +224,7 @@ namespace sem3 {
 			return;
 		}
 
-		if (button8->Tag != "1" && button1->Tag != "1" && button2->Tag != "1") {
+		if (button8->Tag != "1" && button2->Tag != "1") {
 			label1->Text = "Meter Phase type needs to be selected";
 			return;
 		}
@@ -268,19 +252,9 @@ private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e
 	button8->Tag = "1";
 	this->meterPhase = "Single";
 
-	button1->BackgroundImage = nullptr;
+	
 	button2->BackgroundImage = nullptr;
-	button1->Tag = nullptr;
-	button2->Tag = nullptr;
-}
-private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
-	button1->BackgroundImage = System::Drawing::Image::FromFile("Images/settings-double.png");
-	button1->Tag = "1";
-	this->meterPhase = "Double";
-
-	button8->BackgroundImage = nullptr;
-	button2->BackgroundImage = nullptr;
-	button8->Tag = nullptr;
+	
 	button2->Tag = nullptr;
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -289,9 +263,9 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	this->meterPhase = "Triple";
 
 	button8->BackgroundImage = nullptr;
-	button1->BackgroundImage = nullptr;
+	
 	button8->Tag = nullptr;
-	button1->Tag = nullptr;
+	
 }
 private: System::Void Settings_Load(System::Object^ sender, System::EventArgs^ e) {
 	dbManager db;
@@ -316,11 +290,7 @@ private: System::Void Settings_Load(System::Object^ sender, System::EventArgs^ e
 		button8->Tag = "1";
 		this->meterPhase = "Single";
 	}
-	else if (meterPhaseType == "Double") {
-		button1->BackgroundImage = System::Drawing::Image::FromFile("Images/settings-double.png");
-		button1->Tag = "1";
-		this->meterPhase = "Double";
-	}
+	
 	else if (meterPhaseType == "Triple") {
 		button2->BackgroundImage = System::Drawing::Image::FromFile("Images/settings-triple.png");
 		button2->Tag = "1";

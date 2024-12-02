@@ -115,7 +115,7 @@ namespace sem3 {
 	private: System::Windows::Forms::TextBox^ textBox2;
 	private: System::Windows::Forms::Panel^ panel2;
 	private: System::Windows::Forms::Panel^ panel3;
-	private: System::Windows::Forms::TextBox^ textBox5;
+
 	private: System::Windows::Forms::TextBox^ textBox4;
 	private: System::Windows::Forms::TextBox^ textBox3;
 	private: System::Windows::Forms::Label^ label3;
@@ -131,6 +131,7 @@ namespace sem3 {
 	private: System::Windows::Forms::TextBox^ textBox7;
 	private: System::Windows::Forms::TextBox^ textBox6;
 	private: System::Windows::Forms::Button^ button11;
+private: System::Windows::Forms::TextBox^ textBox5;
 
 	protected:
 
@@ -169,13 +170,13 @@ namespace sem3 {
 			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->button10 = (gcnew System::Windows::Forms::Button());
-			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->button11 = (gcnew System::Windows::Forms::Button());
+			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			this->panel1->SuspendLayout();
 			this->panel3->SuspendLayout();
 			this->panel2->SuspendLayout();
@@ -250,7 +251,6 @@ namespace sem3 {
 			this->panel3->Controls->Add(this->button12);
 			this->panel3->Controls->Add(this->textBox7);
 			this->panel3->Controls->Add(this->textBox6);
-			this->panel3->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel3->Location = System::Drawing::Point(0, 0);
 			this->panel3->Name = L"panel3";
 			this->panel3->Size = System::Drawing::Size(1424, 891);
@@ -337,6 +337,7 @@ namespace sem3 {
 			this->textBox6->Name = L"textBox6";
 			this->textBox6->Size = System::Drawing::Size(157, 28);
 			this->textBox6->TabIndex = 12;
+			this->textBox6->TextChanged += gcnew System::EventHandler(this, &Admin::textBox6_TextChanged);
 			// 
 			// button1
 			// 
@@ -482,18 +483,6 @@ namespace sem3 {
 			this->button10->UseVisualStyleBackColor = false;
 			this->button10->Click += gcnew System::EventHandler(this, &Admin::button10_Click);
 			// 
-			// textBox5
-			// 
-			this->textBox5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
-				static_cast<System::Int32>(static_cast<System::Byte>(155)));
-			this->textBox5->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->textBox5->Location = System::Drawing::Point(607, 686);
-			this->textBox5->Name = L"textBox5";
-			this->textBox5->Size = System::Drawing::Size(157, 28);
-			this->textBox5->TabIndex = 12;
-			// 
 			// textBox4
 			// 
 			this->textBox4->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
@@ -564,6 +553,18 @@ namespace sem3 {
 			this->button11->TabIndex = 16;
 			this->button11->UseVisualStyleBackColor = false;
 			this->button11->Click += gcnew System::EventHandler(this, &Admin::button11_Click);
+			// 
+			// textBox5
+			// 
+			this->textBox5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
+				static_cast<System::Int32>(static_cast<System::Byte>(155)));
+			this->textBox5->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->textBox5->Location = System::Drawing::Point(607, 686);
+			this->textBox5->Name = L"textBox5";
+			this->textBox5->Size = System::Drawing::Size(157, 28);
+			this->textBox5->TabIndex = 12;
 			// 
 			// Admin
 			// 
@@ -792,6 +793,8 @@ private: System::Void button12_Click(System::Object^ sender, System::EventArgs^ 
 }
 private: System::Void panel3_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 	displayAppliances();
+}
+private: System::Void textBox6_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }
