@@ -29,6 +29,7 @@ namespace sem3 {
 		int userID;
 		int powerConsumed;
 		Panel^ dynamicPanelGen;
+		void OnNextButtonClick(System::Object^ sender, System::EventArgs^ e);
 	private: System::Windows::Forms::Button^ button9;
 	private: System::Windows::Forms::Button^ button3;
 	private: System::Windows::Forms::Button^ button11;
@@ -214,9 +215,9 @@ namespace sem3 {
 			this->button9->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 			this->button9->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button9->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button9->Location = System::Drawing::Point(1143, 143);
+			this->button9->Location = System::Drawing::Point(1142, 143);
 			this->button9->Name = L"button9";
-			this->button9->Size = System::Drawing::Size(182, 37);
+			this->button9->Size = System::Drawing::Size(177, 37);
 			this->button9->TabIndex = 5;
 			this->button9->UseVisualStyleBackColor = false;
 			this->button9->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button9_Click);
@@ -1071,13 +1072,13 @@ void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System
 		// button to next generate
 
 		Button^ nextGenBtn = gcnew Button;
-		nextGenBtn->BackColor = System::Drawing::Color::Aqua;
+		nextGenBtn->BackColor = System::Drawing::Color::Transparent;
 		nextGenBtn->FlatAppearance->BorderSize = 0;
 		nextGenBtn->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 		nextGenBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 		nextGenBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-		nextGenBtn->Location = System::Drawing::Point(682, 831);
-		nextGenBtn->Size = System::Drawing::Size(137, 40);
+		nextGenBtn->Location = System::Drawing::Point(690, 795);
+		nextGenBtn->Size = System::Drawing::Size(220, 40);
 		nextGenBtn->TabIndex = 0;
 		nextGenBtn->UseVisualStyleBackColor = false;
 		nextGenBtn->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnNextGenButtonClick);
