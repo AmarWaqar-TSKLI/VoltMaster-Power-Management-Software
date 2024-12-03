@@ -668,28 +668,36 @@ namespace sem3 {
 
 
 	// Function to collect data
-	void GetCheckedData(Control^ parentControl, std::vector<std::pair<std::string, int>>& result) {
+	void GetCheckedData(Control^ parentControl, std::vector <std::tuple<std::string, int, int>>& result) {
 
 		for each (Control ^ ctrl in parentControl->Controls) {
 			// Check if the control is a CheckBox
 			CheckBox^ checkBox = dynamic_cast<CheckBox^>(ctrl);
-			if (checkBox != nullptr ) {
+			if (checkBox != nullptr) {
 				if (checkBox->Checked) {
 					// Get the associated Label from the CheckBox's Tag
 					Label^ label = safe_cast<Label^>(checkBox->Tag);
 					if (label != nullptr) {
 						// Get the associated PictureBox from the Label's Tag
-						PictureBox^ pictureBox = safe_cast<PictureBox^>(label->Tag);
-						if (pictureBox != nullptr) {
-							// Convert Label text (managed string) to std::string
-							std::string labelText = msclr::interop::marshal_as<std::string>(label->Text);
+						Label^ Quantity = safe_cast<Label^>(label->Tag);
+						if (Quantity != nullptr)
+						{
+							PictureBox^ pictureBox = safe_cast<PictureBox^>(Quantity->Tag);
 
-							// Convert PictureBox Tag to int
-							int pictureBoxTag = Convert::ToInt32(pictureBox->Tag);
+							if (pictureBox != nullptr) {
+								// Convert Label text (managed string) to std::string
+								std::string labelText = msclr::interop::marshal_as<std::string>(label->Text);
 
-							// Store the Label's text and PictureBox's tag as a pair
-							result.push_back(std::make_pair(labelText, pictureBoxTag));
+								// Convert PictureBox Tag to int
+								int pictureBoxTag = Convert::ToInt32(pictureBox->Tag);
+								int quantity = Convert::ToInt32(Quantity->Text);
+
+								// Store the Label's text and PictureBox's tag as a pair
+								//result.push_back(std::make_tuple(labelText, pictureBoxTag,quantity));
+								result.emplace_back(labelText, pictureBoxTag, quantity);
+							}
 						}
+
 					}
 				}
 			}
@@ -745,169 +753,300 @@ namespace sem3 {
 			}
 		}
 
-void scheduleGenerationForm::OnNextButtonClick(System::Object^ sender, System::EventArgs^ e) {
-	MessageBox::Show("Next button clicked!", "Info", MessageBoxButtons::OK, MessageBoxIcon::Information);
-	std::vector<std::pair<std::string, int>> result;
-	GetCheckedData(this, result);
-	getApDayAndDuration(result);
-	
-}
-// Function to collect data.
-	void GetCheckedDataByDay(Control^ parentControl, std::vector<std::vector<std::tuple<int, std::string, int>>>& weeklyData) {
+			   void scheduleGenerationForm::OnNextButtonClick(System::Object^ sender, System::EventArgs^ e) {
+				   MessageBox::Show("Next button clicked!", "Info", MessageBoxButtons::OK, MessageBoxIcon::Information);
+				   std::vector <std::tuple<std::string, int, int>> result;
+				   std::vector <std::tuple<std::string, int, int>> resultfinal;
 
-	for each (Control ^ ctrl in parentControl->Controls) {
-		CheckBox^ checkBox = dynamic_cast<CheckBox^>(ctrl);
-		if (checkBox != nullptr && checkBox->Checked) {
-			// Get the associated label (day).
-			Label^ dayLabel = safe_cast<Label^>(checkBox->Tag);
-			if (dayLabel != nullptr) {
-				// Get the associated textbox (duration).
-				TextBox^ txtDuration = safe_cast<TextBox^>(dayLabel->Tag);
-				if (txtDuration != nullptr) {
-					// Get the appliance name label (tag of the textbox).
-					Label^ applianceLabel = safe_cast<Label^>(txtDuration->Tag);
-					if (applianceLabel != nullptr) {
-						// Convert to std::string and int.
-						std::string dayText = msclr::interop::marshal_as<std::string>(dayLabel->Text);
-						std::string applianceName = msclr::interop::marshal_as<std::string>(applianceLabel->Text);
-						int duration = Convert::ToInt32(txtDuration->Text);
+				   GetCheckedData(this, result);
+				   for (int i = 0; i < result.size(); i++)
+				   {
+					   int quan = std::get<2>(result[i]);
+					   System::String^ managedString = gcnew System::String(std::get<0>(result[i]).c_str());
+					   if (quan > 1) {
 
-						int dayIndex = GetDayIndex(dayText);
-						if (dayIndex >= 0 && dayIndex < 7) {
-							int priority = Convert::ToInt32(applianceLabel->Tag);
 
-							weeklyData[dayIndex].emplace_back(duration, applianceName, priority);
-						}
-					}
+						   System::Windows::Forms::DialogResult resultD = MessageBox::Show(
+							   "Do you want to run " + managedString + " Appliance on same time",         // Message text
+							   "Confirmation",                    // Caption
+							   MessageBoxButtons::YesNo,          // Buttons
+							   MessageBoxIcon::Question           // Icon
+						   );
+
+						   // Perform actions based on the result
+
+						   if (resultD == System::Windows::Forms::DialogResult::No) {
+							   //int Id = db.getApplianceID(appendedName);
+
+							   for (int j = 1; j <= quan; j++) {
+								   // Convert managed string to unmanaged char*
+								   std::string applianceName1 = msclr::interop::marshal_as<std::string>(managedString);
+
+								   // Calculate new string length (original length + the number of digits in i + null terminator)
+
+								   applianceName1 += " "; // Append the integer i as a string
+								   applianceName1 += std::to_string(j); // Append the integer i as a string
+								   resultfinal.emplace_back(std::make_tuple(applianceName1, std::get<1>(result[i]), 1));
+								   // Convert the resulting std::string back to a char array for the database operation
+							   }
+
+
+						   }
+						   else if (resultD == System::Windows::Forms::DialogResult::Yes) {
+							   resultfinal.emplace_back(std::make_tuple(std::get<0>(result[i]), std::get<1>(result[i]), quan));
+
+						   }
+					   }
+					   else {
+
+						   resultfinal.emplace_back(std::make_tuple(std::get<0>(result[i]), std::get<1>(result[i]), quan));
+
+
+					   }
+
+				   }
+				   getApDayAndDuration(resultfinal);
+
+
+			   }
+			   // Function to collect data.
+			   void GetCheckedDataByDay(Control^ parentControl, std::vector<std::vector<std::tuple<int, std::string, int, int>>>& weeklyData) {
+
+				   for each (Control ^ ctrl in parentControl->Controls) {
+					   CheckBox^ checkBox = dynamic_cast<CheckBox^>(ctrl);
+					   if (checkBox != nullptr && checkBox->Checked) {
+						   // Get the associated label (day).
+						   Label^ dayLabel = safe_cast<Label^>(checkBox->Tag);
+						   if (dayLabel != nullptr) {
+							   // Get the associated textbox (duration).
+
+							   TextBox^ txtDuration = safe_cast<TextBox^>(dayLabel->Tag);
+							   if (txtDuration != nullptr) {
+								   // Get the appliance name label (tag of the textbox).
+								   Label^ applianceLabel = safe_cast<Label^>(txtDuration->Tag);
+								   if (applianceLabel != nullptr) {
+									   // Convert to std::string and int.
+									   std::string dayText = msclr::interop::marshal_as<std::string>(dayLabel->Text);
+									   std::string applianceName = msclr::interop::marshal_as<std::string>(applianceLabel->Text);
+									   int duration = Convert::ToInt32(txtDuration->Text);
+									   int quantity = Convert::ToInt32(applianceLabel->Name);
+									   int dayIndex = GetDayIndex(dayText);
+									   if (dayIndex >= 0 && dayIndex < 7) {
+										   int priority = Convert::ToInt32(applianceLabel->Tag);
+
+										   weeklyData[dayIndex].emplace_back(duration, applianceName, priority, quantity);
+									   }
+								   }
+							   }
+						   }
+					   }
+					   if (ctrl->Controls->Count > 0)
+					   {
+						   GetCheckedDataByDay(ctrl, weeklyData);
+					   }
+				   }
+			   }
+	void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System::EventArgs^ e) {
+		MessageBox::Show("Next Gen button clicked!", "Info", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		std::vector<std::vector<std::tuple<int, std::string, int, int>>> weeklyData(7);
+		GetCheckedDataByDay(dynamicPanelGen, weeklyData);
+		// Simple loop with cout-style output using Debug::WriteLine
+		for (int i = 0; i < weeklyData.size(); ++i) {
+			std::cout << "Day " << (i + 1) << ":\n";
+			for (const auto& entry : weeklyData[i]) {
+				int duration = std::get<0>(entry);
+				std::string applianceName = std::get<1>(entry);
+				int prior = std::get<2>(entry);
+				int quantity = std::get<3>(entry);
+				std::cout << "  " << applianceName << " - " << "Priority: " << prior << " - " << "Duration: " << duration << " Minutes  - " << "Quantity = " << quantity << std::endl;
+			}
+		}
+	}
+	void scheduleGenerationForm::OnIncreaseClick(System::Object^ sender, System::EventArgs^ e)
+	{
+		// Retrieve the button that was clicked
+		Button^ clickedButton = dynamic_cast<Button^>(sender);
+		if (clickedButton != nullptr && clickedButton->Tag != nullptr)
+		{
+			// Get the linked Label using the Tag property
+			Label^ lblQuantity = dynamic_cast<Label^>(clickedButton->Tag);
+			if (lblQuantity != nullptr)
+			{
+				// Increase the quantity
+				int quantity = System::Convert::ToInt32(lblQuantity->Text);
+				quantity++;
+				lblQuantity->Text = quantity.ToString(); // Update the label with the new quantity
+			}
+		}
+	}
+
+	void scheduleGenerationForm::OnDecreaseClick(System::Object^ sender, System::EventArgs^ e)
+	{
+		// Retrieve the button that was clicked
+		Button^ clickedButton = dynamic_cast<Button^>(sender);
+		if (clickedButton != nullptr && clickedButton->Tag != nullptr)
+		{
+			// Get the linked Label using the Tag property
+			Label^ lblQuantity = dynamic_cast<Label^>(clickedButton->Tag);
+			if (lblQuantity != nullptr)
+			{
+				// Decrease the quantity, but don't go below zero
+				int quantity = System::Convert::ToInt32(lblQuantity->Text);
+				if (quantity > 1)
+				{
+					quantity--;
+					lblQuantity->Text = quantity.ToString(); // Update the label with the new quantity
 				}
 			}
 		}
-		if (ctrl->Controls->Count > 0)
-		{
-			GetCheckedDataByDay(ctrl, weeklyData);
-		}
 	}
+int quantity = 1;
+void WeeklySceduleGeneration() {
+
+	int startY = 30; // Starting Y position for TextBoxes
+	int startX = 100; // X position for the first TextBox
+	int verticalSpacing = 60; // Vertical space between each TextBox
+	int size = 0;
+	dbManager db;
+	db.open("test.db");
+	string* applianceData = db.getAllApplianceNames(size);
+	Panel^ dynamicPanel = gcnew Panel();
+	dynamicPanel->Visible = true;
+	dynamicPanel->Size = System::Drawing::Size(1400, 950);
+
+	dynamicPanel->Location = System::Drawing::Point(0, 0); // Ensure it's positioned at the top-left of the form
+	dynamicPanel->BackgroundImage = System::Drawing::Image::FromFile("Images/Weekly Schedule-SelectAppliances.jpg");
+	// Set the background image if it exists
+	//String^ imagePath = "Images/sg- exists.jpg"; // Update your path
+
+	this->Controls->Add(dynamicPanel);
+	dynamicPanel->BringToFront();
+
+
+
+	Panel^ dynamicPanel1 = gcnew Panel();
+	dynamicPanel1->Visible = true;
+	dynamicPanel1->Size = System::Drawing::Size(961, 689 - 49);
+
+	dynamicPanel1->Location = System::Drawing::Point(346, 142); // Ensure it's positioned at the top-left of the form
+	dynamicPanel1->BackColor = System::Drawing::Color::FromArgb(65, 65, 65);
+	// Set the background image if it exists
+	//String^ imagePath = "Images/sg- exists.jpg"; // Update your path
+	dynamicPanel1->AutoScroll = true;
+
+	dynamicPanel->Controls->Add(dynamicPanel1);
+	dynamicPanel1->BringToFront();
+
+	// Loop through applianceData to create TextBoxes for each appliance
+	for (int i = 0; i < size; ++i)
+	{
+		// Create a Label for each appliance
+		Label^ label = gcnew Label();
+		label->Text = gcnew System::String(applianceData[i].c_str()); // Appliance name
+		label->Location = System::Drawing::Point(startX + 25, startY + (i * verticalSpacing));
+		label->AutoSize = true;
+		label->ForeColor = System::Drawing::Color::White;
+		//label->BackColor = System::Drawing::Color::Aqua;
+		label->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
+		label->Visible = true;
+		dynamicPanel1->Controls->Add(label);
+		// Create a new PictureBox
+		PictureBox^ pictureBox = gcnew PictureBox();
+		pictureBox->Size = System::Drawing::Size(93, 36);
+
+		pictureBox->Location = System::Drawing::Point(startX + 310, (startY - 10) + (i * verticalSpacing));
+
+		pictureBox->Image = System::Drawing::Image::FromFile("Images/priority1.png"); // Provide the path to your image file
+		pictureBox->Tag = "1";
+		// Make sure the aspect ratio is maintained when the picture is resized
+		pictureBox->SizeMode = PictureBoxSizeMode::StretchImage;  // Other options: Normal, CenterImage, AutoSize, etc.
+		pictureBox->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::PictureBox_Click);
+		// Add the PictureBox to the form's panel (or directly to the form)
+		dynamicPanel1->Controls->Add(pictureBox);
+
+
+		CheckBox^ checkBox = gcnew CheckBox();
+
+		// Set the properties of the CheckBox
+		checkBox->Text = "";  // Text for the CheckBox
+		checkBox->Location = System::Drawing::Point(startX - 65, (startY + 7) + (i * verticalSpacing)); // Position on the form
+		checkBox->AutoSize = true;  // Automatically resize to fit the text
+		checkBox->Size = System::Drawing::Size(130, 130);
+
+		// Add an event handler for the CheckedChanged event
+		//checkBox->CheckedChanged += gcnew System::EventHandler(this, &ApplianceFrom::CheckBox_CheckedChanged);
+
+		// Add the CheckBox to the form's controls
+		dynamicPanel1->Controls->Add(checkBox);
+		// Label to show quantity
+
+		Label^ lblQuantity = gcnew Label();
+		lblQuantity->Text = quantity.ToString();
+		lblQuantity->Location = System::Drawing::Point(startX + 634, (startY - 7) + (i * verticalSpacing));
+		lblQuantity->Size = System::Drawing::Size(80, 30);
+		lblQuantity->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+		lblQuantity->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
+		lblQuantity->ForeColor = System::Drawing::Color::White;
+
+		//Increase btn
+		Button^ btnIncrease = gcnew Button();
+		btnIncrease->Text = "+";
+		btnIncrease->Location = System::Drawing::Point(startX + 700, (startY - 7) + (i * verticalSpacing));
+		btnIncrease->Size = System::Drawing::Size(40, 30);
+		btnIncrease->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnIncreaseClick);
+
+
+		btnIncrease->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
+		btnIncrease->ForeColor = System::Drawing::Color::White;
+		btnIncrease->BackColor = System::Drawing::Color::FromArgb(0, 116, 249);
+		btnIncrease->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		btnIncrease->FlatAppearance->BorderSize = 0;
+		btnIncrease->Tag = lblQuantity;
+		// Button for Decrease (Minus)
+		Button^ btnDecrease = gcnew Button();
+		btnDecrease->Text = "-";
+		btnDecrease->Location = System::Drawing::Point(startX + 610, (startY - 7) + (i * verticalSpacing));
+		btnDecrease->Size = System::Drawing::Size(40, 30);
+		btnDecrease->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnDecreaseClick);
+		btnDecrease->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
+		btnDecrease->TextAlign = System::Drawing::ContentAlignment::TopCenter;
+		btnDecrease->Padding = System::Windows::Forms::Padding(0);
+		btnDecrease->ForeColor = System::Drawing::Color::White;
+		btnDecrease->BackColor = System::Drawing::Color::FromArgb(139, 27, 27);
+		btnDecrease->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+		btnDecrease->FlatAppearance->BorderSize = 0;
+		//	btnDecrease->Click += gcnew System::EventHandler(this, &ApplianceFrom::OnDecreaseClick);
+		btnDecrease->Tag = lblQuantity;
+
+		dynamicPanel1->Controls->Add(btnDecrease);
+		dynamicPanel1->Controls->Add(btnIncrease);
+		dynamicPanel1->Controls->Add(lblQuantity);
+
+		checkBox->Tag = label;
+		label->Tag = lblQuantity;
+		lblQuantity->Tag = pictureBox;
+
+	}
+
+	db.close();
+
+	// button to next
+
+	Button^ nextBtn = gcnew Button;
+	nextBtn->BackColor = System::Drawing::Color::Transparent;
+	nextBtn->FlatAppearance->BorderSize = 0;
+	nextBtn->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+	nextBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+	nextBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+	nextBtn->Location = System::Drawing::Point(682, 831);
+	nextBtn->Size = System::Drawing::Size(137, 40);
+	nextBtn->TabIndex = 0;
+	nextBtn->UseVisualStyleBackColor = false;
+	nextBtn->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnNextButtonClick);
+	nextBtn->Visible = true;
+	nextBtn->BringToFront();
+	dynamicPanel->Controls->Add(nextBtn);
 }
-void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System::EventArgs^ e) {
-	MessageBox::Show("Next Gen button clicked!", "Info", MessageBoxButtons::OK, MessageBoxIcon::Information);
-	std::vector<std::vector<std::tuple<int, std::string, int>>> weeklyData(7);
-	GetCheckedDataByDay(dynamicPanelGen, weeklyData);
-	// Simple loop with cout-style output using Debug::WriteLine
-	for (int i = 0; i < weeklyData.size(); ++i) {
-		std::cout << "Day " << (i + 1) << ":\n";
-		for (const auto& entry : weeklyData[i]) {
-			int duration = std::get<0>(entry);
-			std::string applianceName = std::get<1>(entry);
-			int prior = std::get<2>(entry);
-			std::cout << "  " << applianceName << " - " << "Priority: " << prior << " - " << "Duration: " << duration << " Minutes\n";
-		}
-	}
-}
-
-	void WeeklySceduleGeneration() {
-		
-			int startY = 30; // Starting Y position for TextBoxes
-			int startX = 200; // X position for the first TextBox
-			int verticalSpacing = 60; // Vertical space between each TextBox
-			int size = 0;
-			dbManager db;
-			db.open("test.db");
-			string* applianceData = db.getAllApplianceNames(size);
-			Panel^ dynamicPanel = gcnew Panel();
-			dynamicPanel->Visible = true;
-			dynamicPanel->Size = System::Drawing::Size(1400, 950);
-
-			dynamicPanel->Location = System::Drawing::Point(0,0); // Ensure it's positioned at the top-left of the form
-			dynamicPanel->BackgroundImage = System::Drawing::Image::FromFile("Images/Weekly Schedule-SelectAppliances.jpg");
-			// Set the background image if it exists
-			//String^ imagePath = "Images/sg- exists.jpg"; // Update your path
-
-			this->Controls->Add(dynamicPanel);
-			dynamicPanel->BringToFront();
-
-
-
-			Panel^ dynamicPanel1 = gcnew Panel();
-			dynamicPanel1->Visible = true;
-			dynamicPanel1->Size = System::Drawing::Size(961, 689 - 49);
-
-			dynamicPanel1->Location = System::Drawing::Point(346, 142); // Ensure it's positioned at the top-left of the form
-			dynamicPanel1->BackColor = System::Drawing::Color::FromArgb(65,65,65);
-			// Set the background image if it exists
-			//String^ imagePath = "Images/sg- exists.jpg"; // Update your path
-			dynamicPanel1->AutoScroll = true;
-
-			dynamicPanel->Controls->Add(dynamicPanel1);
-			dynamicPanel1->BringToFront();
-			// Loop through applianceData to create TextBoxes for each appliance
-			for (int i = 0; i < size; ++i)
-			{
-				// Create a Label for each appliance
-				Label^ label = gcnew Label();
-				label->Text = gcnew System::String(applianceData[i].c_str()); // Appliance name
-				label->Location = System::Drawing::Point(startX + 15, startY + (i * verticalSpacing));
-				label->AutoSize = true;
-				label->ForeColor = System::Drawing::Color::White;
-				//label->BackColor = System::Drawing::Color::Aqua;
-				label->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
-				label->Visible = true;
-				dynamicPanel1->Controls->Add(label);
-				// Create a new PictureBox
-				PictureBox^ pictureBox = gcnew PictureBox();
-				pictureBox->Size = System::Drawing::Size(93, 36);
-
-				pictureBox->Location = System::Drawing::Point(startX + 485, (startY - 10) + (i * verticalSpacing));
-
-				pictureBox->Image = System::Drawing::Image::FromFile("Images/priority1.png"); // Provide the path to your image file
-				pictureBox->Tag = "1";
-				// Make sure the aspect ratio is maintained when the picture is resized
-				pictureBox->SizeMode = PictureBoxSizeMode::StretchImage;  // Other options: Normal, CenterImage, AutoSize, etc.
-				pictureBox->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::PictureBox_Click);
-				// Add the PictureBox to the form's panel (or directly to the form)
-				dynamicPanel1->Controls->Add(pictureBox);
-
-
-				CheckBox^ checkBox = gcnew CheckBox();
-
-				// Set the properties of the CheckBox
-				checkBox->Text = "";  // Text for the CheckBox
-				checkBox->Location = System::Drawing::Point(startX - 75, (startY + 7) + (i * verticalSpacing)); // Position on the form
-				checkBox->AutoSize = true;  // Automatically resize to fit the text
-				checkBox->Size = System::Drawing::Size(130, 130);
-
-				// Add an event handler for the CheckedChanged event
-				//checkBox->CheckedChanged += gcnew System::EventHandler(this, &ApplianceFrom::CheckBox_CheckedChanged);
-
-				// Add the CheckBox to the form's controls
-				dynamicPanel1->Controls->Add(checkBox);
-				// Label to show quantity
-
-
-				checkBox->Tag = label;
-				label->Tag = pictureBox;
-				
-
-			}
-		
-			db.close();
-
-			// button to next
-
-			Button^ nextBtn = gcnew Button;
-			nextBtn->BackColor = System::Drawing::Color::Transparent;
-			nextBtn->FlatAppearance->BorderSize = 0;
-			nextBtn->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
-			nextBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
-			nextBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			nextBtn->Location = System::Drawing::Point(682, 831);
-			nextBtn->Size = System::Drawing::Size(137, 40);
-			nextBtn->TabIndex = 0;
-			nextBtn->UseVisualStyleBackColor = false;
-			nextBtn->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnNextButtonClick);
-			nextBtn->Visible = true;
-			nextBtn->BringToFront();
-			dynamicPanel->Controls->Add(nextBtn);
-	}
 
 	String^ getDay(int i) {
 		switch (i) {
@@ -961,7 +1100,7 @@ void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System
 	}
 
 
-	void getApDayAndDuration(std::vector<std::pair<std::string, int>> appliances) {
+	void getApDayAndDuration(std::vector<std::tuple<std::string, int, int>> appliances) {
 		int startY = 30; // Starting Y position for TextBoxes
 		int startX = 10; // X position for the first TextBox
 		int verticalSpacing = 120; // Vertical space between each TextBox
@@ -994,12 +1133,14 @@ void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System
 
 		dynamicPanelGen->Controls->Add(dynamicPanel1);
 		dynamicPanel1->BringToFront();
+		//std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
 		// Loop through applianceData to create TextBoxes for each appliance
 		for (int i = 0; i < appliances.size(); ++i)
 		{
 			// Create a Label for each appliance
 			Label^ label = gcnew Label();
-			label->Text = gcnew System::String(appliances[i].first.c_str()); // Appliance name
+			label->Text = gcnew System::String(std::get<0>(appliances[i]).c_str());
+			// Appliance name
 			label->Location = System::Drawing::Point(startX + 400, startY + (i * verticalSpacing));
 			label->AutoSize = true;
 			label->ForeColor = System::Drawing::Color::White;
@@ -1015,7 +1156,7 @@ void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System
 
 				// Set the properties of the CheckBox
 				checkBox->Text = "";  // Text for the CheckBox
-				checkBox->Location = System::Drawing::Point(startX + (j* HorizontalSpacing) + 40, (startY + 7) +  (i * verticalSpacing) + 40); // Position on the form
+				checkBox->Location = System::Drawing::Point(startX + (j * HorizontalSpacing) + 40, (startY + 7) + (i * verticalSpacing) + 40); // Position on the form
 				checkBox->AutoSize = true;  // Automatically resize to fit the text
 				checkBox->Size = System::Drawing::Size(130, 130);
 				//checkBox->Appearance = System::Windows::Forms::Appearance::Button;
@@ -1029,7 +1170,7 @@ void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System
 
 				// Create a Label for each appliance
 				Label^ label1 = gcnew Label();
-				label1->Text = gcnew System::String(getDay(j+1)); // Appliance name
+				label1->Text = gcnew System::String(getDay(j + 1)); // Appliance name
 
 				label1->Location = System::Drawing::Point(startX + (j * HorizontalSpacing) + 55, (startY + 7) + (i * verticalSpacing) + 35); // Position on the form
 				label1->AutoSize = true;
@@ -1061,7 +1202,9 @@ void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System
 				checkBox->Tag = label1;
 				label1->Tag = txtDuration;
 				txtDuration->Tag = label;
-				label->Tag = appliances[i].second;
+				label->Tag = std::get<1>(appliances[i]);
+				label->Name = std::get<2>(appliances[i]).ToString();
+				//cout << std::get<2>(appliances[i]);
 			}
 			startY += boxSpacey;
 			// Label to show quantity
