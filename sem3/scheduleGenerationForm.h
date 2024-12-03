@@ -29,7 +29,6 @@ namespace sem3 {
 		int userID;
 		int powerConsumed;
 		Panel^ dynamicPanelGen;
-		void OnNextButtonClick(System::Object^ sender, System::EventArgs^ e);
 	private: System::Windows::Forms::Button^ button9;
 	private: System::Windows::Forms::Button^ button3;
 	private: System::Windows::Forms::Button^ button11;
@@ -217,7 +216,7 @@ namespace sem3 {
 			this->button9->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 			this->button9->Location = System::Drawing::Point(1142, 143);
 			this->button9->Name = L"button9";
-			this->button9->Size = System::Drawing::Size(177, 37);
+			this->button9->Size = System::Drawing::Size(184, 37);
 			this->button9->TabIndex = 5;
 			this->button9->UseVisualStyleBackColor = false;
 			this->button9->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button9_Click);
@@ -1092,7 +1091,7 @@ void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System
 		if (button8->Tag=="1") {
 			this->type = "daily";
 		}
-		if (button9->Tag=="1") {
+		else if (button9->Tag=="1") {
 			this->type = "weekly";
 			if (textBox1->Text == "") {
 				label1->Text = "Error: Current Units cannot be empty!";
