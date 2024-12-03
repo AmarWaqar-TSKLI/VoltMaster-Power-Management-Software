@@ -2,6 +2,7 @@
 #include "db.h"
 #include <iostream>
 #include <string>
+#include <cctype>
 #include <msclr/marshal.h>
 #include <sstream>
 #include <iomanip>
@@ -36,6 +37,20 @@ namespace sem3 {
 	private: System::Windows::Forms::Button^ button13;
 	private: System::Windows::Forms::Button^ button14;
 	private: System::Windows::Forms::Button^ button10;
+	private: System::Windows::Forms::Panel^ panel2;
+	private: System::Windows::Forms::Button^ button15;
+	private: System::Windows::Forms::Button^ button16;
+	private: System::Windows::Forms::Button^ button17;
+	private: System::Windows::Forms::Button^ button18;
+	private: System::Windows::Forms::Button^ button19;
+	private: System::Windows::Forms::Button^ button25;
+	private: System::Windows::Forms::Button^ button26;
+	private: System::Windows::Forms::Button^ button27;
+	private: System::Windows::Forms::Button^ button22;
+	private: System::Windows::Forms::Button^ button23;
+	private: System::Windows::Forms::Button^ button21;
+	private: System::Windows::Forms::Button^ button20;
+	private: System::Windows::Forms::Label^ label2;
 	public:
 		String^ type;
 		scheduleGenerationForm(int userID)
@@ -84,6 +99,20 @@ namespace sem3 {
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(scheduleGenerationForm::typeid));
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->button25 = (gcnew System::Windows::Forms::Button());
+			this->button26 = (gcnew System::Windows::Forms::Button());
+			this->button27 = (gcnew System::Windows::Forms::Button());
+			this->button22 = (gcnew System::Windows::Forms::Button());
+			this->button23 = (gcnew System::Windows::Forms::Button());
+			this->button21 = (gcnew System::Windows::Forms::Button());
+			this->button20 = (gcnew System::Windows::Forms::Button());
+			this->button15 = (gcnew System::Windows::Forms::Button());
+			this->button16 = (gcnew System::Windows::Forms::Button());
+			this->button17 = (gcnew System::Windows::Forms::Button());
+			this->button18 = (gcnew System::Windows::Forms::Button());
+			this->button19 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button11 = (gcnew System::Windows::Forms::Button());
 			this->button12 = (gcnew System::Windows::Forms::Button());
@@ -100,6 +129,7 @@ namespace sem3 {
 			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->button10 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
+			this->panel2->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button1
@@ -119,6 +149,7 @@ namespace sem3 {
 			// panel1
 			// 
 			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
+			this->panel1->Controls->Add(this->panel2);
 			this->panel1->Controls->Add(this->button3);
 			this->panel1->Controls->Add(this->button11);
 			this->panel1->Controls->Add(this->button12);
@@ -136,6 +167,210 @@ namespace sem3 {
 			this->panel1->TabIndex = 1;
 			this->panel1->Visible = false;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &scheduleGenerationForm::panel1_Paint);
+			// 
+			// panel2
+			// 
+			this->panel2->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel2.BackgroundImage")));
+			this->panel2->Controls->Add(this->label2);
+			this->panel2->Controls->Add(this->button25);
+			this->panel2->Controls->Add(this->button26);
+			this->panel2->Controls->Add(this->button27);
+			this->panel2->Controls->Add(this->button22);
+			this->panel2->Controls->Add(this->button23);
+			this->panel2->Controls->Add(this->button21);
+			this->panel2->Controls->Add(this->button20);
+			this->panel2->Controls->Add(this->button15);
+			this->panel2->Controls->Add(this->button16);
+			this->panel2->Controls->Add(this->button17);
+			this->panel2->Controls->Add(this->button18);
+			this->panel2->Controls->Add(this->button19);
+			this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel2->Location = System::Drawing::Point(0, 0);
+			this->panel2->Name = L"panel2";
+			this->panel2->Size = System::Drawing::Size(1424, 911);
+			this->panel2->TabIndex = 13;
+			this->panel2->Visible = false;
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->BackColor = System::Drawing::Color::Transparent;
+			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label2->ForeColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(0)),
+				static_cast<System::Int32>(static_cast<System::Byte>(0)));
+			this->label2->Location = System::Drawing::Point(788, 166);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(0, 26);
+			this->label2->TabIndex = 25;
+			// 
+			// button25
+			// 
+			this->button25->BackColor = System::Drawing::Color::Transparent;
+			this->button25->FlatAppearance->BorderSize = 0;
+			this->button25->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button25->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button25->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button25->Location = System::Drawing::Point(1068, 609);
+			this->button25->Name = L"button25";
+			this->button25->Size = System::Drawing::Size(260, 47);
+			this->button25->TabIndex = 24;
+			this->button25->UseVisualStyleBackColor = false;
+			this->button25->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button25_Click);
+			// 
+			// button26
+			// 
+			this->button26->BackColor = System::Drawing::Color::Transparent;
+			this->button26->FlatAppearance->BorderSize = 0;
+			this->button26->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button26->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button26->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button26->Location = System::Drawing::Point(1067, 533);
+			this->button26->Name = L"button26";
+			this->button26->Size = System::Drawing::Size(260, 47);
+			this->button26->TabIndex = 23;
+			this->button26->UseVisualStyleBackColor = false;
+			this->button26->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button26_Click);
+			// 
+			// button27
+			// 
+			this->button27->BackColor = System::Drawing::Color::Transparent;
+			this->button27->FlatAppearance->BorderSize = 0;
+			this->button27->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button27->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button27->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button27->Location = System::Drawing::Point(1066, 457);
+			this->button27->Name = L"button27";
+			this->button27->Size = System::Drawing::Size(260, 47);
+			this->button27->TabIndex = 22;
+			this->button27->UseVisualStyleBackColor = false;
+			this->button27->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button27_Click);
+			// 
+			// button22
+			// 
+			this->button22->BackColor = System::Drawing::Color::Transparent;
+			this->button22->FlatAppearance->BorderSize = 0;
+			this->button22->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button22->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button22->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button22->Location = System::Drawing::Point(1069, 383);
+			this->button22->Name = L"button22";
+			this->button22->Size = System::Drawing::Size(260, 47);
+			this->button22->TabIndex = 21;
+			this->button22->UseVisualStyleBackColor = false;
+			this->button22->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button22_Click);
+			// 
+			// button23
+			// 
+			this->button23->BackColor = System::Drawing::Color::Transparent;
+			this->button23->FlatAppearance->BorderSize = 0;
+			this->button23->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button23->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button23->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button23->Location = System::Drawing::Point(1068, 307);
+			this->button23->Name = L"button23";
+			this->button23->Size = System::Drawing::Size(260, 47);
+			this->button23->TabIndex = 20;
+			this->button23->UseVisualStyleBackColor = false;
+			this->button23->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button23_Click);
+			// 
+			// button21
+			// 
+			this->button21->BackColor = System::Drawing::Color::Transparent;
+			this->button21->FlatAppearance->BorderSize = 0;
+			this->button21->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button21->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button21->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button21->Location = System::Drawing::Point(1067, 231);
+			this->button21->Name = L"button21";
+			this->button21->Size = System::Drawing::Size(260, 47);
+			this->button21->TabIndex = 19;
+			this->button21->UseVisualStyleBackColor = false;
+			this->button21->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button21_Click);
+			// 
+			// button20
+			// 
+			this->button20->BackColor = System::Drawing::Color::Transparent;
+			this->button20->FlatAppearance->BorderSize = 0;
+			this->button20->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button20->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button20->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button20->Location = System::Drawing::Point(1066, 155);
+			this->button20->Name = L"button20";
+			this->button20->Size = System::Drawing::Size(260, 47);
+			this->button20->TabIndex = 18;
+			this->button20->UseVisualStyleBackColor = false;
+			this->button20->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button20_Click);
+			// 
+			// button15
+			// 
+			this->button15->BackColor = System::Drawing::Color::Transparent;
+			this->button15->FlatAppearance->BorderSize = 0;
+			this->button15->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button15->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button15->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button15->Location = System::Drawing::Point(50, 808);
+			this->button15->Name = L"button15";
+			this->button15->Size = System::Drawing::Size(137, 40);
+			this->button15->TabIndex = 17;
+			this->button15->UseVisualStyleBackColor = false;
+			this->button15->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button15_Click);
+			// 
+			// button16
+			// 
+			this->button16->BackColor = System::Drawing::Color::Transparent;
+			this->button16->FlatAppearance->BorderSize = 0;
+			this->button16->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button16->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button16->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button16->Location = System::Drawing::Point(64, 287);
+			this->button16->Name = L"button16";
+			this->button16->Size = System::Drawing::Size(97, 36);
+			this->button16->TabIndex = 13;
+			this->button16->UseVisualStyleBackColor = false;
+			this->button16->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button16_Click);
+			// 
+			// button17
+			// 
+			this->button17->BackColor = System::Drawing::Color::Transparent;
+			this->button17->FlatAppearance->BorderSize = 0;
+			this->button17->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button17->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button17->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button17->Location = System::Drawing::Point(64, 451);
+			this->button17->Name = L"button17";
+			this->button17->Size = System::Drawing::Size(97, 36);
+			this->button17->TabIndex = 14;
+			this->button17->UseVisualStyleBackColor = false;
+			this->button17->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button17_Click);
+			// 
+			// button18
+			// 
+			this->button18->BackColor = System::Drawing::Color::Transparent;
+			this->button18->FlatAppearance->BorderSize = 0;
+			this->button18->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button18->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button18->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button18->Location = System::Drawing::Point(64, 533);
+			this->button18->Name = L"button18";
+			this->button18->Size = System::Drawing::Size(124, 36);
+			this->button18->TabIndex = 15;
+			this->button18->UseVisualStyleBackColor = false;
+			this->button18->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button18_Click);
+			// 
+			// button19
+			// 
+			this->button19->BackColor = System::Drawing::Color::Transparent;
+			this->button19->FlatAppearance->BorderSize = 0;
+			this->button19->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button19->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button19->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button19->Location = System::Drawing::Point(64, 617);
+			this->button19->Name = L"button19";
+			this->button19->Size = System::Drawing::Size(111, 36);
+			this->button19->TabIndex = 16;
+			this->button19->UseVisualStyleBackColor = false;
+			this->button19->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button19_Click);
 			// 
 			// button3
 			// 
@@ -350,13 +585,13 @@ namespace sem3 {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 911);
-			this->Controls->Add(this->button10);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button6);
+			this->Controls->Add(this->button10);
 			this->MaximumSize = System::Drawing::Size(1440, 950);
 			this->MinimumSize = System::Drawing::Size(1440, 950);
 			this->Name = L"scheduleGenerationForm";
@@ -364,6 +599,8 @@ namespace sem3 {
 			this->Load += gcnew System::EventHandler(this, &scheduleGenerationForm::scheduleGenerationForm_Load);
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
+			this->panel2->ResumeLayout(false);
+			this->panel2->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -493,9 +730,23 @@ namespace sem3 {
 		return dateString;
 	}
 
+	void scheduleGenerationForm::OnPrevButtonClickedWeekly(Object^ sender, EventArgs^ e)
+	{
+		// Retrieve the Tag property, which contains the reference to dynamicPanel2
+		Panel^ panelToDispose = safe_cast<Panel^>(dynamic_cast<Button^>(sender)->Tag);
+
+		// Check if the panel is not null before disposing
+		if (panelToDispose != nullptr)
+		{
+			panelToDispose->Hide();
+		}
+	}
 
 
-	void DisplaySchedule(std::tuple<int, int, int, float, int, int, int>** schedule, int rowSize, int colSize) {
+
+
+
+	void DisplaySchedule(std::tuple<int, int, int, float, int, int, int>** schedule, int rowSize, int colSize, bool isWeekly) {
 		// Create the dynamic panel
 		Panel^ dynamicPanel2 = gcnew Panel();
 		dynamicPanel2->Visible = true;
@@ -503,7 +754,11 @@ namespace sem3 {
 		dynamicPanel2->Location = System::Drawing::Point(0, 0); // Ensure it's positioned at the top-left of the form
 
 		// Set the background image if it exists
-		String^ imagePath = "Images/sg- exists.jpg"; // Update your path
+		String^ imagePath;
+		if (!isWeekly)
+			imagePath = "Images/sg- exists.jpg";
+		else
+			imagePath = "Images/weekly-schedule.jpg";
 		if (System::IO::File::Exists(imagePath)) {
 			dynamicPanel2->BackgroundImage = System::Drawing::Image::FromFile(imagePath);
 			//dynamicPanel->BackgroundImageLayout = ImageLayout::Stretch;
@@ -643,6 +898,40 @@ namespace sem3 {
 		db.close();
 		// Add the dynamic panel to the form and bring it to the front
 		
+		if (isWeekly) {
+			Button^ prevBtn = gcnew Button;
+			prevBtn->BackColor = System::Drawing::Color::Transparent;
+			prevBtn->FlatAppearance->BorderSize = 0;
+			prevBtn->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			prevBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			prevBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			prevBtn->Location = System::Drawing::Point(304, 713);
+			prevBtn->Size = System::Drawing::Size(259, 49);
+			prevBtn->TabIndex = 0;
+			prevBtn->UseVisualStyleBackColor = false;
+			prevBtn->Tag = dynamicPanel2;
+			prevBtn->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnPrevButtonClickedWeekly);
+			prevBtn->Visible = true;
+			prevBtn->BringToFront();
+			dynamicPanel2->Controls->Add(prevBtn);
+		}
+		else {
+			//Button^ nextBtn = gcnew Button;
+			//nextBtn->BackColor = System::Drawing::Color::Transparent;
+			//nextBtn->FlatAppearance->BorderSize = 0;
+			//nextBtn->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			//nextBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			//nextBtn->FlatAppearance->BorderColor = System::Drawing::Color::Transparent;  // Set border color to transparent
+			//nextBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			//nextBtn->Location = System::Drawing::Point(682, 831);
+			//nextBtn->Size = System::Drawing::Size(259, 49);
+			//nextBtn->TabIndex = 0;
+			//nextBtn->UseVisualStyleBackColor = false;
+			//nextBtn->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnNextButtonClick);
+			//nextBtn->Visible = true;
+			//nextBtn->BringToFront();
+			//dynamicPanel->Controls->Add(nextBtn);
+		}
 	}
 
 	// helper function to convert minutes into 24 hour format
@@ -846,21 +1135,57 @@ namespace sem3 {
 					   }
 				   }
 			   }
-	void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System::EventArgs^ e) {
+
+	std::string removeNumber(const std::string& input) {
+		size_t pos = 0;
+
+		// Find the position where the first digit appears
+		while (pos < input.size() && !std::isdigit(input[pos])) {
+			pos++;
+		}
+
+		if (!isdigit(input[pos])) {
+			return input;
+		}
+
+		// Return a substring from the start to the first number (excluding the number part)
+		return input.substr(0, pos-1);
+	}
+
+	void scheduleGenerationForm::OnNextGenButtonClick(System::Object^ sender, System::EventArgs^ e) { // ------------------------------------------------------------------------------------------------------
 		MessageBox::Show("Next Gen button clicked!", "Info", MessageBoxButtons::OK, MessageBoxIcon::Information);
 		std::vector<std::vector<std::tuple<int, std::string, int, int>>> weeklyData(7);
 		GetCheckedDataByDay(dynamicPanelGen, weeklyData);
-		// Simple loop with cout-style output using Debug::WriteLine
+		
+
+		dbManager db;
+		db.open("test.db");
+		bool isEmpty = false;
+		int currentSchedule = db.getCurrentSID(userID, isEmpty);
+		if (!isEmpty && currentSchedule >= 1)
+			currentSchedule += 1;
+		db.deleteselectedappliances(userID, currentSchedule);
+		int offsetID = 1;
 		for (int i = 0; i < weeklyData.size(); ++i) {
-			std::cout << "Day " << (i + 1) << ":\n";
 			for (const auto& entry : weeklyData[i]) {
-				int duration = std::get<0>(entry);
-				std::string applianceName = std::get<1>(entry);
-				int prior = std::get<2>(entry);
-				int quantity = std::get<3>(entry);
-				std::cout << "  " << applianceName << " - " << "Priority: " << prior << " - " << "Duration: " << duration << " Minutes  - " << "Quantity = " << quantity << std::endl;
+				string applianceName = removeNumber(std::get<1>(entry));
+				int Id = db.getApplianceID(applianceName.c_str());
+				db.addselectedAppliances(userID, currentSchedule, Id, std::get<1>(entry).c_str(), std::get<2>(entry), std::get<3>(entry), std::get<0>(entry), offsetID, i + 1);
+				db.setApplianceChanged(1);
+				offsetID++;
 			}
 		}
+		for each (Control ^ ctrl in scheduleGenerationForm::Controls) {
+			Panel^ panel = dynamic_cast<Panel^>(ctrl);
+			if (panel != nullptr) {
+				panel->Hide();
+			}
+		}
+		panel2->Parent = this;
+		panel2->Show();
+		panel2->Visible = true;
+		panel2->BringToFront();
+
 	}
 	void scheduleGenerationForm::OnIncreaseClick(System::Object^ sender, System::EventArgs^ e)
 	{
@@ -1039,13 +1364,14 @@ void WeeklySceduleGeneration() {
 	nextBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 	nextBtn->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
 	nextBtn->Location = System::Drawing::Point(682, 831);
-	nextBtn->Size = System::Drawing::Size(137, 40);
+	nextBtn->Size = System::Drawing::Size(259, 49);
 	nextBtn->TabIndex = 0;
 	nextBtn->UseVisualStyleBackColor = false;
 	nextBtn->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::OnNextButtonClick);
 	nextBtn->Visible = true;
 	nextBtn->BringToFront();
 	dynamicPanel->Controls->Add(nextBtn);
+
 }
 
 	String^ getDay(int i) {
@@ -1458,7 +1784,7 @@ void WeeklySceduleGeneration() {
 		// getdate
 
 
-		DisplaySchedule(schedule, applianceCount, 5);
+		DisplaySchedule(schedule, applianceCount, 5, false);
 		
 
 		if (db.getApplianceChanged() == 1) {
@@ -1485,6 +1811,210 @@ void WeeklySceduleGeneration() {
 					<< std::get<4>(t) << std::endl;
 			}
 		}
+	}
+
+	void generateScheduleDaily(int dayNumber) {
+		std::vector<std::tuple<int, int, int, float, int>> appliances;
+		dbManager db;
+		db.open("test.db");
+		if (db.getApplianceCount(userID, dayNumber) == 0) {
+			label1->Text = "Error: No Appliances selected";
+			return;
+		}
+		db.setConsumedUnits(userID, powerConsumed);
+
+		db.getScheduleGenData(userID, appliances, dayNumber);
+		float sum = calculateTotalPower(appliances);
+		int applianceCount = db.getApplianceCount(userID, dayNumber);
+
+
+		std::tuple<int, int, int, float, int, int, int>** schedule = new std::tuple<int, int, int, float, int, int, int>* [applianceCount];
+
+		for (int i = 0; i < applianceCount; ++i) {
+			schedule[i] = new std::tuple<int, int, int, float, int, int, int>[5];  // Allocating memory for each tuple
+		}
+
+
+		for (int i = 0; i < applianceCount; i++) {
+			for (int j = 0; j < 5; j++)
+				schedule[i][j] = std::make_tuple(0, 0, 0, 0.00, 0, 0, 0);
+		}
+		int peakHourStart = db.getPeakHoursStart(userID);
+		int peakHourEnd = db.getPeakHoursEnd(userID);
+		int targetUnits = db.getTargetUnits(userID);
+
+		if (powerConsumed + (30 * sum) <= targetUnits) {
+			bubbleSortPower(appliances, appliances.size());
+			for (int currentCol = 0; currentCol < 5;) {
+				int currMins = 0;
+				int startTime = 0;
+				bool isColumnFilled = false;
+				bool fillPeakHours = false;
+				bool terminate = false;
+				for (int i = 0; i < applianceCount; i++) {
+					if (appliances.empty()) {
+						terminate = true;
+						break;
+					}
+					else {
+						if (currMins > 1440) {
+							currentCol++;
+							break;
+						}
+						else if (currMins <= 1440) {
+							if (isColumnFilled) {
+								currentCol++;
+								break;
+							}
+						}
+					}
+					// code to insert before and after peak hours
+					if (!fillPeakHours && (startTime < peakHourStart * 60 || startTime >= peakHourEnd * 60)) {
+						auto& appliance = appliances.back();
+						if (startTime + std::get<2>(appliance) > 1440) {
+							fillPeakHours = true;
+							i--;
+						}
+						else {
+							std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+							std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+							std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+							std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+							std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+							std::get<5>(schedule[i][currentCol]) = startTime;
+							std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+							startTime += std::get<2>(appliance);
+							currMins += std::get<2>(appliance);
+							appliances.pop_back();
+						}
+					}
+					else if (!fillPeakHours && (startTime >= peakHourStart * 60)) {
+						startTime = peakHourEnd * 60;
+						i--;
+					}
+					else if (fillPeakHours) {
+						// code to insert between peak hours
+						startTime = peakHourStart * 60;
+						while (!appliances.empty()) {
+							if (startTime >= peakHourEnd * 60) {
+								isColumnFilled = true;
+								break;
+							}
+							auto& appliance = appliances.front();
+							std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+							std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+							std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+							std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+							std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+							std::get<5>(schedule[i][currentCol]) = startTime;
+							std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+							startTime += std::get<2>(appliance);
+							currMins += std::get<2>(appliance);
+							appliances.erase(appliances.begin());
+							i++;
+						}
+					}
+				}
+				if (terminate)
+					break;
+
+			}
+		}
+		else {
+			bubbleSortPriority(appliances, appliances.size());
+			while (calculateTotalPower(appliances) > targetUnits || appliances.size() > 24) {
+				appliances.pop_back();
+			}
+
+			bubbleSortPower(appliances, appliances.size());
+			for (int currentCol = 0; currentCol < 5;) {
+				int currMins = 0;
+				int startTime = 0;
+				bool isColumnFilled = false;
+				bool fillPeakHours = false;
+				bool terminate = false;
+				for (int i = 0; i < applianceCount; i++) {
+					if (appliances.empty()) {
+						terminate = true;
+						break;
+					}
+					else {
+						if (currMins > 1440) {
+							currentCol++;
+							break;
+						}
+						else if (currMins <= 1440) {
+							if (isColumnFilled) {
+								currentCol++;
+								break;
+							}
+						}
+					}
+					// code to insert before and after peak hours
+					if (!fillPeakHours && (startTime < peakHourStart * 60 || startTime >= peakHourEnd * 60)) {
+						auto& appliance = appliances.back();
+						std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+						std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+						std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+						std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+						std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+						std::get<5>(schedule[i][currentCol]) = startTime;
+						std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+						startTime += std::get<2>(appliance);
+						currMins += std::get<2>(appliance);
+						appliances.pop_back();
+						if (startTime >= 1440) {
+							fillPeakHours = true;
+						}
+					}
+					else if (!fillPeakHours && (startTime >= peakHourStart * 60)) {
+						startTime = peakHourEnd * 60;
+						i--;
+					}
+					else if (fillPeakHours) {
+						// code to insert between peak hours
+						startTime = peakHourStart * 60;
+						while (!appliances.empty()) {
+							if (startTime >= peakHourEnd * 60) {
+								isColumnFilled = true;
+								break;
+							}
+							auto& appliance = appliances.front();
+							std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+							std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+							std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+							std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+							std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+							std::get<5>(schedule[i][currentCol]) = startTime;
+							std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+							startTime += std::get<2>(appliance);
+							currMins += std::get<2>(appliance);
+							appliances.erase(appliances.begin());
+							i++;
+						}
+					}
+				}
+				if (terminate)
+					break;
+			}
+		}
+		// getdate
+
+
+		DisplaySchedule(schedule, applianceCount, 5, true);
+
+
+		if (db.getApplianceChanged() == 1) {
+			// save scedule id and type and units saved
+			System::String^ managedString = type;
+			std::string nativeString = msclr::interop::marshal_as<std::string>(managedString);
+			std::string date = getTodayDate();
+
+			db.insertIntoSchedules(userID, nativeString, 0, date);
+			db.setApplianceChanged(0);
+		}
+
+		db.close();
 	}
 
 
@@ -1529,6 +2059,49 @@ private: System::Void button10_Click(System::Object^ sender, System::EventArgs^ 
 }
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 	nav::getInstance()->showLogin();
+}
+private: System::Void button16_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showHome();
+}
+private: System::Void button17_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showHistory();
+}
+private: System::Void button18_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showAppliances();
+}
+private: System::Void button19_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showSettings();
+}
+private: System::Void button15_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showLogin();
+}
+	   // monday
+private: System::Void button20_Click(System::Object^ sender, System::EventArgs^ e) {
+	generateScheduleDaily(1);
+}
+	   // tuesday
+private: System::Void button21_Click(System::Object^ sender, System::EventArgs^ e) {
+	generateScheduleDaily(2);
+}
+	   // wednesday
+private: System::Void button23_Click(System::Object^ sender, System::EventArgs^ e) {
+	generateScheduleDaily(3);
+}
+	   // thursday
+private: System::Void button22_Click(System::Object^ sender, System::EventArgs^ e) {
+	generateScheduleDaily(4);
+}
+	  // friday
+private: System::Void button27_Click(System::Object^ sender, System::EventArgs^ e) {
+	generateScheduleDaily(5);
+}
+	   // saturday
+private: System::Void button26_Click(System::Object^ sender, System::EventArgs^ e) {
+	generateScheduleDaily(6);
+}
+	   // sunday
+private: System::Void button25_Click(System::Object^ sender, System::EventArgs^ e) {
+	generateScheduleDaily(7);
 }
 };
 }

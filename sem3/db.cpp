@@ -251,6 +251,7 @@ bool dbManager::createSelectedAppliacesTable()
         "QUANTITY INTEGER NOT NULL,"
         "Duration INTEGER NOT NULL,"
         "offsetId INTEGER NOT NULL,"
+        "dayNumber INTEGER,"
         "FOREIGN KEY(UID) REFERENCES Users(UID),"
         "FOREIGN KEY(SID) REFERENCES Schedules(SID));";
 
@@ -266,11 +267,11 @@ bool dbManager::createSelectedAppliacesTable()
     return true;
 }
 
-bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity, int duration, int offsetId)
+bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity, int duration, int offsetId, int dayNumber)
 {
     sqlite3_stmt* statement;
 
-    string query = "INSERT INTO SelectedAppliances (UID, SID,AID,APPLIANCENAME,PRIORITY,QUANTITY, DURATION, offsetId) VALUES (?,?,?,?,?,?,?,?) ";
+    string query = "INSERT INTO SelectedAppliances (UID, SID,AID,APPLIANCENAME,PRIORITY,QUANTITY, DURATION, offsetId, dayNumber) VALUES (?,?,?,?,?,?,?,?,?) ";
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &statement, nullptr) != SQLITE_OK) {
         cout << "Error preparing statement for Adding selected appliance" << endl;
@@ -285,6 +286,7 @@ bool dbManager::addselectedAppliances(int userID, int scheduleID, int applianceI
     sqlite3_bind_int(statement, 6, quantity);
     sqlite3_bind_int(statement, 7, duration);
     sqlite3_bind_int(statement, 8, offsetId);
+    sqlite3_bind_int(statement, 9, dayNumber);
 
 
     if (sqlite3_step(statement) != SQLITE_DONE) {
@@ -395,7 +397,7 @@ int dbManager::getAppliancePower(int applianceID) {
     return id;
 }
 
-void dbManager::getScheduleGenData(int userID, std::vector<std::tuple<int, int, int, float, int>>& appliances) {
+void dbManager::getScheduleGenData(int userID, std::vector<std::tuple<int, int, int, float, int>>& appliances, int dayNumber) {
     sqlite3_stmt* statement = nullptr;
 
     bool isEmpty = false;
@@ -404,7 +406,7 @@ void dbManager::getScheduleGenData(int userID, std::vector<std::tuple<int, int, 
         currentScheduleID++;
 
     // Prepare and execute SQL query to fetch appliance data
-    const char* applianceQuery = "SELECT offsetId, QUANTITY, Duration, PRIORITY FROM SelectedAppliances where UID = ? AND SID = ?";
+    const char* applianceQuery = "SELECT offsetId, QUANTITY, Duration, PRIORITY FROM SelectedAppliances where UID = ? AND SID = ? AND dayNumber = ?";
     if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
         std::cerr << "Failed to prepare query for gathering schedule generation data: " << sqlite3_errmsg(db) << std::endl;
         return;
@@ -412,6 +414,7 @@ void dbManager::getScheduleGenData(int userID, std::vector<std::tuple<int, int, 
 
     sqlite3_bind_int(statement, 1, userID);
     sqlite3_bind_int(statement, 2, currentScheduleID);
+    sqlite3_bind_int(statement, 3, dayNumber);
 
     // Store appliance data in vector
     while (sqlite3_step(statement) == SQLITE_ROW) {
@@ -563,7 +566,7 @@ const char* dbManager::getApplianceName(int uid, int sid, int applianceIdOffset,
     return name;  // Return the appliance name or nullptr if not found
 }
 
-int dbManager::getApplianceCount(int userID) {
+int dbManager::getApplianceCount(int userID, int dayNumber) {
     sqlite3_stmt* statement = nullptr;
 
     bool isEmpty = false;
@@ -572,7 +575,7 @@ int dbManager::getApplianceCount(int userID) {
         currentScheduleID++;
 
     // Prepare and execute SQL query to fetch appliance data
-    const char* applianceQuery = "SELECT COUNT(*) FROM SelectedAppliances where UID = ? AND SID = ?";
+    const char* applianceQuery = "SELECT COUNT(*) FROM SelectedAppliances where UID = ? AND SID = ? AND dayNumber = ?";
     if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
         std::cerr << "Failed to prepare query for gathering appliance count data: " << sqlite3_errmsg(db) << std::endl;
         return -1;
@@ -580,6 +583,7 @@ int dbManager::getApplianceCount(int userID) {
 
     sqlite3_bind_int(statement, 1, userID);
     sqlite3_bind_int(statement, 2, currentScheduleID);
+    sqlite3_bind_int(statement, 3, dayNumber);
 
     // Store appliance Count data
     int applianceCount = -1;
