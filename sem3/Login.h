@@ -2,6 +2,9 @@
 #include <string>
 #include <msclr\marshal_cppstd.h>
 #include "db.h"
+#include "nav.h"
+#include "Admin.h"
+
 namespace sem3 {
 
 	using namespace System;
@@ -17,7 +20,6 @@ namespace sem3 {
 	public ref class Login : public System::Windows::Forms::Form
 	{
 	public:
-		dbManager& db; // Reference to the database manager
 	private: System::Windows::Forms::Panel^ SIGNUP_PANEL;
 
 	private: System::Windows::Forms::Button^ SIGN_UP_BTN;
@@ -48,7 +50,6 @@ namespace sem3 {
 	public:
 		int loggedInUserID; // Store the authenticated user's ID
 		int loggedInAdminID;
-		bool isAdmin;
 		//Login(void)
 		//{
 		//	InitializeComponent();
@@ -56,10 +57,9 @@ namespace sem3 {
 		//	//TODO: Add the constructor code here
 		//	//
 		//}
-		Login(dbManager& dbManager) : db(dbManager) 
+		Login() 
 		{
 			InitializeComponent();
-			isAdmin = false;
 		}
 
 	protected:
@@ -352,18 +352,6 @@ namespace sem3 {
 	
 
 	public:// Method to retrieve the authenticated user ID
-		int getLoggedInUserID()
-		{
-			return loggedInUserID;
-		}
-		int getLoggedInAdminID()
-		{
-			return loggedInAdminID;
-		}
-		bool getIsAdmin()
-		{
-			return isAdmin;
-		}
 	private: System::Void LOG_Click(System::Object^ sender, System::EventArgs^ e) {
 		// Get input from textboxes
 		String^ username = L_NAME->Text;
@@ -377,8 +365,12 @@ namespace sem3 {
 		if (db.authenticateUser(uname, pass))
 		{
 			loggedInUserID = db.readUserID(uname.c_str()); // Get the user's ID
-			this->DialogResult = System::Windows::Forms::DialogResult::OK; // Notify successful login
-			this->Close(); // Close the LoginForm
+			db.initialize();
+
+			nav::initialize(loggedInUserID, this);
+
+			nav::getInstance()->showHome();
+			this->Hide();
 		}
 		else
 		{
@@ -447,9 +439,10 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	if (db.authenticateAdmin(uname, pass))
 	{
 		loggedInAdminID = db.readAdminID(uname.c_str()); // Get the user's ID
-		isAdmin = true;
-		this->DialogResult = System::Windows::Forms::DialogResult::OK; // Notify successful login
-		this->Close(); // Close the LoginForm
+		Admin^ adminForm = gcnew Admin(loggedInAdminID);
+		db.initialize();
+		this->Hide();
+		adminForm->Show();
 	}
 	else
 	{

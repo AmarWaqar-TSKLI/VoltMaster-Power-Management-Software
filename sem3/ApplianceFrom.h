@@ -4,8 +4,7 @@
 #include <msclr\marshal_cppstd.h>
 #include "db.h"
 #include <vector>
-#include "scheduleGenerationForm.h"
-//#include "historyForm.h"
+#include "nav.h"
 
 namespace sem3 {
 	using namespace System;
@@ -34,15 +33,15 @@ namespace sem3 {
 		Form home;
 	private: System::Windows::Forms::Button^ button3;
 	private: System::Windows::Forms::Button^ button4;
+	private: System::Windows::Forms::Button^ button7;
+	private: System::Windows::Forms::Button^ button6;
 	public:
 		int userID;
-		Form^ oldForm;
-		ApplianceFrom(int userID, Form^ OldForm)
+		ApplianceFrom(int userID)
 		{
 			InitializeComponent();
 			applianceData = gcnew List<Tuple<int, String^>^>(); // Initialize the list
 			this->userID = userID;
-			this->oldForm = OldForm;
 		}
 
 		// Set appliance data (converting from unmanaged vector to managed list)
@@ -257,6 +256,8 @@ namespace sem3 {
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
+			this->button7 = (gcnew System::Windows::Forms::Button());
+			this->button6 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -282,6 +283,7 @@ namespace sem3 {
 			this->button1->Size = System::Drawing::Size(116, 51);
 			this->button1->TabIndex = 1;
 			this->button1->UseVisualStyleBackColor = false;
+			this->button1->Click += gcnew System::EventHandler(this, &ApplianceFrom::button1_Click_1);
 			// 
 			// button2
 			// 
@@ -325,11 +327,41 @@ namespace sem3 {
 			this->button4->UseVisualStyleBackColor = false;
 			this->button4->Click += gcnew System::EventHandler(this, &ApplianceFrom::button4_Click);
 			// 
+			// button7
+			// 
+			this->button7->BackColor = System::Drawing::Color::Transparent;
+			this->button7->FlatAppearance->BorderSize = 0;
+			this->button7->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button7->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button7->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button7->Location = System::Drawing::Point(54, 806);
+			this->button7->Name = L"button7";
+			this->button7->Size = System::Drawing::Size(137, 40);
+			this->button7->TabIndex = 8;
+			this->button7->UseVisualStyleBackColor = false;
+			this->button7->Click += gcnew System::EventHandler(this, &ApplianceFrom::button7_Click);
+			// 
+			// button6
+			// 
+			this->button6->BackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatAppearance->BorderSize = 0;
+			this->button6->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button6->Location = System::Drawing::Point(54, 611);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(137, 40);
+			this->button6->TabIndex = 7;
+			this->button6->UseVisualStyleBackColor = false;
+			this->button6->Click += gcnew System::EventHandler(this, &ApplianceFrom::button6_Click);
+			// 
 			// ApplianceFrom
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1422, 881);
+			this->ClientSize = System::Drawing::Size(1424, 881);
+			this->Controls->Add(this->button7);
+			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
@@ -441,7 +473,6 @@ namespace sem3 {
 
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 		// go to home
-		oldForm->Show();
 		this->Hide();
 	}
 
@@ -730,14 +761,19 @@ namespace sem3 {
 
 	}
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID, this);
-	myform->Show();
-	this->Hide();
+	nav::getInstance()->showSchedules();
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-	// historyForm
-	oldForm->Show();
-	this->Hide();
+	nav::getInstance()->showHistory();
+}
+private: System::Void button1_Click_1(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showHome();
+}
+private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showSettings();
+}
+private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showLogin();
 }
 };
 }

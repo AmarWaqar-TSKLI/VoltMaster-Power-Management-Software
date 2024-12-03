@@ -9,6 +9,8 @@
 #include <vector>
 #include <tuple>
 #include <utility>
+#include "nav.h"
+
 namespace sem3 {
 
 	using namespace System;
@@ -27,15 +29,19 @@ namespace sem3 {
 		int userID;
 		int powerConsumed;
 		Panel^ dynamicPanelGen;
-		Form^ old;
 	private: System::Windows::Forms::Button^ button9;
+	private: System::Windows::Forms::Button^ button3;
+	private: System::Windows::Forms::Button^ button11;
+	private: System::Windows::Forms::Button^ button12;
+	private: System::Windows::Forms::Button^ button13;
+	private: System::Windows::Forms::Button^ button14;
+	private: System::Windows::Forms::Button^ button10;
 	public:
 		String^ type;
-		scheduleGenerationForm(int userID, Form^ o)
+		scheduleGenerationForm(int userID)
 		{
 			InitializeComponent();
 			this->userID = userID;
-			old = o;
 		}
 
 	protected:
@@ -52,7 +58,7 @@ namespace sem3 {
 	private: System::Windows::Forms::Button^ button1;
 	private: System::Windows::Forms::Panel^ panel1;
 	private: System::Windows::Forms::Button^ button2;
-	private: System::Windows::Forms::Button^ button3;
+
 	private: System::Windows::Forms::Button^ button4;
 	private: System::Windows::Forms::Button^ button5;
 	private: System::Windows::Forms::Button^ button6;
@@ -78,16 +84,21 @@ namespace sem3 {
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(scheduleGenerationForm::typeid));
 			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->button11 = (gcnew System::Windows::Forms::Button());
+			this->button12 = (gcnew System::Windows::Forms::Button());
+			this->button13 = (gcnew System::Windows::Forms::Button());
+			this->button14 = (gcnew System::Windows::Forms::Button());
 			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button2 = (gcnew System::Windows::Forms::Button());
-			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->button10 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -108,6 +119,11 @@ namespace sem3 {
 			// panel1
 			// 
 			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
+			this->panel1->Controls->Add(this->button3);
+			this->panel1->Controls->Add(this->button11);
+			this->panel1->Controls->Add(this->button12);
+			this->panel1->Controls->Add(this->button13);
+			this->panel1->Controls->Add(this->button14);
 			this->panel1->Controls->Add(this->button9);
 			this->panel1->Controls->Add(this->label1);
 			this->panel1->Controls->Add(this->textBox1);
@@ -121,6 +137,76 @@ namespace sem3 {
 			this->panel1->Visible = false;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &scheduleGenerationForm::panel1_Paint);
 			// 
+			// button3
+			// 
+			this->button3->BackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->BorderSize = 0;
+			this->button3->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button3->Location = System::Drawing::Point(50, 804);
+			this->button3->Name = L"button3";
+			this->button3->Size = System::Drawing::Size(137, 40);
+			this->button3->TabIndex = 12;
+			this->button3->UseVisualStyleBackColor = false;
+			this->button3->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button3_Click);
+			// 
+			// button11
+			// 
+			this->button11->BackColor = System::Drawing::Color::Transparent;
+			this->button11->FlatAppearance->BorderSize = 0;
+			this->button11->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button11->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button11->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button11->Location = System::Drawing::Point(64, 283);
+			this->button11->Name = L"button11";
+			this->button11->Size = System::Drawing::Size(97, 36);
+			this->button11->TabIndex = 8;
+			this->button11->UseVisualStyleBackColor = false;
+			this->button11->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button11_Click);
+			// 
+			// button12
+			// 
+			this->button12->BackColor = System::Drawing::Color::Transparent;
+			this->button12->FlatAppearance->BorderSize = 0;
+			this->button12->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button12->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button12->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button12->Location = System::Drawing::Point(64, 447);
+			this->button12->Name = L"button12";
+			this->button12->Size = System::Drawing::Size(97, 36);
+			this->button12->TabIndex = 9;
+			this->button12->UseVisualStyleBackColor = false;
+			this->button12->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button12_Click);
+			// 
+			// button13
+			// 
+			this->button13->BackColor = System::Drawing::Color::Transparent;
+			this->button13->FlatAppearance->BorderSize = 0;
+			this->button13->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button13->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button13->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button13->Location = System::Drawing::Point(64, 529);
+			this->button13->Name = L"button13";
+			this->button13->Size = System::Drawing::Size(124, 36);
+			this->button13->TabIndex = 10;
+			this->button13->UseVisualStyleBackColor = false;
+			this->button13->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button13_Click);
+			// 
+			// button14
+			// 
+			this->button14->BackColor = System::Drawing::Color::Transparent;
+			this->button14->FlatAppearance->BorderSize = 0;
+			this->button14->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button14->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button14->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button14->Location = System::Drawing::Point(64, 613);
+			this->button14->Name = L"button14";
+			this->button14->Size = System::Drawing::Size(111, 36);
+			this->button14->TabIndex = 11;
+			this->button14->UseVisualStyleBackColor = false;
+			this->button14->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button14_Click);
+			// 
 			// button9
 			// 
 			this->button9->BackColor = System::Drawing::Color::Transparent;
@@ -128,9 +214,9 @@ namespace sem3 {
 			this->button9->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 			this->button9->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button9->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button9->Location = System::Drawing::Point(1142, 143);
+			this->button9->Location = System::Drawing::Point(1143, 143);
 			this->button9->Name = L"button9";
-			this->button9->Size = System::Drawing::Size(177, 37);
+			this->button9->Size = System::Drawing::Size(182, 37);
 			this->button9->TabIndex = 5;
 			this->button9->UseVisualStyleBackColor = false;
 			this->button9->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button9_Click);
@@ -202,19 +288,6 @@ namespace sem3 {
 			this->button2->UseVisualStyleBackColor = false;
 			this->button2->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button2_Click);
 			// 
-			// button3
-			// 
-			this->button3->BackColor = System::Drawing::Color::Transparent;
-			this->button3->FlatAppearance->BorderSize = 0;
-			this->button3->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
-			this->button3->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
-			this->button3->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button3->Location = System::Drawing::Point(63, 367);
-			this->button3->Name = L"button3";
-			this->button3->Size = System::Drawing::Size(111, 36);
-			this->button3->TabIndex = 3;
-			this->button3->UseVisualStyleBackColor = false;
-			// 
 			// button4
 			// 
 			this->button4->BackColor = System::Drawing::Color::Transparent;
@@ -241,6 +314,7 @@ namespace sem3 {
 			this->button5->Size = System::Drawing::Size(124, 36);
 			this->button5->TabIndex = 5;
 			this->button5->UseVisualStyleBackColor = false;
+			this->button5->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button5_Click);
 			// 
 			// button6
 			// 
@@ -254,6 +328,21 @@ namespace sem3 {
 			this->button6->Size = System::Drawing::Size(111, 36);
 			this->button6->TabIndex = 6;
 			this->button6->UseVisualStyleBackColor = false;
+			this->button6->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button6_Click);
+			// 
+			// button10
+			// 
+			this->button10->BackColor = System::Drawing::Color::Transparent;
+			this->button10->FlatAppearance->BorderSize = 0;
+			this->button10->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button10->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button10->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button10->Location = System::Drawing::Point(49, 808);
+			this->button10->Name = L"button10";
+			this->button10->Size = System::Drawing::Size(137, 40);
+			this->button10->TabIndex = 7;
+			this->button10->UseVisualStyleBackColor = false;
+			this->button10->Click += gcnew System::EventHandler(this, &scheduleGenerationForm::button10_Click);
 			// 
 			// scheduleGenerationForm
 			// 
@@ -261,10 +350,10 @@ namespace sem3 {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 911);
+			this->Controls->Add(this->button10);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->button2);
-			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button6);
@@ -276,7 +365,6 @@ namespace sem3 {
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
 			this->ResumeLayout(false);
-			void OnNextButtonClick(System::Object^ sender, System::EventArgs^ e);
 
 		}
 #pragma endregion
@@ -301,6 +389,8 @@ namespace sem3 {
 	private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
 		button8->BackgroundImage = System::Drawing::Image::FromFile("Images/sg-daily.png");
 		button8->Tag = "1";
+		button9->BackgroundImage = nullptr;
+		button9->Tag = nullptr;
 	}
 	
 	
@@ -1264,14 +1354,38 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 private: System::Void button9_Click(System::Object^ sender, System::EventArgs^ e) {
 	button9->BackgroundImage = System::Drawing::Image::FromFile("Images/sg-weekly.png");
 	button9->Tag = "1";
+	button8->BackgroundImage = nullptr;
+	button8->Tag = nullptr;
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-	
-	// history
+	nav::getInstance()->showHistory();
 }
-	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
-		old->Show();
-		this->Hide();
-	}
+private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showHome();
+}
+private: System::Void button11_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showHome();
+}
+private: System::Void button12_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showHistory();
+}
+private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showAppliances();
+}
+private: System::Void button13_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showAppliances();
+}
+private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showSettings();
+}
+private: System::Void button14_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showSettings();
+}
+private: System::Void button10_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showLogin();
+}
+private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showLogin();
+}
 };
 }

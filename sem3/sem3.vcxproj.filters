@@ -28,6 +28,12 @@
     <Filter Include="Source Files\Forms">
       <UniqueIdentifier>{06963cb5-95fc-4763-a64f-380f26ce1789}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Navigation">
+      <UniqueIdentifier>{300ddffc-488f-40d6-a5cd-fcd314cd5c2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\navigation">
+      <UniqueIdentifier>{a870912a-880a-40fc-a871-fd9e12914503}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApplianceFrom.h">
@@ -45,15 +51,6 @@
     <ClInclude Include="User .h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Appliance.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PowerConsumption.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Schedule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="scheduleGenerationForm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -62,6 +59,15 @@
     </ClInclude>
     <ClInclude Include="historyForm.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Admin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nav.h">
+      <Filter>Header Files\navigation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -86,8 +92,17 @@
     <ClCompile Include="scheduleGenerationForm.cpp">
       <Filter>Source Files\Forms</Filter>
     </ClCompile>
-    <ClCompile Include="historyForm.cpp">
+    <ClCompile Include="Admin.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Source Files\Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="historyForm.cpp">
+      <Filter>Source Files\Forms</Filter>
+    </ClCompile>
+    <ClCompile Include="nav.cpp">
+      <Filter>Source Files\Navigation</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

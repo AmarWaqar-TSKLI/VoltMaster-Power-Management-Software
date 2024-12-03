@@ -11,6 +11,7 @@ public:
 	dbManager();
 	void open(const char* name);
 	void close();
+	void initialize();
 	bool createApplianceListTable();
 	bool addApplianceToList(const char* name, int powerUsage);
 	bool createScheduleTable();

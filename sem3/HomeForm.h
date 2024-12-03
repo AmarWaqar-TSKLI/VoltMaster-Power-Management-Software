@@ -1,8 +1,7 @@
 #pragma once
-#include "ApplianceFrom.h"
-#include "scheduleGenerationForm.h"
-#include "Settings.h"
-#include"historyForm.h"
+#include "db.h"
+#include "nav.h"
+
 namespace sem3 {
 
 	using namespace System;
@@ -36,7 +35,7 @@ namespace sem3 {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Button^ button1;
+
 	protected:
 
 	private: System::Windows::Forms::Button^ button3;
@@ -63,7 +62,6 @@ namespace sem3 {
 		void InitializeComponent(void)
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(HomeForm::typeid));
-			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button5 = (gcnew System::Windows::Forms::Button());
@@ -74,20 +72,6 @@ namespace sem3 {
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
-			// 
-			// button1
-			// 
-			this->button1->BackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatAppearance->BorderSize = 0;
-			this->button1->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button1->Location = System::Drawing::Point(59, 286);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(137, 40);
-			this->button1->TabIndex = 0;
-			this->button1->UseVisualStyleBackColor = false;
-			this->button1->Click += gcnew System::EventHandler(this, &HomeForm::button1_Click);
 			// 
 			// button3
 			// 
@@ -157,6 +141,7 @@ namespace sem3 {
 			this->button7->Size = System::Drawing::Size(137, 40);
 			this->button7->TabIndex = 6;
 			this->button7->UseVisualStyleBackColor = false;
+			this->button7->Click += gcnew System::EventHandler(this, &HomeForm::button7_Click);
 			// 
 			// label1
 			// 
@@ -165,7 +150,7 @@ namespace sem3 {
 			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label1->Location = System::Drawing::Point(317, 262);
+			this->label1->Location = System::Drawing::Point(328, 262);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(0, 29);
 			this->label1->TabIndex = 7;
@@ -178,7 +163,7 @@ namespace sem3 {
 			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label2->Location = System::Drawing::Point(704, 403);
+			this->label2->Location = System::Drawing::Point(705, 401);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(0, 29);
 			this->label2->TabIndex = 8;
@@ -190,7 +175,7 @@ namespace sem3 {
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label3->Location = System::Drawing::Point(337, 403);
+			this->label3->Location = System::Drawing::Point(322, 404);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(0, 29);
 			this->label3->TabIndex = 9;
@@ -202,7 +187,7 @@ namespace sem3 {
 			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label4->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label4->Location = System::Drawing::Point(337, 549);
+			this->label4->Location = System::Drawing::Point(324, 549);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(0, 29);
 			this->label4->TabIndex = 10;
@@ -222,7 +207,6 @@ namespace sem3 {
 			this->Controls->Add(this->button5);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
-			this->Controls->Add(this->button1);
 			this->MaximumSize = System::Drawing::Size(1440, 950);
 			this->MinimumSize = System::Drawing::Size(1440, 858);
 			this->Name = L"HomeForm";
@@ -255,26 +239,21 @@ namespace sem3 {
 		db.close();
 	}
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-	ApplianceFrom^ myform = gcnew ApplianceFrom(userID, this);
-	myform->Show();
-	this->Hide();
+	nav::getInstance()->showAppliances();
 }
 private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
-	scheduleGenerationForm^ myform = gcnew scheduleGenerationForm(userID, this);
-	myform->Show();
-	this->Hide();
+	nav::getInstance()->showSchedules();
 }
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
-	Settings^ myform = gcnew Settings(userID, this);
-	myform->Show();
-	this->Hide();
+	nav::getInstance()->showSettings();
 }
 private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
 private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-	historyForm^ myHForm = gcnew historyForm(userID, this);
-	this->Hide();
-	myHForm->Show();
+	nav::getInstance()->showHistory();
+}
+private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showLogin();
 }
 };
 }

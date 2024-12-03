@@ -1,6 +1,7 @@
 #pragma once
 #include "db.h"
 #include <msclr/marshal_cppstd.h>
+#include "nav.h"
 
 namespace sem3 {
 
@@ -22,14 +23,17 @@ namespace sem3 {
 		int peakStart;
 		int peakEnd;
 		String^ meterPhase;
+	private: System::Windows::Forms::Button^ button4;
+	public:
+	private: System::Windows::Forms::Button^ button5;
+	private: System::Windows::Forms::Button^ button6;
+	private: System::Windows::Forms::Button^ button9;
 	private: System::Windows::Forms::Button^ button3;
 	public:
-		Form^ oldForm;
-		Settings(int userID, Form^ old)
+		Settings(int userID)
 		{
 			InitializeComponent();
 			this->userID = userID;
-			oldForm = old;
 		}
 
 	protected:
@@ -77,6 +81,10 @@ namespace sem3 {
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->button4 = (gcnew System::Windows::Forms::Button());
+			this->button5 = (gcnew System::Windows::Forms::Button());
+			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// textBox1
@@ -201,12 +209,72 @@ namespace sem3 {
 			this->button3->UseVisualStyleBackColor = false;
 			this->button3->Click += gcnew System::EventHandler(this, &Settings::button3_Click);
 			// 
+			// button4
+			// 
+			this->button4->BackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatAppearance->BorderSize = 0;
+			this->button4->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button4->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button4->Location = System::Drawing::Point(55, 811);
+			this->button4->Name = L"button4";
+			this->button4->Size = System::Drawing::Size(137, 40);
+			this->button4->TabIndex = 15;
+			this->button4->UseVisualStyleBackColor = false;
+			this->button4->Click += gcnew System::EventHandler(this, &Settings::button4_Click);
+			// 
+			// button5
+			// 
+			this->button5->BackColor = System::Drawing::Color::Transparent;
+			this->button5->FlatAppearance->BorderSize = 0;
+			this->button5->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button5->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button5->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button5->Location = System::Drawing::Point(55, 362);
+			this->button5->Name = L"button5";
+			this->button5->Size = System::Drawing::Size(137, 40);
+			this->button5->TabIndex = 14;
+			this->button5->UseVisualStyleBackColor = false;
+			this->button5->Click += gcnew System::EventHandler(this, &Settings::button5_Click);
+			// 
+			// button6
+			// 
+			this->button6->BackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatAppearance->BorderSize = 0;
+			this->button6->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button6->Location = System::Drawing::Point(55, 523);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(137, 40);
+			this->button6->TabIndex = 13;
+			this->button6->UseVisualStyleBackColor = false;
+			this->button6->Click += gcnew System::EventHandler(this, &Settings::button6_Click);
+			// 
+			// button9
+			// 
+			this->button9->BackColor = System::Drawing::Color::Transparent;
+			this->button9->FlatAppearance->BorderSize = 0;
+			this->button9->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button9->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button9->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button9->Location = System::Drawing::Point(56, 286);
+			this->button9->Name = L"button9";
+			this->button9->Size = System::Drawing::Size(123, 39);
+			this->button9->TabIndex = 16;
+			this->button9->UseVisualStyleBackColor = false;
+			this->button9->Click += gcnew System::EventHandler(this, &Settings::button9_Click);
+			// 
 			// Settings
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 911);
+			this->Controls->Add(this->button9);
+			this->Controls->Add(this->button4);
+			this->Controls->Add(this->button5);
+			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->label1);
 			this->Controls->Add(this->button7);
@@ -329,8 +397,19 @@ private: System::Void Settings_Load(System::Object^ sender, System::EventArgs^ e
 	db.close();
 }
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
-	oldForm->Show();
-	this->Hide();
+	nav::getInstance()->showHistory();
+}
+private: System::Void button9_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showHome();
+}
+private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showSchedules();
+}
+private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showAppliances();
+}
+private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+	nav::getInstance()->showLogin();
 }
 };
 }

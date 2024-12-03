@@ -126,7 +126,6 @@
     <ClInclude Include="Admin.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="Appliance.h" />
     <ClInclude Include="ApplianceFrom.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -140,14 +139,13 @@
     <ClInclude Include="Login.h">
       <FileType>CppForm</FileType>
     </ClInclude>
-    <ClInclude Include="PowerConsumption.h" />
-    <ClInclude Include="Schedule.h" />
+    <ClInclude Include="nav.h" />
     <ClInclude Include="scheduleGenerationForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="Settings.h">
-		<FileType>CppForm</FileType>
-	</ClInclude>
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="User .h" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +162,7 @@
     <ClCompile Include="historyForm.cpp" />
     <ClCompile Include="HomeForm.cpp" />
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="nav.cpp" />
     <ClCompile Include="scheduleGenerationForm.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="sqlite\sqlite3.c">
@@ -195,8 +194,8 @@
       <DependentUpon>scheduleGenerationForm.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
-		<DependentUpon>Settings.h</DependentUpon>
-	</EmbeddedResource>
+      <DependentUpon>Settings.h</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
