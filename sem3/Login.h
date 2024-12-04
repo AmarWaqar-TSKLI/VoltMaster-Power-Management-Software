@@ -163,12 +163,11 @@ namespace sem3 {
 			this->SIGNUP_PANEL->Controls->Add(this->P2_TB);
 			this->SIGNUP_PANEL->Controls->Add(this->P1_TB);
 			this->SIGNUP_PANEL->Controls->Add(this->UNAME_TB);
-			this->SIGNUP_PANEL->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->SIGNUP_PANEL->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->SIGNUP_PANEL->Location = System::Drawing::Point(0, 0);
+			this->SIGNUP_PANEL->Location = System::Drawing::Point(0, 354);
 			this->SIGNUP_PANEL->Name = L"SIGNUP_PANEL";
-			this->SIGNUP_PANEL->Size = System::Drawing::Size(1424, 901);
+			this->SIGNUP_PANEL->Size = System::Drawing::Size(547, 527);
 			this->SIGNUP_PANEL->TabIndex = 7;
 			this->SIGNUP_PANEL->Visible = false;
 			// 
@@ -253,7 +252,7 @@ namespace sem3 {
 			this->button1->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 			this->button1->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button1->Location = System::Drawing::Point(565, 850);
+			this->button1->Location = System::Drawing::Point(565, 849);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(127, 23);
 			this->button1->TabIndex = 9;
@@ -270,7 +269,7 @@ namespace sem3 {
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1424, 901);
+			this->panel1->Size = System::Drawing::Size(1424, 881);
 			this->panel1->TabIndex = 10;
 			this->panel1->Visible = false;
 			// 
@@ -328,7 +327,7 @@ namespace sem3 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1424, 901);
+			this->ClientSize = System::Drawing::Size(1424, 881);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->SIGNUP_PANEL);
@@ -337,9 +336,10 @@ namespace sem3 {
 			this->Controls->Add(this->LOG);
 			this->Controls->Add(this->linkLabel1);
 			this->MaximumSize = System::Drawing::Size(1440, 940);
-			this->MinimumSize = System::Drawing::Size(1440, 940);
+			this->MinimumSize = System::Drawing::Size(1440, 858);
 			this->Name = L"Login";
 			this->Text = L"Login";
+			this->Load += gcnew System::EventHandler(this, &Login::Login_Load);
 			this->SIGNUP_PANEL->ResumeLayout(false);
 			this->SIGNUP_PANEL->PerformLayout();
 			this->panel1->ResumeLayout(false);
@@ -449,6 +449,8 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 		MessageBox::Show("Incorrect username or password");
 	}
 	db.close();
+}
+private: System::Void Login_Load(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

@@ -35,6 +35,10 @@ namespace sem3 {
 	private: System::Windows::Forms::Button^ button4;
 	private: System::Windows::Forms::Button^ button7;
 	private: System::Windows::Forms::Button^ button6;
+	private: System::Windows::Forms::TextBox^ textBox1;
+	private: System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
+	private: System::Windows::Forms::TextBox^ textBox2;
+	private: System::Windows::Forms::TextBox^ textBox3;
 	public:
 		int userID;
 		ApplianceFrom(int userID)
@@ -237,11 +241,13 @@ namespace sem3 {
 				
 			}
 		}
+private: System::ComponentModel::IContainer^ components;
+protected:
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container^ components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -250,6 +256,7 @@ namespace sem3 {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(ApplianceFrom::typeid));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->button1 = (gcnew System::Windows::Forms::Button());
@@ -258,6 +265,10 @@ namespace sem3 {
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
+			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -267,7 +278,7 @@ namespace sem3 {
 				static_cast<System::Int32>(static_cast<System::Byte>(65)));
 			this->panel1->Location = System::Drawing::Point(347, 104);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(963, 641);
+			this->panel1->Size = System::Drawing::Size(963, 360);
 			this->panel1->TabIndex = 0;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &ApplianceFrom::panel1_Paint_1);
 			// 
@@ -292,7 +303,7 @@ namespace sem3 {
 			this->button2->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 			this->button2->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 			this->button2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button2->Location = System::Drawing::Point(685, 793);
+			this->button2->Location = System::Drawing::Point(1052, 695);
 			this->button2->Name = L"button2";
 			this->button2->Size = System::Drawing::Size(253, 42);
 			this->button2->TabIndex = 0;
@@ -355,11 +366,50 @@ namespace sem3 {
 			this->button6->UseVisualStyleBackColor = false;
 			this->button6->Click += gcnew System::EventHandler(this, &ApplianceFrom::button6_Click);
 			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(0, 0);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(100, 31);
+			this->textBox1->TabIndex = 9;
+			// 
+			// contextMenuStrip1
+			// 
+			this->contextMenuStrip1->Name = L"contextMenuStrip1";
+			this->contextMenuStrip1->Size = System::Drawing::Size(61, 4);
+			// 
+			// textBox2
+			// 
+			this->textBox2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
+				static_cast<System::Int32>(static_cast<System::Byte>(155)));
+			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox2->Location = System::Drawing::Point(587, 653);
+			this->textBox2->Multiline = true;
+			this->textBox2->Name = L"textBox2";
+			this->textBox2->Size = System::Drawing::Size(105, 24);
+			this->textBox2->TabIndex = 11;
+			this->textBox2->TextChanged += gcnew System::EventHandler(this, &ApplianceFrom::textBox2_TextChanged);
+			// 
+			// textBox3
+			// 
+			this->textBox3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
+				static_cast<System::Int32>(static_cast<System::Byte>(155)));
+			this->textBox3->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox3->Location = System::Drawing::Point(587, 708);
+			this->textBox3->Multiline = true;
+			this->textBox3->Name = L"textBox3";
+			this->textBox3->Size = System::Drawing::Size(105, 22);
+			this->textBox3->TabIndex = 12;
+			this->textBox3->TextChanged += gcnew System::EventHandler(this, &ApplianceFrom::textBox3_TextChanged);
+			// 
 			// ApplianceFrom
 			// 
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::None;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 881);
+			this->Controls->Add(this->textBox3);
+			this->Controls->Add(this->textBox2);
+			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button4);
@@ -368,6 +418,8 @@ namespace sem3 {
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->panel1);
 			this->DoubleBuffered = true;
+			this->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 15.75F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedSingle;
 			this->MaximumSize = System::Drawing::Size(1440, 950);
 			this->MinimumSize = System::Drawing::Size(1440, 858);
@@ -375,6 +427,7 @@ namespace sem3 {
 			this->Text = L"ApplianceFrom";
 			this->Load += gcnew System::EventHandler(this, &ApplianceFrom::ApplianceFrom_Load);
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
@@ -615,6 +668,17 @@ namespace sem3 {
 			std::cout << res[i] << std::endl;
 		}
 		takeNewDurationAppliancesShow(res);
+
+		if (textBox2->Text != "" && textBox3->Text != "") {
+			System::String^ managedString = textBox2->Text;
+			std::string applianceName = msclr::interop::marshal_as<std::string>(managedString);
+			int powerUsage = Int32::Parse(textBox3->Text);
+
+
+			db.addApplianceToList(applianceName.c_str(), powerUsage);
+
+		}
+
 		db.close();
 
 	}
@@ -774,6 +838,10 @@ private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e
 }
 private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
 	nav::getInstance()->showLogin();
+}
+private: System::Void textBox2_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void textBox3_TextChanged(System::Object^ sender, System::EventArgs^ e) {
 }
 };
 }

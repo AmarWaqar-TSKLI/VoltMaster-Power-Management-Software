@@ -170,13 +170,13 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->button10 = (gcnew System::Windows::Forms::Button());
+			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->button11 = (gcnew System::Windows::Forms::Button());
-			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
 			this->panel1->SuspendLayout();
 			this->panel3->SuspendLayout();
 			this->panel2->SuspendLayout();
@@ -238,7 +238,7 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1424, 891);
+			this->panel1->Size = System::Drawing::Size(1424, 881);
 			this->panel1->TabIndex = 4;
 			this->panel1->Visible = false;
 			// 
@@ -436,7 +436,7 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel2->Location = System::Drawing::Point(0, 0);
 			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(1424, 891);
+			this->panel2->Size = System::Drawing::Size(1424, 881);
 			this->panel2->TabIndex = 5;
 			this->panel2->Visible = false;
 			this->panel2->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Admin::panel2_Paint);
@@ -482,6 +482,18 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->button10->TabIndex = 13;
 			this->button10->UseVisualStyleBackColor = false;
 			this->button10->Click += gcnew System::EventHandler(this, &Admin::button10_Click);
+			// 
+			// textBox5
+			// 
+			this->textBox5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
+				static_cast<System::Int32>(static_cast<System::Byte>(155)));
+			this->textBox5->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->textBox5->Location = System::Drawing::Point(607, 686);
+			this->textBox5->Name = L"textBox5";
+			this->textBox5->Size = System::Drawing::Size(157, 28);
+			this->textBox5->TabIndex = 12;
 			// 
 			// textBox4
 			// 
@@ -554,30 +566,18 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->button11->UseVisualStyleBackColor = false;
 			this->button11->Click += gcnew System::EventHandler(this, &Admin::button11_Click);
 			// 
-			// textBox5
-			// 
-			this->textBox5->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
-				static_cast<System::Int32>(static_cast<System::Byte>(155)));
-			this->textBox5->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->textBox5->Location = System::Drawing::Point(607, 686);
-			this->textBox5->Name = L"textBox5";
-			this->textBox5->Size = System::Drawing::Size(157, 28);
-			this->textBox5->TabIndex = 12;
-			// 
 			// Admin
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1424, 891);
+			this->ClientSize = System::Drawing::Size(1424, 881);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
 			this->MaximumSize = System::Drawing::Size(1440, 930);
-			this->MinimumSize = System::Drawing::Size(1440, 930);
+			this->MinimumSize = System::Drawing::Size(1440, 858);
 			this->Name = L"Admin";
 			this->Text = L"Admin";
 			this->panel1->ResumeLayout(false);

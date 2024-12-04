@@ -163,7 +163,7 @@ namespace sem3 {
 			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label2->Location = System::Drawing::Point(705, 401);
+			this->label2->Location = System::Drawing::Point(700, 401);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(0, 29);
 			this->label2->TabIndex = 8;
@@ -187,7 +187,7 @@ namespace sem3 {
 			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label4->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label4->Location = System::Drawing::Point(324, 549);
+			this->label4->Location = System::Drawing::Point(320, 549);
 			this->label4->Name = L"label4";
 			this->label4->Size = System::Drawing::Size(0, 29);
 			this->label4->TabIndex = 10;
@@ -232,7 +232,7 @@ namespace sem3 {
 		int end = 0;
 		string meter;
 		db.getpeakhoursandmeter(userID, start, end, meter);
-		label4->Text = start.ToString() + " - " + end.ToString();
+		label4->Text = start.ToString() + ":00-" + end.ToString() + ":00(24-hr format)";
 		label3->Text = gcnew System::String(meter.c_str());
 
 

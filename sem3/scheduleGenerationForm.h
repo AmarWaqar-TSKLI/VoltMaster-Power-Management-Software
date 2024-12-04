@@ -163,7 +163,7 @@ namespace sem3 {
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(1424, 911);
+			this->panel1->Size = System::Drawing::Size(1424, 881);
 			this->panel1->TabIndex = 1;
 			this->panel1->Visible = false;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &scheduleGenerationForm::panel1_Paint);
@@ -187,9 +187,10 @@ namespace sem3 {
 			this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel2->Location = System::Drawing::Point(0, 0);
 			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(1424, 911);
+			this->panel2->Size = System::Drawing::Size(1424, 881);
 			this->panel2->TabIndex = 13;
 			this->panel2->Visible = false;
+			this->panel2->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &scheduleGenerationForm::panel2_Paint);
 			// 
 			// label2
 			// 
@@ -584,7 +585,7 @@ namespace sem3 {
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(1424, 911);
+			this->ClientSize = System::Drawing::Size(1424, 881);
 			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->button2);
@@ -593,7 +594,7 @@ namespace sem3 {
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button10);
 			this->MaximumSize = System::Drawing::Size(1440, 950);
-			this->MinimumSize = System::Drawing::Size(1440, 950);
+			this->MinimumSize = System::Drawing::Size(1440, 858);
 			this->Name = L"scheduleGenerationForm";
 			this->Text = L"scheduleGenerationForm";
 			this->Load += gcnew System::EventHandler(this, &scheduleGenerationForm::scheduleGenerationForm_Load);
@@ -784,7 +785,7 @@ namespace sem3 {
 		dbManager db;
 		db.open("test.db");
 		int units = 0;
-		int bill = 0;
+		int bill = 20000;
 		db.gettargetunitsestimatedbill(userID, units, bill);
 		Label^ labelbill = gcnew Label();
 
@@ -1379,7 +1380,7 @@ void WeeklySceduleGeneration() {
 		case 1: return "Mon";
 		case 2: return "Tue";
 		case 3: return "Wed";
-		case 4: return "Thurs";
+		case 4: return "Thu";
 		case 5: return "Fri";
 		case 6: return "Sat";
 		case 7: return "Sun";
@@ -1391,7 +1392,7 @@ void WeeklySceduleGeneration() {
 		if (day == "Mon") return 0;
 		if (day == "Tue") return 1;
 		if (day == "Wed") return 2;
-		if (day == "Thurs") return 3;
+		if (day == "Thu") return 3;
 		if (day == "Fri") return 4;
 		if (day == "Sat") return 5;
 		if (day == "Sun") return 6;
@@ -1430,7 +1431,7 @@ void WeeklySceduleGeneration() {
 		int startY = 30; // Starting Y position for TextBoxes
 		int startX = 10; // X position for the first TextBox
 		int verticalSpacing = 120; // Vertical space between each TextBox
-		int HorizontalSpacing = 130; // Vertical space between each TextBox
+		int HorizontalSpacing = 120; // Vertical space between each TextBox
 		int size = 0;
 
 		dynamicPanelGen = gcnew Panel();
@@ -1460,6 +1461,19 @@ void WeeklySceduleGeneration() {
 		dynamicPanelGen->Controls->Add(dynamicPanel1);
 		dynamicPanel1->BringToFront();
 		//std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+		
+		Label^ label2 = gcnew Label();
+		label2->Text = "Duration is in Minutes"; // Set the label's text
+		label2->Location = System::Drawing::Point(1000, 747);
+		label2->AutoSize = true;
+		label2->ForeColor = System::Drawing::Color::Red;
+		label2->Padding = System::Windows::Forms::Padding(10);
+		label2->Font = gcnew System::Drawing::Font(label2->Font->FontFamily, 10.0f);
+		label2->BackColor = System::Drawing::Color::Transparent; // Set background to transparent
+		label2->Visible = true;
+		dynamicPanelGen->Controls->Add(label2);
+
+
 		// Loop through applianceData to create TextBoxes for each appliance
 		for (int i = 0; i < appliances.size(); ++i)
 		{
@@ -1467,13 +1481,39 @@ void WeeklySceduleGeneration() {
 			Label^ label = gcnew Label();
 			label->Text = gcnew System::String(std::get<0>(appliances[i]).c_str());
 			// Appliance name
-			label->Location = System::Drawing::Point(startX + 400, startY + (i * verticalSpacing));
+			label->Location = System::Drawing::Point(startX + 400, startY + (i * verticalSpacing) - 10);
 			label->AutoSize = true;
 			label->ForeColor = System::Drawing::Color::White;
 			label->Padding = System::Windows::Forms::Padding(10);
 			label->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
 			label->Visible = true;
 			dynamicPanel1->Controls->Add(label);
+
+			// Day Text
+			Label^ label2 = gcnew Label();
+			label2->Text = "Day:"; // Set the label's text to "Day"
+			// Appliance name
+			label2->Location = System::Drawing::Point(startX, startY + (i * verticalSpacing) + 30);
+			label2->AutoSize = true;
+			label2->ForeColor = System::Drawing::Color::White;
+			label2->Padding = System::Windows::Forms::Padding(10);
+			label2->Font = gcnew System::Drawing::Font(label2->Font->FontFamily, 15.0f);
+			label2->Visible = true;
+			dynamicPanel1->Controls->Add(label2);
+
+			//Duration Label
+			Label^ label3 = gcnew Label();
+			label3->Text = "Duration:"; // Set the label's text to "Duration"
+			// Appliance name
+			label3->Location = System::Drawing::Point(startX, startY + (i * verticalSpacing) + 85);
+			label3->AutoSize = true;
+			label3->ForeColor = System::Drawing::Color::White;
+			label3->Padding = System::Windows::Forms::Padding(10);
+			label3->Font = gcnew System::Drawing::Font(label3->Font->FontFamily, 15.0f);
+			label3->Visible = true;
+			dynamicPanel1->Controls->Add(label3);
+
+
 
 
 			int boxSpacey = 50;
@@ -1482,7 +1522,7 @@ void WeeklySceduleGeneration() {
 
 				// Set the properties of the CheckBox
 				checkBox->Text = "";  // Text for the CheckBox
-				checkBox->Location = System::Drawing::Point(startX + (j * HorizontalSpacing) + 40, (startY + 7) + (i * verticalSpacing) + 40); // Position on the form
+				checkBox->Location = System::Drawing::Point(startX + (j * HorizontalSpacing) + 170, (startY + 9) + (i * verticalSpacing) + 40); // Position on the form
 				checkBox->AutoSize = true;  // Automatically resize to fit the text
 				checkBox->Size = System::Drawing::Size(130, 130);
 				//checkBox->Appearance = System::Windows::Forms::Appearance::Button;
@@ -1498,7 +1538,7 @@ void WeeklySceduleGeneration() {
 				Label^ label1 = gcnew Label();
 				label1->Text = gcnew System::String(getDay(j + 1)); // Appliance name
 
-				label1->Location = System::Drawing::Point(startX + (j * HorizontalSpacing) + 55, (startY + 7) + (i * verticalSpacing) + 35); // Position on the form
+				label1->Location = System::Drawing::Point(startX + (j * HorizontalSpacing) + 110, (startY + 7) + (i * verticalSpacing) + 35); // Position on the form
 				label1->AutoSize = true;
 				//label1->Padding = System::Windows::Forms::Padding(10); // Add padding
 				label1->ForeColor = System::Drawing::Color::White;
@@ -1514,7 +1554,7 @@ void WeeklySceduleGeneration() {
 				// Label to show Duration in Hours
 				TextBox^ txtDuration = gcnew TextBox();
 				txtDuration->Text = "10";
-				txtDuration->Location = System::Drawing::Point(startX + (j * HorizontalSpacing) + 55, (startY + 7) + (i * verticalSpacing) + 35 + boxSpacey); // Position on the form
+				txtDuration->Location = System::Drawing::Point(startX + (j * HorizontalSpacing) + 110, (startY + 7) + (i * verticalSpacing) + 35 + boxSpacey); // Position on the form
 				txtDuration->Size = System::Drawing::Size(80, 30);
 				txtDuration->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
 				txtDuration->Font = gcnew System::Drawing::Font(label->Font->FontFamily, 15.0f);
@@ -2102,6 +2142,8 @@ private: System::Void button26_Click(System::Object^ sender, System::EventArgs^ 
 	   // sunday
 private: System::Void button25_Click(System::Object^ sender, System::EventArgs^ e) {
 	generateScheduleDaily(7);
+}
+private: System::Void panel2_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
 };
 }
