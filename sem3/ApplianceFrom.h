@@ -663,7 +663,9 @@ protected:
 		CheckAllCheckboxes(this);
 		dbManager db;
 		db.open("test.db");
-		std::vector<std::string> res = db.getApplianceNamesWithDuplicateAID(userID, 1);
+		bool isempty = false;
+		int dsid = db.getCurrentSID(userID,isempty);
+		std::vector<std::string> res = db.getApplianceNamesWithDuplicateAID(userID,dsid);
 		for (int i = 0; i < res.size(); i++) {
 			std::cout << res[i] << std::endl;
 		}
