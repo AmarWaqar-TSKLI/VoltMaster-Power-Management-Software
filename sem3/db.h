@@ -57,10 +57,8 @@ public:
 	void createAdminTable();
 	void addAdmin(const char* username, const char* password);
 	int getSingleMeterPrice();
-	int getDoubleMeterPrice();
 	int getTripleMeterPrice();
 	void setSingleMeterPrice(int singlePrice);
-	void setDoubleMeterPrice(int doublePrice);
 	void setTripleMeterPrice(int triplePrice);
 	bool authenticateAdmin(const std::string& uname, const std::string& pass);
 	int readAdminID(const char* username);

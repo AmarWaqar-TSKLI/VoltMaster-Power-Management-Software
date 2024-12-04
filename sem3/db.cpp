@@ -1156,7 +1156,6 @@ void dbManager::createAdminTable()
 void dbManager::addAdmin(const char* username, const char* password)
 {
     int singlePrice = getSingleMeterPrice();
-    int doublePrice = getDoubleMeterPrice();
     int triplePrice = getTripleMeterPrice();
 
     sqlite3_stmt* statement;
@@ -1171,8 +1170,7 @@ void dbManager::addAdmin(const char* username, const char* password)
     sqlite3_bind_text(statement, 1, username, -1, SQLITE_STATIC);
     sqlite3_bind_text(statement, 2, password, -1, SQLITE_STATIC);
     sqlite3_bind_int(statement, 3, singlePrice);
-    sqlite3_bind_int(statement, 4, doublePrice);
-    sqlite3_bind_int(statement, 5, triplePrice);
+    sqlite3_bind_int(statement, 4, triplePrice);
 
     if (sqlite3_step(statement) != SQLITE_DONE) {
         cout << "Error executing statement for Adding Admin" << endl;
@@ -1209,29 +1207,6 @@ int dbManager::getSingleMeterPrice()
     return singleMeterPrice;
 }
 
-int dbManager::getDoubleMeterPrice()
-{
-    sqlite3_stmt* statement = nullptr;
-
-    // Prepare and execute SQL query to fetch appliance changed data
-    const char* applianceQuery = "SELECT doublePrice FROM Admins";
-
-    if (sqlite3_prepare_v2(db, applianceQuery, -1, &statement, nullptr) != SQLITE_OK) {
-        std::cerr << "Failed to prepare query for gathering double meter price: " << sqlite3_errmsg(db) << std::endl;
-        return 1;
-    }
-
-    int singleMeterPrice = 1;
-    if (sqlite3_step(statement) == SQLITE_ROW) {
-        singleMeterPrice = sqlite3_column_int(statement, 0);
-    }
-    else {
-        return 1;
-    }
-
-    sqlite3_finalize(statement);
-    return singleMeterPrice;
-}
 
 int dbManager::getTripleMeterPrice()
 {
@@ -1274,29 +1249,6 @@ void dbManager::setSingleMeterPrice(int singlePrice)
     // Execute the query to update the record
     if (sqlite3_step(statement) != SQLITE_DONE) {
         std::cerr << "Failed to execute update query for setting single Meter Price: " << sqlite3_errmsg(db) << std::endl;
-    }
-
-    // Finalize the statement to clean up
-    sqlite3_finalize(statement);
-}
-
-void dbManager::setDoubleMeterPrice(int doublePrice)
-{
-    sqlite3_stmt* statement = nullptr;
-
-    const char* updateQuery = "UPDATE Admins SET doublePrice = ?";
-
-    // Prepare the query
-    if (sqlite3_prepare_v2(db, updateQuery, -1, &statement, nullptr) != SQLITE_OK) {
-        std::cerr << "Failed to prepare update query for setting double Meter Price: " << sqlite3_errmsg(db) << std::endl;
-        return;
-    }
-
-    sqlite3_bind_int(statement, 1, doublePrice);
-
-    // Execute the query to update the record
-    if (sqlite3_step(statement) != SQLITE_DONE) {
-        std::cerr << "Failed to execute update query for setting double Meter Price: " << sqlite3_errmsg(db) << std::endl;
     }
 
     // Finalize the statement to clean up

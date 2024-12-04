@@ -16,9 +16,6 @@
     <Filter Include="Source Files\Database">
       <UniqueIdentifier>{c4216cec-726d-4cf3-96aa-3d57c4abab0c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Database">
-      <UniqueIdentifier>{fa87940b-acfb-459b-a4fc-ff1af2358ba8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\sqlite">
       <UniqueIdentifier>{f48f1cc6-7813-4c8d-a1b0-5fc34888c395}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="Header Files\navigation">
       <UniqueIdentifier>{a870912a-880a-40fc-a871-fd9e12914503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Database">
+      <UniqueIdentifier>{fa87940b-acfb-459b-a4fc-ff1af2358ba8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -116,10 +116,10 @@ namespace sem3 {
 	private: System::Windows::Forms::Panel^ panel2;
 	private: System::Windows::Forms::Panel^ panel3;
 
-	private: System::Windows::Forms::TextBox^ textBox4;
+
 	private: System::Windows::Forms::TextBox^ textBox3;
 	private: System::Windows::Forms::Label^ label3;
-	private: System::Windows::Forms::Label^ label2;
+
 	private: System::Windows::Forms::Label^ label1;
 	private: System::Windows::Forms::Button^ button8;
 	private: System::Windows::Forms::Button^ button9;
@@ -171,10 +171,8 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->button10 = (gcnew System::Windows::Forms::Button());
 			this->textBox5 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
 			this->label3 = (gcnew System::Windows::Forms::Label());
-			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->button11 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
@@ -227,14 +225,13 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			// panel1
 			// 
 			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
-			this->panel1->Controls->Add(this->panel3);
 			this->panel1->Controls->Add(this->button1);
 			this->panel1->Controls->Add(this->button5);
 			this->panel1->Controls->Add(this->button7);
-			this->panel1->Controls->Add(this->textBox2);
-			this->panel1->Controls->Add(this->textBox1);
-			this->panel1->Controls->Add(this->button6);
 			this->panel1->Controls->Add(this->panel2);
+			this->panel1->Controls->Add(this->textBox1);
+			this->panel1->Controls->Add(this->textBox2);
+			this->panel1->Controls->Add(this->button6);
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
@@ -251,9 +248,10 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->panel3->Controls->Add(this->button12);
 			this->panel3->Controls->Add(this->textBox7);
 			this->panel3->Controls->Add(this->textBox6);
+			this->panel3->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel3->Location = System::Drawing::Point(0, 0);
 			this->panel3->Name = L"panel3";
-			this->panel3->Size = System::Drawing::Size(1424, 891);
+			this->panel3->Size = System::Drawing::Size(1424, 881);
 			this->panel3->TabIndex = 6;
 			this->panel3->Visible = false;
 			this->panel3->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Admin::panel3_Paint);
@@ -423,14 +421,13 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			// panel2
 			// 
 			this->panel2->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel2.BackgroundImage")));
+			this->panel2->Controls->Add(this->panel3);
 			this->panel2->Controls->Add(this->button8);
 			this->panel2->Controls->Add(this->button9);
 			this->panel2->Controls->Add(this->button10);
 			this->panel2->Controls->Add(this->textBox5);
-			this->panel2->Controls->Add(this->textBox4);
 			this->panel2->Controls->Add(this->textBox3);
 			this->panel2->Controls->Add(this->label3);
-			this->panel2->Controls->Add(this->label2);
 			this->panel2->Controls->Add(this->label1);
 			this->panel2->Controls->Add(this->button11);
 			this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -490,22 +487,10 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->textBox5->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox5->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->textBox5->Location = System::Drawing::Point(607, 686);
+			this->textBox5->Location = System::Drawing::Point(1132, 335);
 			this->textBox5->Name = L"textBox5";
 			this->textBox5->Size = System::Drawing::Size(157, 28);
 			this->textBox5->TabIndex = 12;
-			// 
-			// textBox4
-			// 
-			this->textBox4->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
-				static_cast<System::Int32>(static_cast<System::Byte>(155)));
-			this->textBox4->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->textBox4->Location = System::Drawing::Point(1167, 336);
-			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(157, 28);
-			this->textBox4->TabIndex = 11;
 			// 
 			// textBox3
 			// 
@@ -525,21 +510,10 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->label3->BackColor = System::Drawing::Color::Transparent;
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->label3->Location = System::Drawing::Point(611, 611);
+			this->label3->Location = System::Drawing::Point(1138, 260);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(0, 29);
 			this->label3->TabIndex = 9;
-			// 
-			// label2
-			// 
-			this->label2->AutoSize = true;
-			this->label2->BackColor = System::Drawing::Color::Transparent;
-			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->label2->Location = System::Drawing::Point(1171, 261);
-			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(0, 29);
-			this->label2->TabIndex = 8;
 			// 
 			// label1
 			// 
@@ -630,16 +604,13 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	db.open("test.db");
 
 	int singlePrice = db.getSingleMeterPrice();
-	int doublePrice = db.getDoubleMeterPrice();
 	int triplePrice = db.getTripleMeterPrice();
 
 
 	String^ singlePriceStr = singlePrice.ToString();
-	String^ doublePriceStr = doublePrice.ToString();
 	String^ triplePriceStr = triplePrice.ToString();
 
 	label1->Text = singlePriceStr;
-	label2->Text = doublePriceStr;
 	label3->Text = triplePriceStr;
 	db.close();
 }
@@ -662,16 +633,13 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 	db.open("test.db");
 
 	int singlePrice = db.getSingleMeterPrice();
-	int doublePrice = db.getDoubleMeterPrice();
 	int triplePrice = db.getTripleMeterPrice();
 
 
 	String^ singlePriceStr = singlePrice.ToString();
-	String^ doublePriceStr = doublePrice.ToString();
 	String^ triplePriceStr = triplePrice.ToString();
 
 	label1->Text = singlePriceStr;
-	label2->Text = doublePriceStr;
 	label3->Text = triplePriceStr;
 	db.close();
 }
@@ -740,21 +708,18 @@ private: System::Void button13_Click(System::Object^ sender, System::EventArgs^ 
 	db.open("test.db");
 
 	int singlePrice = db.getSingleMeterPrice();
-	int doublePrice = db.getDoubleMeterPrice();
 	int triplePrice = db.getTripleMeterPrice();
 
 
 	String^ singlePriceStr = singlePrice.ToString();
-	String^ doublePriceStr = doublePrice.ToString();
 	String^ triplePriceStr = triplePrice.ToString();
 
 	label1->Text = singlePriceStr;
-	label2->Text = doublePriceStr;
 	label3->Text = triplePriceStr;
 	db.close();
 }
 private: System::Void button11_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBox3->Text == "" || textBox4->Text == "" || textBox5->Text == "") {
+	if (textBox3->Text == ""  || textBox5->Text == "") {
 		MessageBox::Show("Please enter all fields", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 		return;
 	}
@@ -763,11 +728,9 @@ private: System::Void button11_Click(System::Object^ sender, System::EventArgs^ 
 	db.open("test.db");
 
 	int singlePrice = Int32::Parse(textBox3->Text);
-	int doublePrice = Int32::Parse(textBox4->Text);
 	int triplePrice = Int32::Parse(textBox5->Text);
 
 	db.setSingleMeterPrice(singlePrice);
-	db.setDoubleMeterPrice(doublePrice);
 	db.setTripleMeterPrice(triplePrice);
 
 	db.close();
