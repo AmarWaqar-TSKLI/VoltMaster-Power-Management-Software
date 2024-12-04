@@ -35,10 +35,11 @@ namespace sem3 {
 	private: System::Windows::Forms::Button^ button4;
 	private: System::Windows::Forms::Button^ button7;
 	private: System::Windows::Forms::Button^ button6;
-	private: System::Windows::Forms::TextBox^ textBox1;
+
 	private: System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
 	private: System::Windows::Forms::TextBox^ textBox2;
 	private: System::Windows::Forms::TextBox^ textBox3;
+	private: System::Windows::Forms::TextBox^ textBox1;
 	public:
 		int userID;
 		ApplianceFrom(int userID)
@@ -265,10 +266,10 @@ protected:
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -366,13 +367,6 @@ protected:
 			this->button6->UseVisualStyleBackColor = false;
 			this->button6->Click += gcnew System::EventHandler(this, &ApplianceFrom::button6_Click);
 			// 
-			// textBox1
-			// 
-			this->textBox1->Location = System::Drawing::Point(0, 0);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(100, 31);
-			this->textBox1->TabIndex = 9;
-			// 
 			// contextMenuStrip1
 			// 
 			this->contextMenuStrip1->Name = L"contextMenuStrip1";
@@ -401,6 +395,13 @@ protected:
 			this->textBox3->Size = System::Drawing::Size(105, 22);
 			this->textBox3->TabIndex = 12;
 			this->textBox3->TextChanged += gcnew System::EventHandler(this, &ApplianceFrom::textBox3_TextChanged);
+			// 
+			// textBox1
+			// 
+			this->textBox1->Location = System::Drawing::Point(0, 0);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(100, 31);
+			this->textBox1->TabIndex = 9;
 			// 
 			// ApplianceFrom
 			// 
@@ -432,6 +433,7 @@ protected:
 		}
 #pragma endregion
 	private: System::Void ApplianceFrom_Load(System::Object^ sender, System::EventArgs^ e) {
+	
 
 		dbManager db;
 		db.open("test.db");
@@ -535,6 +537,9 @@ protected:
 	void ApplianceFrom::saveBtn_Click(System::Object^ sender, System::EventArgs^ e) {
 		// traverse		
 		saveDurations();	
+		MessageBox::Show("Durations Updated ","Information", MessageBoxButtons::OK, MessageBoxIcon::Information);
+		//panel1->BringToFront();
+		
 
 	}
 	void saveDurations() {
@@ -655,7 +660,11 @@ protected:
 			txtDuration->BringToFront();
 
 		}
-
+		button1->BringToFront();
+		button3->BringToFront();
+		button4->BringToFront();
+		button6->BringToFront();
+		button7->BringToFront();
 		
 	}
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -682,6 +691,7 @@ protected:
 		}
 
 		db.close();
+
 
 	}
 		  

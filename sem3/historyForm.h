@@ -361,6 +361,11 @@ namespace sem3 {
 			db.close();
 			// Add the dynamic panel to the form and bring it to the front
 
+			button1->BringToFront();
+			button2->BringToFront();
+			button3->BringToFront();
+			button4->BringToFront();
+			button7->BringToFront();
 		}
 
 		// Function to calculate the power consumption of an appliance
