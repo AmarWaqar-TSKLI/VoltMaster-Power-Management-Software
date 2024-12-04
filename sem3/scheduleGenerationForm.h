@@ -1658,7 +1658,7 @@ void WeeklySceduleGeneration() {
 		}
 
 
-		for (int i = 0; i < applianceCount; i++) {
+ 		for (int i = 0; i < applianceCount; i++) {
 			for (int j = 0; j < 5; j++)
 				schedule[i][j] = std::make_tuple(0, 0, 0, 0.00, 0, 0, 0);
 		}
@@ -1724,17 +1724,23 @@ void WeeklySceduleGeneration() {
 								break;
 							}
 							auto& appliance = appliances.front();
-							std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
-							std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
-							std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
-							std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
-							std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
-							std::get<5>(schedule[i][currentCol]) = startTime;
-							std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
-							startTime += std::get<2>(appliance);
-							currMins += std::get<2>(appliance);
-							appliances.erase(appliances.begin());
-							i++;
+							if (currMins + std::get<2>(appliance) > 1440) {
+								isColumnFilled = true;
+								break;
+							}
+							else {
+								std::get<0>(schedule[i][currentCol]) = std::get<0>(appliance);
+								std::get<1>(schedule[i][currentCol]) = std::get<1>(appliance);
+								std::get<2>(schedule[i][currentCol]) = std::get<2>(appliance);
+								std::get<3>(schedule[i][currentCol]) = std::get<3>(appliance);
+								std::get<4>(schedule[i][currentCol]) = std::get<4>(appliance);
+								std::get<5>(schedule[i][currentCol]) = startTime;
+								std::get<6>(schedule[i][currentCol]) = startTime + std::get<2>(appliance);
+								startTime += std::get<2>(appliance);
+								currMins += std::get<2>(appliance);
+								appliances.erase(appliances.begin());
+								i++;
+							}
 						}
 					}
 				}
@@ -1848,7 +1854,9 @@ void WeeklySceduleGeneration() {
 					<< std::get<1>(t) << ", "
 					<< std::get<2>(t) << ", "
 					<< std::get<3>(t) << ", "
-					<< std::get<4>(t) << std::endl;
+					<< std::get<4>(t) << ", "
+					<< std::get<5>(t) << ", "
+					<< std::get<6>(t) << std::endl;
 			}
 		}
 	}
