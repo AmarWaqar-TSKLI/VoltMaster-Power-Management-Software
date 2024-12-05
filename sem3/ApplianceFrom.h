@@ -36,10 +36,10 @@ namespace sem3 {
 	private: System::Windows::Forms::Button^ button7;
 	private: System::Windows::Forms::Button^ button6;
 
-	private: System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
+
 	private: System::Windows::Forms::TextBox^ textBox2;
 	private: System::Windows::Forms::TextBox^ textBox3;
-	private: System::Windows::Forms::TextBox^ textBox1;
+
 	public:
 		int userID;
 		ApplianceFrom(int userID)
@@ -257,7 +257,6 @@ protected:
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(ApplianceFrom::typeid));
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
 			this->button1 = (gcnew System::Windows::Forms::Button());
@@ -266,10 +265,8 @@ protected:
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->button7 = (gcnew System::Windows::Forms::Button());
 			this->button6 = (gcnew System::Windows::Forms::Button());
-			this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox3 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->SuspendLayout();
 			// 
 			// panel1
@@ -367,20 +364,15 @@ protected:
 			this->button6->UseVisualStyleBackColor = false;
 			this->button6->Click += gcnew System::EventHandler(this, &ApplianceFrom::button6_Click);
 			// 
-			// contextMenuStrip1
-			// 
-			this->contextMenuStrip1->Name = L"contextMenuStrip1";
-			this->contextMenuStrip1->Size = System::Drawing::Size(61, 4);
-			// 
 			// textBox2
 			// 
 			this->textBox2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
 				static_cast<System::Int32>(static_cast<System::Byte>(155)));
 			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox2->Location = System::Drawing::Point(587, 653);
+			this->textBox2->Location = System::Drawing::Point(575, 650);
 			this->textBox2->Multiline = true;
 			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(105, 24);
+			this->textBox2->Size = System::Drawing::Size(127, 30);
 			this->textBox2->TabIndex = 11;
 			this->textBox2->TextChanged += gcnew System::EventHandler(this, &ApplianceFrom::textBox2_TextChanged);
 			// 
@@ -389,19 +381,12 @@ protected:
 			this->textBox3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
 				static_cast<System::Int32>(static_cast<System::Byte>(155)));
 			this->textBox3->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox3->Location = System::Drawing::Point(587, 708);
+			this->textBox3->Location = System::Drawing::Point(575, 705);
 			this->textBox3->Multiline = true;
 			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(105, 22);
+			this->textBox3->Size = System::Drawing::Size(127, 31);
 			this->textBox3->TabIndex = 12;
 			this->textBox3->TextChanged += gcnew System::EventHandler(this, &ApplianceFrom::textBox3_TextChanged);
-			// 
-			// textBox1
-			// 
-			this->textBox1->Location = System::Drawing::Point(0, 0);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(100, 31);
-			this->textBox1->TabIndex = 9;
 			// 
 			// ApplianceFrom
 			// 
@@ -410,7 +395,6 @@ protected:
 			this->ClientSize = System::Drawing::Size(1424, 881);
 			this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->textBox2);
-			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->button7);
 			this->Controls->Add(this->button6);
 			this->Controls->Add(this->button4);
@@ -531,9 +515,25 @@ protected:
 		this->Hide();
 	}
 
-	// Event handler for saveBtn Click
+	private: void RemoveAllChildControls(System::Windows::Forms::Panel^ panel)
+	{
+		// Iterate over all controls in the panel (from the last to the first)
+		for (int i = panel->Controls->Count - 1; i >= 0; i--)
+		{
+			// Get the control at index i
+			Control^ control = panel->Controls[i];
 
-	
+			// Remove the control from the panel's controls collection
+			panel->Controls->RemoveAt(i);
+
+			// Optionally, delete the control (freeing memory)
+			delete control;  // This is important if you want to manage memory
+		}
+	}
+
+
+
+	// Event handler for saveBtn Click
 	void ApplianceFrom::saveBtn_Click(System::Object^ sender, System::EventArgs^ e) {
 		// traverse		
 		saveDurations();	
@@ -670,30 +670,56 @@ protected:
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		// Iterate over all the controls in the form, including nested ones
 		CheckAllCheckboxes(this);
+
 		dbManager db;
 		db.open("test.db");
+
 		bool isempty = false;
-		int dsid = db.getCurrentSID(userID,isempty);
-		std::vector<std::string> res = db.getApplianceNamesWithDuplicateAID(userID,dsid);
+		int dsid = db.getCurrentSID(userID, isempty);
+		std::vector<std::string> res = db.getApplianceNamesWithDuplicateAID(userID, dsid);
+
+		// Output appliance names with duplicates to the console
 		for (int i = 0; i < res.size(); i++) {
 			std::cout << res[i] << std::endl;
 		}
+
+		// Show the appliances
 		takeNewDurationAppliancesShow(res);
 
-		if (textBox2->Text != "" && textBox3->Text != "") {
-			System::String^ managedString = textBox2->Text;
-			std::string applianceName = msclr::interop::marshal_as<std::string>(managedString);
-			int powerUsage = Int32::Parse(textBox3->Text);
-
-
-			db.addApplianceToList(applianceName.c_str(), powerUsage);
-
+		// Validate appliance name and power usage
+		if ((textBox2->Text != "" && textBox3->Text == "") || (textBox2->Text == "" && textBox3->Text != "")) {
+			MessageBox::Show("Please enter all fields", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+			db.close();
+			return;
 		}
 
+		// Validate appliance name (textBox2) and power usage (textBox3)
+		System::String^ managedString = textBox2->Text;
+		std::string applianceName = msclr::interop::marshal_as<std::string>(managedString);
+
+		int powerUsage;
+		if (textBox3->Text != "") {
+			if (!Int32::TryParse(textBox3->Text, powerUsage) || powerUsage <= 0) {
+				MessageBox::Show("Please enter a valid positive integer for Power Usage.", "Invalid Input", MessageBoxButtons::OK, MessageBoxIcon::Error);
+				db.close();
+				return;
+			}
+		}
+
+		// Add appliance to the list if everything is valid
+		if (textBox3->Text != "" && textBox2->Text != "") {
+			db.addApplianceToList(applianceName.c_str(), powerUsage);
+		}
+		RemoveAllChildControls(panel1);
+		std::vector<std::pair<int, std::string>> appliances;
+		db.readApplianceData(appliances);
+		setApplianceData(appliances);
 		db.close();
 
-
+		// Show success message
+		MessageBox::Show("Appliance added successfully!", "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
 	}
+
 		  
 
 	// Helper function to check all checkboxes, including nested ones

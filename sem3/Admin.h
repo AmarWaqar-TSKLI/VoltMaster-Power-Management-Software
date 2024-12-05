@@ -20,15 +20,16 @@ namespace sem3 {
 	{
 	public:
 		int adminID;
-		
-		Admin(int adminID)
+		Form^ login;
+		Admin(int adminID,Form^ login)
 		{
 			InitializeComponent();
 			this->adminID = adminID;
 			panel1->Parent = this;
 			panel2->Parent = this;
 			panel3->Parent = this;
-			
+			panel4->Parent = this;
+			this->login = login;
 		}
 		
 		
@@ -93,6 +94,7 @@ namespace sem3 {
 				viewMoreBtn->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
 				viewMoreBtn->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
 				viewMoreBtn->Tag = label->Text;
+				viewMoreBtn->Name = "Delete";
 				viewMoreBtn->Click += gcnew System::EventHandler(this, &Admin::OnViewMoreButtonClick);
 
 				dynamicPanel->Controls->Add(viewMoreBtn);
@@ -132,6 +134,28 @@ namespace sem3 {
 	private: System::Windows::Forms::TextBox^ textBox6;
 	private: System::Windows::Forms::Button^ button11;
 private: System::Windows::Forms::TextBox^ textBox5;
+private: System::Windows::Forms::Panel^ panel4;
+private: System::Windows::Forms::Button^ button16;
+private: System::Windows::Forms::Button^ button17;
+private: System::Windows::Forms::Button^ button18;
+private: System::Windows::Forms::Button^ button19;
+private: System::Windows::Forms::Button^ button20;
+private: System::Windows::Forms::Button^ button21;
+private: System::Windows::Forms::Button^ button22;
+private: System::Windows::Forms::Button^ button23;
+private: System::Windows::Forms::Button^ button24;
+private: System::Windows::Forms::Button^ button29;
+private: System::Windows::Forms::Button^ button26;
+private: System::Windows::Forms::Button^ button27;
+private: System::Windows::Forms::Button^ button28;
+private: System::Windows::Forms::Button^ button25;
+private: System::Windows::Forms::Button^ button30;
+
+private: System::Windows::Forms::Label^ label6;
+
+private: System::Windows::Forms::Label^ label2;
+private: System::Windows::Forms::TextBox^ textBox4;
+private: System::Windows::Forms::TextBox^ textBox8;
 
 	protected:
 
@@ -153,20 +177,27 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->button3 = (gcnew System::Windows::Forms::Button());
 			this->button4 = (gcnew System::Windows::Forms::Button());
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			this->panel3 = (gcnew System::Windows::Forms::Panel());
+			this->panel4 = (gcnew System::Windows::Forms::Panel());
+			this->textBox8 = (gcnew System::Windows::Forms::TextBox());
+			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
+			this->label6 = (gcnew System::Windows::Forms::Label());
+			this->label2 = (gcnew System::Windows::Forms::Label());
+			this->button30 = (gcnew System::Windows::Forms::Button());
+			this->button29 = (gcnew System::Windows::Forms::Button());
+			this->button26 = (gcnew System::Windows::Forms::Button());
+			this->button27 = (gcnew System::Windows::Forms::Button());
+			this->button28 = (gcnew System::Windows::Forms::Button());
+			this->button25 = (gcnew System::Windows::Forms::Button());
 			this->button13 = (gcnew System::Windows::Forms::Button());
 			this->button14 = (gcnew System::Windows::Forms::Button());
 			this->button15 = (gcnew System::Windows::Forms::Button());
 			this->button12 = (gcnew System::Windows::Forms::Button());
 			this->textBox7 = (gcnew System::Windows::Forms::TextBox());
 			this->textBox6 = (gcnew System::Windows::Forms::TextBox());
-			this->button1 = (gcnew System::Windows::Forms::Button());
-			this->button5 = (gcnew System::Windows::Forms::Button());
-			this->button7 = (gcnew System::Windows::Forms::Button());
-			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
-			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->button6 = (gcnew System::Windows::Forms::Button());
-			this->panel2 = (gcnew System::Windows::Forms::Panel());
+			this->button24 = (gcnew System::Windows::Forms::Button());
+			this->button23 = (gcnew System::Windows::Forms::Button());
 			this->button8 = (gcnew System::Windows::Forms::Button());
 			this->button9 = (gcnew System::Windows::Forms::Button());
 			this->button10 = (gcnew System::Windows::Forms::Button());
@@ -175,9 +206,23 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->button11 = (gcnew System::Windows::Forms::Button());
+			this->button22 = (gcnew System::Windows::Forms::Button());
+			this->button21 = (gcnew System::Windows::Forms::Button());
+			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
+			this->button6 = (gcnew System::Windows::Forms::Button());
+			this->button7 = (gcnew System::Windows::Forms::Button());
+			this->button5 = (gcnew System::Windows::Forms::Button());
+			this->button1 = (gcnew System::Windows::Forms::Button());
+			this->button16 = (gcnew System::Windows::Forms::Button());
+			this->button20 = (gcnew System::Windows::Forms::Button());
+			this->button18 = (gcnew System::Windows::Forms::Button());
+			this->button17 = (gcnew System::Windows::Forms::Button());
+			this->button19 = (gcnew System::Windows::Forms::Button());
 			this->panel1->SuspendLayout();
-			this->panel3->SuspendLayout();
 			this->panel2->SuspendLayout();
+			this->panel3->SuspendLayout();
+			this->panel4->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// button2
@@ -225,13 +270,16 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			// panel1
 			// 
 			this->panel1->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel1.BackgroundImage")));
-			this->panel1->Controls->Add(this->button1);
-			this->panel1->Controls->Add(this->button5);
-			this->panel1->Controls->Add(this->button7);
 			this->panel1->Controls->Add(this->panel2);
 			this->panel1->Controls->Add(this->textBox1);
 			this->panel1->Controls->Add(this->textBox2);
 			this->panel1->Controls->Add(this->button6);
+			this->panel1->Controls->Add(this->button7);
+			this->panel1->Controls->Add(this->button5);
+			this->panel1->Controls->Add(this->button1);
+			this->panel1->Controls->Add(this->button16);
+			this->panel1->Controls->Add(this->button20);
+			this->panel1->Controls->Add(this->button18);
 			this->panel1->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel1->Location = System::Drawing::Point(0, 0);
 			this->panel1->Name = L"panel1";
@@ -239,15 +287,40 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->panel1->TabIndex = 4;
 			this->panel1->Visible = false;
 			// 
+			// panel2
+			// 
+			this->panel2->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel2.BackgroundImage")));
+			this->panel2->Controls->Add(this->panel3);
+			this->panel2->Controls->Add(this->button8);
+			this->panel2->Controls->Add(this->button9);
+			this->panel2->Controls->Add(this->button10);
+			this->panel2->Controls->Add(this->textBox5);
+			this->panel2->Controls->Add(this->textBox3);
+			this->panel2->Controls->Add(this->label3);
+			this->panel2->Controls->Add(this->label1);
+			this->panel2->Controls->Add(this->button11);
+			this->panel2->Controls->Add(this->button22);
+			this->panel2->Controls->Add(this->button21);
+			this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel2->Location = System::Drawing::Point(0, 0);
+			this->panel2->Name = L"panel2";
+			this->panel2->Size = System::Drawing::Size(1424, 881);
+			this->panel2->TabIndex = 5;
+			this->panel2->Visible = false;
+			this->panel2->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Admin::panel2_Paint);
+			// 
 			// panel3
 			// 
 			this->panel3->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel3.BackgroundImage")));
+			this->panel3->Controls->Add(this->panel4);
 			this->panel3->Controls->Add(this->button13);
 			this->panel3->Controls->Add(this->button14);
 			this->panel3->Controls->Add(this->button15);
 			this->panel3->Controls->Add(this->button12);
 			this->panel3->Controls->Add(this->textBox7);
 			this->panel3->Controls->Add(this->textBox6);
+			this->panel3->Controls->Add(this->button24);
+			this->panel3->Controls->Add(this->button23);
 			this->panel3->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->panel3->Location = System::Drawing::Point(0, 0);
 			this->panel3->Name = L"panel3";
@@ -255,6 +328,159 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->panel3->TabIndex = 6;
 			this->panel3->Visible = false;
 			this->panel3->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Admin::panel3_Paint);
+			// 
+			// panel4
+			// 
+			this->panel4->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel4.BackgroundImage")));
+			this->panel4->Controls->Add(this->textBox8);
+			this->panel4->Controls->Add(this->textBox4);
+			this->panel4->Controls->Add(this->label6);
+			this->panel4->Controls->Add(this->label2);
+			this->panel4->Controls->Add(this->button30);
+			this->panel4->Controls->Add(this->button29);
+			this->panel4->Controls->Add(this->button26);
+			this->panel4->Controls->Add(this->button27);
+			this->panel4->Controls->Add(this->button28);
+			this->panel4->Controls->Add(this->button25);
+			this->panel4->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel4->Location = System::Drawing::Point(0, 0);
+			this->panel4->Name = L"panel4";
+			this->panel4->Size = System::Drawing::Size(1424, 881);
+			this->panel4->TabIndex = 21;
+			this->panel4->Visible = false;
+			this->panel4->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Admin::panel4_Paint);
+			// 
+			// textBox8
+			// 
+			this->textBox8->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
+				static_cast<System::Int32>(static_cast<System::Byte>(155)));
+			this->textBox8->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox8->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->textBox8->Location = System::Drawing::Point(1132, 335);
+			this->textBox8->Name = L"textBox8";
+			this->textBox8->Size = System::Drawing::Size(157, 28);
+			this->textBox8->TabIndex = 30;
+			// 
+			// textBox4
+			// 
+			this->textBox4->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
+				static_cast<System::Int32>(static_cast<System::Byte>(155)));
+			this->textBox4->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->textBox4->Location = System::Drawing::Point(607, 334);
+			this->textBox4->Name = L"textBox4";
+			this->textBox4->Size = System::Drawing::Size(157, 28);
+			this->textBox4->TabIndex = 29;
+			// 
+			// label6
+			// 
+			this->label6->AutoSize = true;
+			this->label6->BackColor = System::Drawing::Color::Transparent;
+			this->label6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->label6->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label6->Location = System::Drawing::Point(1141, 260);
+			this->label6->Name = L"label6";
+			this->label6->Size = System::Drawing::Size(0, 29);
+			this->label6->TabIndex = 28;
+			// 
+			// label2
+			// 
+			this->label2->AutoSize = true;
+			this->label2->BackColor = System::Drawing::Color::Transparent;
+			this->label2->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label2->Location = System::Drawing::Point(613, 262);
+			this->label2->Name = L"label2";
+			this->label2->Size = System::Drawing::Size(0, 29);
+			this->label2->TabIndex = 26;
+			// 
+			// button30
+			// 
+			this->button30->BackColor = System::Drawing::Color::Transparent;
+			this->button30->FlatAppearance->BorderSize = 0;
+			this->button30->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button30->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button30->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button30->Location = System::Drawing::Point(655, 805);
+			this->button30->Name = L"button30";
+			this->button30->Size = System::Drawing::Size(262, 43);
+			this->button30->TabIndex = 25;
+			this->button30->UseVisualStyleBackColor = false;
+			this->button30->Click += gcnew System::EventHandler(this, &Admin::button30_Click);
+			// 
+			// button29
+			// 
+			this->button29->BackColor = System::Drawing::Color::Transparent;
+			this->button29->FlatAppearance->BorderSize = 0;
+			this->button29->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button29->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button29->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button29->Location = System::Drawing::Point(53, 594);
+			this->button29->Name = L"button29";
+			this->button29->Size = System::Drawing::Size(122, 38);
+			this->button29->TabIndex = 24;
+			this->button29->UseVisualStyleBackColor = false;
+			this->button29->Click += gcnew System::EventHandler(this, &Admin::button29_Click);
+			// 
+			// button26
+			// 
+			this->button26->BackColor = System::Drawing::Color::Transparent;
+			this->button26->FlatAppearance->BorderSize = 0;
+			this->button26->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button26->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button26->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button26->Location = System::Drawing::Point(53, 501);
+			this->button26->Name = L"button26";
+			this->button26->Size = System::Drawing::Size(122, 38);
+			this->button26->TabIndex = 23;
+			this->button26->UseVisualStyleBackColor = false;
+			this->button26->Click += gcnew System::EventHandler(this, &Admin::button26_Click);
+			// 
+			// button27
+			// 
+			this->button27->BackColor = System::Drawing::Color::Transparent;
+			this->button27->FlatAppearance->BorderSize = 0;
+			this->button27->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button27->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button27->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button27->Location = System::Drawing::Point(47, 403);
+			this->button27->Name = L"button27";
+			this->button27->Size = System::Drawing::Size(122, 38);
+			this->button27->TabIndex = 22;
+			this->button27->UseVisualStyleBackColor = false;
+			this->button27->Click += gcnew System::EventHandler(this, &Admin::button27_Click);
+			// 
+			// button28
+			// 
+			this->button28->BackColor = System::Drawing::Color::Transparent;
+			this->button28->FlatAppearance->BorderSize = 0;
+			this->button28->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button28->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button28->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button28->Location = System::Drawing::Point(53, 314);
+			this->button28->Name = L"button28";
+			this->button28->Size = System::Drawing::Size(110, 38);
+			this->button28->TabIndex = 21;
+			this->button28->UseVisualStyleBackColor = false;
+			this->button28->Click += gcnew System::EventHandler(this, &Admin::button28_Click);
+			// 
+			// button25
+			// 
+			this->button25->BackColor = System::Drawing::Color::Transparent;
+			this->button25->FlatAppearance->BorderSize = 0;
+			this->button25->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button25->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button25->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button25->Location = System::Drawing::Point(46, 804);
+			this->button25->Name = L"button25";
+			this->button25->Size = System::Drawing::Size(129, 38);
+			this->button25->TabIndex = 19;
+			this->button25->UseVisualStyleBackColor = false;
+			this->button25->Click += gcnew System::EventHandler(this, &Admin::button25_Click);
 			// 
 			// button13
 			// 
@@ -337,106 +563,33 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->textBox6->TabIndex = 12;
 			this->textBox6->TextChanged += gcnew System::EventHandler(this, &Admin::textBox6_TextChanged);
 			// 
-			// button1
+			// button24
 			// 
-			this->button1->BackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatAppearance->BorderSize = 0;
-			this->button1->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
-			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button1->Location = System::Drawing::Point(59, 596);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(122, 38);
-			this->button1->TabIndex = 7;
-			this->button1->UseVisualStyleBackColor = false;
-			this->button1->Click += gcnew System::EventHandler(this, &Admin::button1_Click);
+			this->button24->BackColor = System::Drawing::Color::Transparent;
+			this->button24->FlatAppearance->BorderSize = 0;
+			this->button24->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button24->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button24->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button24->Location = System::Drawing::Point(56, 680);
+			this->button24->Name = L"button24";
+			this->button24->Size = System::Drawing::Size(122, 38);
+			this->button24->TabIndex = 23;
+			this->button24->UseVisualStyleBackColor = false;
+			this->button24->Click += gcnew System::EventHandler(this, &Admin::button24_Click);
 			// 
-			// button5
+			// button23
 			// 
-			this->button5->BackColor = System::Drawing::Color::Transparent;
-			this->button5->FlatAppearance->BorderSize = 0;
-			this->button5->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
-			this->button5->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
-			this->button5->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button5->Location = System::Drawing::Point(60, 501);
-			this->button5->Name = L"button5";
-			this->button5->Size = System::Drawing::Size(122, 38);
-			this->button5->TabIndex = 6;
-			this->button5->UseVisualStyleBackColor = false;
-			this->button5->Click += gcnew System::EventHandler(this, &Admin::button5_Click);
-			// 
-			// button7
-			// 
-			this->button7->BackColor = System::Drawing::Color::Transparent;
-			this->button7->FlatAppearance->BorderSize = 0;
-			this->button7->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
-			this->button7->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
-			this->button7->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button7->Location = System::Drawing::Point(58, 314);
-			this->button7->Name = L"button7";
-			this->button7->Size = System::Drawing::Size(110, 38);
-			this->button7->TabIndex = 4;
-			this->button7->UseVisualStyleBackColor = false;
-			this->button7->Click += gcnew System::EventHandler(this, &Admin::button7_Click);
-			// 
-			// textBox2
-			// 
-			this->textBox2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
-				static_cast<System::Int32>(static_cast<System::Byte>(155)));
-			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->textBox2->Location = System::Drawing::Point(949, 286);
-			this->textBox2->Name = L"textBox2";
-			this->textBox2->Size = System::Drawing::Size(347, 25);
-			this->textBox2->TabIndex = 9;
-			this->textBox2->UseSystemPasswordChar = true;
-			// 
-			// textBox1
-			// 
-			this->textBox1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
-				static_cast<System::Int32>(static_cast<System::Byte>(155)));
-			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
-			this->textBox1->Location = System::Drawing::Point(949, 158);
-			this->textBox1->Name = L"textBox1";
-			this->textBox1->Size = System::Drawing::Size(347, 25);
-			this->textBox1->TabIndex = 8;
-			// 
-			// button6
-			// 
-			this->button6->BackColor = System::Drawing::Color::Transparent;
-			this->button6->FlatAppearance->BorderSize = 0;
-			this->button6->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
-			this->button6->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
-			this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
-			this->button6->Location = System::Drawing::Point(678, 793);
-			this->button6->Name = L"button6";
-			this->button6->Size = System::Drawing::Size(255, 42);
-			this->button6->TabIndex = 10;
-			this->button6->UseVisualStyleBackColor = false;
-			this->button6->Click += gcnew System::EventHandler(this, &Admin::button6_Click);
-			// 
-			// panel2
-			// 
-			this->panel2->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"panel2.BackgroundImage")));
-			this->panel2->Controls->Add(this->panel3);
-			this->panel2->Controls->Add(this->button8);
-			this->panel2->Controls->Add(this->button9);
-			this->panel2->Controls->Add(this->button10);
-			this->panel2->Controls->Add(this->textBox5);
-			this->panel2->Controls->Add(this->textBox3);
-			this->panel2->Controls->Add(this->label3);
-			this->panel2->Controls->Add(this->label1);
-			this->panel2->Controls->Add(this->button11);
-			this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->panel2->Location = System::Drawing::Point(0, 0);
-			this->panel2->Name = L"panel2";
-			this->panel2->Size = System::Drawing::Size(1424, 881);
-			this->panel2->TabIndex = 5;
-			this->panel2->Visible = false;
-			this->panel2->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &Admin::panel2_Paint);
+			this->button23->BackColor = System::Drawing::Color::Transparent;
+			this->button23->FlatAppearance->BorderSize = 0;
+			this->button23->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button23->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button23->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button23->Location = System::Drawing::Point(47, 807);
+			this->button23->Name = L"button23";
+			this->button23->Size = System::Drawing::Size(129, 38);
+			this->button23->TabIndex = 22;
+			this->button23->UseVisualStyleBackColor = false;
+			this->button23->Click += gcnew System::EventHandler(this, &Admin::button23_Click);
 			// 
 			// button8
 			// 
@@ -540,6 +693,185 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->button11->UseVisualStyleBackColor = false;
 			this->button11->Click += gcnew System::EventHandler(this, &Admin::button11_Click);
 			// 
+			// button22
+			// 
+			this->button22->BackColor = System::Drawing::Color::Transparent;
+			this->button22->FlatAppearance->BorderSize = 0;
+			this->button22->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button22->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button22->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button22->Location = System::Drawing::Point(53, 678);
+			this->button22->Name = L"button22";
+			this->button22->Size = System::Drawing::Size(122, 38);
+			this->button22->TabIndex = 18;
+			this->button22->UseVisualStyleBackColor = false;
+			this->button22->Click += gcnew System::EventHandler(this, &Admin::button22_Click);
+			// 
+			// button21
+			// 
+			this->button21->BackColor = System::Drawing::Color::Transparent;
+			this->button21->FlatAppearance->BorderSize = 0;
+			this->button21->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button21->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button21->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button21->Location = System::Drawing::Point(44, 801);
+			this->button21->Name = L"button21";
+			this->button21->Size = System::Drawing::Size(129, 38);
+			this->button21->TabIndex = 17;
+			this->button21->UseVisualStyleBackColor = false;
+			this->button21->Click += gcnew System::EventHandler(this, &Admin::button21_Click);
+			// 
+			// textBox1
+			// 
+			this->textBox1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
+				static_cast<System::Int32>(static_cast<System::Byte>(155)));
+			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->textBox1->Location = System::Drawing::Point(949, 158);
+			this->textBox1->Name = L"textBox1";
+			this->textBox1->Size = System::Drawing::Size(347, 25);
+			this->textBox1->TabIndex = 8;
+			// 
+			// textBox2
+			// 
+			this->textBox2->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(157)), static_cast<System::Int32>(static_cast<System::Byte>(155)),
+				static_cast<System::Int32>(static_cast<System::Byte>(155)));
+			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
+			this->textBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 16, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->textBox2->Location = System::Drawing::Point(949, 286);
+			this->textBox2->Name = L"textBox2";
+			this->textBox2->Size = System::Drawing::Size(347, 25);
+			this->textBox2->TabIndex = 9;
+			this->textBox2->UseSystemPasswordChar = true;
+			// 
+			// button6
+			// 
+			this->button6->BackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatAppearance->BorderSize = 0;
+			this->button6->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button6->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button6->Location = System::Drawing::Point(678, 793);
+			this->button6->Name = L"button6";
+			this->button6->Size = System::Drawing::Size(255, 42);
+			this->button6->TabIndex = 10;
+			this->button6->UseVisualStyleBackColor = false;
+			this->button6->Click += gcnew System::EventHandler(this, &Admin::button6_Click);
+			// 
+			// button7
+			// 
+			this->button7->BackColor = System::Drawing::Color::Transparent;
+			this->button7->FlatAppearance->BorderSize = 0;
+			this->button7->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button7->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button7->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button7->Location = System::Drawing::Point(47, 314);
+			this->button7->Name = L"button7";
+			this->button7->Size = System::Drawing::Size(121, 38);
+			this->button7->TabIndex = 4;
+			this->button7->UseVisualStyleBackColor = false;
+			this->button7->Click += gcnew System::EventHandler(this, &Admin::button7_Click);
+			// 
+			// button5
+			// 
+			this->button5->BackColor = System::Drawing::Color::Transparent;
+			this->button5->FlatAppearance->BorderSize = 0;
+			this->button5->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button5->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button5->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button5->Location = System::Drawing::Point(47, 501);
+			this->button5->Name = L"button5";
+			this->button5->Size = System::Drawing::Size(135, 38);
+			this->button5->TabIndex = 6;
+			this->button5->UseVisualStyleBackColor = false;
+			this->button5->Click += gcnew System::EventHandler(this, &Admin::button5_Click);
+			// 
+			// button1
+			// 
+			this->button1->BackColor = System::Drawing::Color::Transparent;
+			this->button1->FlatAppearance->BorderSize = 0;
+			this->button1->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button1->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button1->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button1->Location = System::Drawing::Point(47, 583);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(134, 51);
+			this->button1->TabIndex = 7;
+			this->button1->UseVisualStyleBackColor = false;
+			this->button1->Click += gcnew System::EventHandler(this, &Admin::button1_Click);
+			// 
+			// button16
+			// 
+			this->button16->BackColor = System::Drawing::Color::Transparent;
+			this->button16->FlatAppearance->BorderSize = 0;
+			this->button16->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button16->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button16->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button16->Location = System::Drawing::Point(47, 680);
+			this->button16->Name = L"button16";
+			this->button16->Size = System::Drawing::Size(135, 38);
+			this->button16->TabIndex = 5;
+			this->button16->UseVisualStyleBackColor = false;
+			this->button16->Click += gcnew System::EventHandler(this, &Admin::button16_Click);
+			// 
+			// button20
+			// 
+			this->button20->BackColor = System::Drawing::Color::Transparent;
+			this->button20->FlatAppearance->BorderSize = 0;
+			this->button20->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button20->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button20->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button20->Location = System::Drawing::Point(52, 680);
+			this->button20->Name = L"button20";
+			this->button20->Size = System::Drawing::Size(122, 38);
+			this->button20->TabIndex = 13;
+			this->button20->UseVisualStyleBackColor = false;
+			this->button20->Click += gcnew System::EventHandler(this, &Admin::button20_Click);
+			// 
+			// button18
+			// 
+			this->button18->BackColor = System::Drawing::Color::Transparent;
+			this->button18->FlatAppearance->BorderSize = 0;
+			this->button18->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button18->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button18->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button18->Location = System::Drawing::Point(46, 806);
+			this->button18->Name = L"button18";
+			this->button18->Size = System::Drawing::Size(122, 38);
+			this->button18->TabIndex = 12;
+			this->button18->UseVisualStyleBackColor = false;
+			this->button18->Click += gcnew System::EventHandler(this, &Admin::button18_Click);
+			// 
+			// button17
+			// 
+			this->button17->BackColor = System::Drawing::Color::Transparent;
+			this->button17->FlatAppearance->BorderSize = 0;
+			this->button17->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button17->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button17->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button17->Location = System::Drawing::Point(46, 806);
+			this->button17->Name = L"button17";
+			this->button17->Size = System::Drawing::Size(129, 38);
+			this->button17->TabIndex = 6;
+			this->button17->UseVisualStyleBackColor = false;
+			this->button17->Click += gcnew System::EventHandler(this, &Admin::button17_Click);
+			// 
+			// button19
+			// 
+			this->button19->BackColor = System::Drawing::Color::Transparent;
+			this->button19->FlatAppearance->BorderSize = 0;
+			this->button19->FlatAppearance->MouseDownBackColor = System::Drawing::Color::Transparent;
+			this->button19->FlatAppearance->MouseOverBackColor = System::Drawing::Color::Transparent;
+			this->button19->FlatStyle = System::Windows::Forms::FlatStyle::Flat;
+			this->button19->Location = System::Drawing::Point(55, 679);
+			this->button19->Name = L"button19";
+			this->button19->Size = System::Drawing::Size(122, 38);
+			this->button19->TabIndex = 11;
+			this->button19->UseVisualStyleBackColor = false;
+			this->button19->Click += gcnew System::EventHandler(this, &Admin::button19_Click);
+			// 
 			// Admin
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -550,16 +882,20 @@ private: System::Windows::Forms::TextBox^ textBox5;
 			this->Controls->Add(this->button4);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->button2);
+			this->Controls->Add(this->button19);
+			this->Controls->Add(this->button17);
 			this->MaximumSize = System::Drawing::Size(1440, 930);
 			this->MinimumSize = System::Drawing::Size(1440, 858);
 			this->Name = L"Admin";
 			this->Text = L"Admin";
 			this->panel1->ResumeLayout(false);
 			this->panel1->PerformLayout();
-			this->panel3->ResumeLayout(false);
-			this->panel3->PerformLayout();
 			this->panel2->ResumeLayout(false);
 			this->panel2->PerformLayout();
+			this->panel3->ResumeLayout(false);
+			this->panel3->PerformLayout();
+			this->panel4->ResumeLayout(false);
+			this->panel4->PerformLayout();
 			this->ResumeLayout(false);
 
 		}
@@ -594,11 +930,13 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	panel1->Visible = true;
 	panel2->Visible = false;
 	panel3->Visible = false;
+	panel4->Visible = false;
 }
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = false;
 	panel2->Visible = true;
 	panel3->Visible = false;
+	panel4->Visible = false;
 
 	dbManager db;
 	db.open("test.db");
@@ -618,16 +956,19 @@ private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e
 	panel1->Visible = false;
 	panel2->Visible = false;
 	panel3->Visible = true;
+	panel4->Visible = false;
 }
 private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = false;
 	panel2->Visible = false;
 	panel3->Visible = false;
+	panel4->Visible = false;
 }
 private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = false;
 	panel2->Visible = true;
 	panel3->Visible = false;
+	panel4->Visible = false;
 
 	dbManager db;
 	db.open("test.db");
@@ -647,30 +988,72 @@ private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e
 	panel1->Visible = false;
 	panel2->Visible = false;
 	panel3->Visible = true;
+	panel4->Visible = false;
 	displayAppliances();
 }
-	   void Admin::OnViewMoreButtonClick(System::Object^ sender, System::EventArgs^ e) {
-		   Button^ clickedButton = dynamic_cast<Button^>(sender);
-		   dbManager db;
-		   db.open("test.db");
-		   if (clickedButton != nullptr) {
-			  
-			   String^ applianceName = clickedButton->Tag->ToString();
 
-			   // Convert to std::string for database function
-			   std::string applianceStdStr = msclr::interop::marshal_as<std::string>(applianceName);
+	   // Recursive function to remove panels and their child controls,
+	   // skipping TextBox controls and only deleting buttons with Name = "Delete"
+	   void RemovePanels(Control^ parent)
+	   {
+		   // Iterate over each child control in the parent
+		   for (int i = parent->Controls->Count - 1; i >= 0; --i)
+		   {
+			   Control^ control = parent->Controls[i];
 
-			   // Call the deleteAppliance function from dbManager
-			   db.deleteAppliance(applianceStdStr.c_str());
-			   MessageBox::Show("Deleted appliance: " + applianceName, "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
+			   // Skip TextBox controls
+			   if (control->GetType() == TextBox::typeid)
+			   {
+				   continue; // Skip TextBox, don't remove it
+			   }
 
-			   panel3->Controls->Clear();
-			   displayAppliances();
-			   // Show confirmation message
-			  
+			   // If it's a button and its name is "Delete", remove it
+			   if (control->GetType() == Button::typeid)
+			   {
+				   Button^ button = dynamic_cast<Button^>(control);
+				   if (button != nullptr && button->Name == "Delete")
+				   {
+					   parent->Controls->RemoveAt(i); // Remove the button
+					   delete button; // Delete the button (memory cleanup)
+					   continue; // Skip further actions on this control
+				   }
+			   }
+
+			   // If it's a panel, recursively remove its children
+			   if (control->GetType() == Panel::typeid)
+			   {
+				   RemovePanels(control);
+			   }
+
+			   // Remove the control (panel or other)
+			   parent->Controls->RemoveAt(i);
+			   delete control; // Delete the control (memory cleanup)
 		   }
-		   db.close(); 
 	   }
+
+
+void Admin::OnViewMoreButtonClick(System::Object^ sender, System::EventArgs^ e) {
+	Button^ clickedButton = dynamic_cast<Button^>(sender);
+	dbManager db;
+	db.open("test.db");
+	if (clickedButton != nullptr) {
+			  
+		String^ applianceName = clickedButton->Tag->ToString();
+
+		// Convert to std::string for database function
+		std::string applianceStdStr = msclr::interop::marshal_as<std::string>(applianceName);
+
+		// Call the deleteAppliance function from dbManager
+		db.deleteAppliance(applianceStdStr.c_str());
+		MessageBox::Show("Deleted appliance: " + applianceName, "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
+
+		RemovePanels(panel3);
+		displayAppliances();
+		// Show confirmation message
+			  
+	}
+	db.close(); 
+}
 
 private: System::Void panel2_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
@@ -678,32 +1061,37 @@ private: System::Void button10_Click(System::Object^ sender, System::EventArgs^ 
 	panel1->Visible = false;
 	panel2->Visible = false;
 	panel3->Visible = false;
+	panel4->Visible = false;
 }
 private: System::Void button9_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = true;
 	panel2->Visible = false;
 	panel3->Visible = false;
+	panel4->Visible = false;
 }
 private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = false;
 	panel2->Visible = false;
 	panel3->Visible = true;
+	panel4->Visible = false;
 }
 private: System::Void button15_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = false;
 	panel2->Visible = false;
 	panel3->Visible = false;
+	panel4->Visible = false;
 }
 private: System::Void button14_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = true;
 	panel2->Visible = false;
 	panel3->Visible = false;
+	panel4->Visible = false;
 }
 private: System::Void button13_Click(System::Object^ sender, System::EventArgs^ e) {
 	panel1->Visible = false;
 	panel2->Visible = true;
 	panel3->Visible = false;
-
+	panel4->Visible = false;
 	dbManager db;
 	db.open("test.db");
 
@@ -719,45 +1107,259 @@ private: System::Void button13_Click(System::Object^ sender, System::EventArgs^ 
 	db.close();
 }
 private: System::Void button11_Click(System::Object^ sender, System::EventArgs^ e) {
-	if (textBox3->Text == ""  || textBox5->Text == "") {
+	// Check if text boxes are empty
+	if (textBox3->Text == "" || textBox5->Text == "") {
 		MessageBox::Show("Please enter all fields", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 		return;
 	}
 
+	// Validate singleMeterPrice (textBox3) and tripleMeterPrice (textBox5) inputs
+	int singleMeterPrice, tripleMeterPrice;
+
+	// Try parsing the values as integers
+	if (!Int32::TryParse(textBox3->Text, singleMeterPrice) || !Int32::TryParse(textBox5->Text, tripleMeterPrice)) {
+		MessageBox::Show("Please enter valid integer values for single and triple meter prices.", "Invalid Input", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+
+	// Check if the values are non-negative (prices should not be negative)
+	if (singleMeterPrice < 0 || tripleMeterPrice < 0) {
+		MessageBox::Show("Prices must be non-negative values.", "Invalid Price", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+
+	// If everything is valid, save the values to the database
 	dbManager db;
 	db.open("test.db");
 
-	int singlePrice = Int32::Parse(textBox3->Text);
-	int triplePrice = Int32::Parse(textBox5->Text);
-
-	db.setSingleMeterPrice(singlePrice);
-	db.setTripleMeterPrice(triplePrice);
+	db.setSingleMeterPrice(singleMeterPrice);
+	db.setTripleMeterPrice(tripleMeterPrice);
 
 	db.close();
 
+	// Show success message
 	MessageBox::Show("Successfully Saved!", "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
 }
+
+
 private: System::Void button12_Click(System::Object^ sender, System::EventArgs^ e) {
+	// Check if appliance name and power usage are empty
 	if (textBox6->Text == "" || textBox7->Text == "") {
 		MessageBox::Show("Please enter all fields", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
 		return;
 	}
 
+	// Validate applianceName (textBox6)
 	System::String^ managedString = textBox6->Text;
 	std::string applianceName = msclr::interop::marshal_as<std::string>(managedString);
-	int powerUsage = Int32::Parse(textBox7->Text);
 
+	// Validate powerUsage (textBox7)
+	int powerUsage;
+	if (!Int32::TryParse(textBox7->Text, powerUsage) || powerUsage <= 0) {
+		MessageBox::Show("Please enter a valid positive integer for Power Usage.", "Invalid Input", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+
+	// If everything is valid, save the appliance data
 	dbManager db;
 	db.open("test.db");
 
 	db.addApplianceToList(applianceName.c_str(), powerUsage);
+	RemovePanels(panel3);
+	displayAppliances();
 
 	db.close();
+
+	// Show success message
+	MessageBox::Show("Appliance added successfully!", "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
 }
+
 private: System::Void panel3_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
-	displayAppliances();
 }
 private: System::Void textBox6_TextChanged(System::Object^ sender, System::EventArgs^ e) {
+}
+private: System::Void button16_Click(System::Object^ sender, System::EventArgs^ e) {
+	// register peak hours
+	panel1->Visible = false;
+	panel2->Visible = false;
+	panel3->Visible = false;
+	panel4->Visible = true;
+
+	dbManager db;
+	db.open("test.db");
+
+	int peakHourStart = db.getAdminPeakHourStart();
+	int peakHourEnd = db.getAdminPeakHourEnd();
+
+	label2->Text = peakHourStart.ToString();
+	label6->Text = peakHourEnd.ToString();
+	db.close();
+}
+private: System::Void button17_Click(System::Object^ sender, System::EventArgs^ e) {
+	// home log out
+	this->Hide();
+	login->Show();
+}
+private: System::Void button20_Click(System::Object^ sender, System::EventArgs^ e) {
+	// register peak
+	panel1->Visible = false;
+	panel2->Visible = false;
+	panel3->Visible = false;
+	panel4->Visible = true;
+
+
+	dbManager db;
+	db.open("test.db");
+
+	int peakHourStart = db.getAdminPeakHourStart();
+	int peakHourEnd = db.getAdminPeakHourEnd();
+
+	label2->Text = peakHourStart.ToString();
+	label6->Text = peakHourEnd.ToString();
+	db.close();
+}
+private: System::Void button18_Click(System::Object^ sender, System::EventArgs^ e) {
+	// register log
+	this->Hide();
+	login->Show();
+}
+private: System::Void button22_Click(System::Object^ sender, System::EventArgs^ e) {
+	// meter peak
+	panel1->Visible = false;
+	panel2->Visible = false;
+	panel3->Visible = false;
+	panel4->Visible = true;
+
+	dbManager db;
+	db.open("test.db");
+
+	int peakHourStart = db.getAdminPeakHourStart();
+	int peakHourEnd = db.getAdminPeakHourEnd();
+
+	label2->Text = peakHourStart.ToString();
+	label6->Text = peakHourEnd.ToString();
+	db.close();
+}
+private: System::Void button21_Click(System::Object^ sender, System::EventArgs^ e) {
+	// meter log
+	this->Hide();
+	login->Show();
+}
+private: System::Void button24_Click(System::Object^ sender, System::EventArgs^ e) {
+	// appliances peak
+	panel1->Visible = false;
+	panel2->Visible = false;
+	panel3->Visible = false;
+	panel4->Visible = true;
+
+	dbManager db;
+	db.open("test.db");
+
+	int peakHourStart = db.getAdminPeakHourStart();
+	int peakHourEnd = db.getAdminPeakHourEnd();
+
+	label2->Text = peakHourStart.ToString();
+	label6->Text = peakHourEnd.ToString();
+	db.close();
+}
+private: System::Void button23_Click(System::Object^ sender, System::EventArgs^ e) {
+	// appliances log
+	this->Hide();
+	login->Show();
+}
+private: System::Void button28_Click(System::Object^ sender, System::EventArgs^ e) {
+	// peak home
+	panel1->Visible = false;
+	panel2->Visible = false;
+	panel3->Visible = false;
+	panel4->Visible = false;
+}
+private: System::Void button27_Click(System::Object^ sender, System::EventArgs^ e) {
+	// peak register
+	panel1->Visible = true;
+	panel2->Visible = false;
+	panel3->Visible = false;
+	panel4->Visible = false;
+}
+private: System::Void button26_Click(System::Object^ sender, System::EventArgs^ e) {
+	// peak meter
+	panel1->Visible = false;
+	panel2->Visible = true;
+	panel3->Visible = false;
+	panel4->Visible = false;
+}
+private: System::Void button29_Click(System::Object^ sender, System::EventArgs^ e) {
+	// peak appliances
+	panel1->Visible = false;
+	panel2->Visible = false;
+	panel3->Visible = true;
+	panel4->Visible = false;
+}
+private: System::Void button25_Click(System::Object^ sender, System::EventArgs^ e) {
+	// peak logout
+	this->Hide();
+	login->Show();
+}
+private: System::Void button30_Click(System::Object^ sender, System::EventArgs^ e) {
+	// Peak hour save button
+
+	// Check if text boxes are empty
+	if (textBox4->Text == "" || textBox8->Text == "") {
+		MessageBox::Show("Please enter all fields", "Error", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+
+	// Validate peakHourStart (textBox4) and peakHourEnd (textBox8) inputs
+	int peakHourStart, peakHourEnd;
+
+	// Try parsing the values as integers
+	if (!Int32::TryParse(textBox4->Text, peakHourStart) || !Int32::TryParse(textBox8->Text, peakHourEnd)) {
+		MessageBox::Show("Please enter valid integer values for peak hour start and end.", "Invalid Input", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+
+	// Check if the values are within valid range (0-24)
+	if (peakHourStart < 0 || peakHourStart > 24 || peakHourEnd < 0 || peakHourEnd > 24) {
+		MessageBox::Show("Please enter values between 0 and 24 for both peak hour start and end.", "Invalid Range", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+
+	// Ensure peakHourStart is less than peakHourEnd
+	if (peakHourStart >= peakHourEnd) {
+		MessageBox::Show("Peak hour start time must be earlier than peak hour end time.", "Invalid Time", MessageBoxButtons::OK, MessageBoxIcon::Error);
+		return;
+	}
+
+	// If everything is valid, save the values
+	dbManager db;
+	db.open("test.db");
+
+	db.setAdminPeakHourStart(peakHourStart);
+	db.setAdminPeakHourEnd(peakHourEnd);
+
+	db.close();
+
+	MessageBox::Show("Successfully Saved!", "Success", MessageBoxButtons::OK, MessageBoxIcon::Information);
+}
+
+private: System::Void button19_Click(System::Object^ sender, System::EventArgs^ e) {
+	// home peak
+	panel1->Visible = false;
+	panel2->Visible = false;
+	panel3->Visible = false;
+	panel4->Visible = true;
+
+	dbManager db;
+	db.open("test.db");
+
+	int peakHourStart = db.getAdminPeakHourStart();
+	int peakHourEnd = db.getAdminPeakHourEnd();
+
+	label2->Text = peakHourStart.ToString();
+	label6->Text = peakHourEnd.ToString();
+	db.close();
+}
+private: System::Void panel4_Paint(System::Object^ sender, System::Windows::Forms::PaintEventArgs^ e) {
 }
 };
 }

@@ -19,7 +19,7 @@ public:
 	bool createUsersTable();
 	bool addUser(const char* username, const char* password, int peakHoursStart, int peakHoursEnd, const char* meterPhaseType);
 	bool createPowerTable();
-	bool addPowerDetail(int userID, int targetUnits, int consumedUnits, int estimatedBill);
+	bool addPowerDetail(int userID, int targetUnits, int consumedUnits);
 	void readApplianceData(std::vector<std::pair<int, std::string>>& appliances);
 	bool createSelectedAppliacesTable();
 	bool addselectedAppliances(int userID, int scheduleID, int applianceID, const char* applianceName, int priority, int quantity, int duration, int offsetId, int dayNumber = 0);
@@ -34,10 +34,10 @@ public:
 	int getApplianceID(const char* applianceName);
 	const char* getApplianceName(int uid, int sid, int applianceIdOffset, System::String^& str);
 	int getApplianceCount(int userID, int dayNumber = 0);
-	std::vector<std::string> getApplianceNamesWithDuplicateAID(int userID, int scheduleID);
+	std::vector<std::string> getApplianceNamesWithDuplicateAID(int userID, int scheduleID, int dayNumber = 0);
 	void updateDuration(const char* applianceName, int newDuration);
 	bool authenticateUser(const std::string& uname, const std::string& pass);
-	bool insertIntoSchedules(int uid, const std::string& type, int unitsSaved, std::string date);
+	bool insertIntoSchedules(int uid, const std::string& type, int unitsSaved, std::string date, int estimatedBill);
 	void setConsumedUnits(int userID, int powerConsumed);
 	int getConsumedUnits(int userID);
 	bool createApplianceChangedTable();
@@ -61,9 +61,14 @@ public:
 	void setSingleMeterPrice(int singlePrice);
 	void setTripleMeterPrice(int triplePrice);
 	bool authenticateAdmin(const std::string& uname, const std::string& pass);
+	int getAdminPeakHourStart();
+	int getAdminPeakHourEnd();
+	void setAdminPeakHourStart(int peakHourStart);
+	void setAdminPeakHourEnd(int peakHourEnd);
 	int readAdminID(const char* username);
-	void gettargetunitsestimatedbill(int uid, int&units, int&bill);
 	void getpeakhoursandmeter(int uid, int& start, int& end, string& meter);
 	std::string* getAllApplianceNames(int& size);
 	void deleteAppliance(const char* appliance);
+	int getEstimatedBill(int userID, int SID);
+	
 };

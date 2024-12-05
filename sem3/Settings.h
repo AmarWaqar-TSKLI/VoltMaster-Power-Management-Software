@@ -279,6 +279,7 @@ namespace sem3 {
 		}
 #pragma endregion
 	private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
+		// Check if the fields are empty and show appropriate error messages
 		if (textBox1->Text == "") {
 			label1->Text = "Targeted Power Units field cannot be empty!";
 			return;
@@ -292,15 +293,41 @@ namespace sem3 {
 			return;
 		}
 
+		// Validate the values in textBox1, textBox2, and textBox3 are valid integers
+		int targetedUnits, peakStart, peakEnd;
+
+		// Try parsing the text inputs into integers
+		if (!Int32::TryParse(textBox1->Text, targetedUnits) || targetedUnits <= 0) {
+			label1->Text = "Please enter a valid positive integer for Targeted Power Units.";
+			return;
+		}
+		if (!Int32::TryParse(textBox2->Text, peakStart) || peakStart < 0 || peakStart > 24) {
+			label1->Text = "Please enter a valid integer for Peak Hours Start Interval (0-24).";
+			return;
+		}
+		if (!Int32::TryParse(textBox3->Text, peakEnd) || peakEnd < 0 || peakEnd > 24) {
+			label1->Text = "Please enter a valid integer for Peak Hours End Interval (0-24).";
+			return;
+		}
+
+		// Ensure peakStart is less than peakEnd
+		if (peakStart >= peakEnd) {
+			label1->Text = "Peak Hours Start Interval must be less than Peak Hours End Interval.";
+			return;
+		}
+
+		// Check if the Meter Phase type is selected
 		if (button8->Tag != "1" && button2->Tag != "1") {
 			label1->Text = "Meter Phase type needs to be selected";
 			return;
 		}
 
-		this->targetedUnits = Int32::Parse(textBox1->Text);
-		this->peakStart = Int32::Parse(textBox2->Text);
-		this->peakEnd = Int32::Parse(textBox3->Text);
+		// If everything is valid, proceed to save the values
+		this->targetedUnits = targetedUnits;
+		this->peakStart = peakStart;
+		this->peakEnd = peakEnd;
 
+		// Convert managed string to std::string
 		System::String^ managedString = meterPhase;
 		std::string meterPhaseType = msclr::interop::marshal_as<std::string>(managedString);
 
@@ -312,9 +339,11 @@ namespace sem3 {
 		db.setMeterPhaseType(userID, meterPhaseType);
 		db.close();
 
+		// Display success message
 		label1->ForeColor = System::Drawing::Color::Green;
 		label1->Text = "Saved Successfully!";
 	}
+
 private: System::Void button8_Click(System::Object^ sender, System::EventArgs^ e) {
 	button8->BackgroundImage = System::Drawing::Image::FromFile("Images/settings-single.png");
 	button8->Tag = "1";

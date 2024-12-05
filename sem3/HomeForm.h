@@ -47,6 +47,8 @@ namespace sem3 {
 	private: System::Windows::Forms::Label^ label2;
 	private: System::Windows::Forms::Label^ label3;
 	private: System::Windows::Forms::Label^ label4;
+	private: System::Windows::Forms::Label^ label5;
+
 
 	private:
 		/// <summary>
@@ -71,6 +73,7 @@ namespace sem3 {
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->label4 = (gcnew System::Windows::Forms::Label());
+			this->label5 = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// button3
@@ -147,12 +150,12 @@ namespace sem3 {
 			// 
 			this->label1->AutoSize = true;
 			this->label1->BackColor = System::Drawing::Color::Transparent;
-			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label1->Font = (gcnew System::Drawing::Font(L"Syne SemiBold", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label1->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label1->Location = System::Drawing::Point(328, 262);
+			this->label1->Location = System::Drawing::Point(327, 262);
 			this->label1->Name = L"label1";
-			this->label1->Size = System::Drawing::Size(0, 29);
+			this->label1->Size = System::Drawing::Size(0, 35);
 			this->label1->TabIndex = 7;
 			this->label1->Click += gcnew System::EventHandler(this, &HomeForm::label1_Click);
 			// 
@@ -160,37 +163,49 @@ namespace sem3 {
 			// 
 			this->label2->AutoSize = true;
 			this->label2->BackColor = System::Drawing::Color::Transparent;
-			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label2->Font = (gcnew System::Drawing::Font(L"Syne SemiBold", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label2->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label2->Location = System::Drawing::Point(700, 401);
+			this->label2->Location = System::Drawing::Point(702, 398);
 			this->label2->Name = L"label2";
-			this->label2->Size = System::Drawing::Size(0, 29);
+			this->label2->Size = System::Drawing::Size(0, 35);
 			this->label2->TabIndex = 8;
 			// 
 			// label3
 			// 
 			this->label3->AutoSize = true;
 			this->label3->BackColor = System::Drawing::Color::Transparent;
-			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label3->Font = (gcnew System::Drawing::Font(L"Syne SemiBold", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label3->ForeColor = System::Drawing::SystemColors::ControlLightLight;
-			this->label3->Location = System::Drawing::Point(322, 404);
+			this->label3->Location = System::Drawing::Point(319, 404);
 			this->label3->Name = L"label3";
-			this->label3->Size = System::Drawing::Size(0, 29);
+			this->label3->Size = System::Drawing::Size(0, 35);
 			this->label3->TabIndex = 9;
 			// 
 			// label4
 			// 
 			this->label4->AutoSize = true;
 			this->label4->BackColor = System::Drawing::Color::Transparent;
-			this->label4->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 18, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->label4->Font = (gcnew System::Drawing::Font(L"Syne SemiBold", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->label4->ForeColor = System::Drawing::SystemColors::ControlLightLight;
 			this->label4->Location = System::Drawing::Point(320, 549);
 			this->label4->Name = L"label4";
-			this->label4->Size = System::Drawing::Size(0, 29);
+			this->label4->Size = System::Drawing::Size(0, 35);
 			this->label4->TabIndex = 10;
+			// 
+			// label5
+			// 
+			this->label5->AutoSize = true;
+			this->label5->BackColor = System::Drawing::Color::Transparent;
+			this->label5->Font = (gcnew System::Drawing::Font(L"Syne SemiBold", 18, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label5->ForeColor = System::Drawing::SystemColors::ControlLightLight;
+			this->label5->Location = System::Drawing::Point(647, 260);
+			this->label5->Name = L"label5";
+			this->label5->Size = System::Drawing::Size(0, 35);
+			this->label5->TabIndex = 11;
 			// 
 			// HomeForm
 			// 
@@ -198,6 +213,7 @@ namespace sem3 {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 881);
+			this->Controls->Add(this->label5);
 			this->Controls->Add(this->label4);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
@@ -223,18 +239,21 @@ namespace sem3 {
 	private: System::Void HomeForm_Load(System::Object^ sender, System::EventArgs^ e) {
 		dbManager db;
 		db.open("test.db");
-		int units=0;
-		int bill = 0;
-		db.gettargetunitsestimatedbill(userID, units, bill);
+		int units=db.getTargetUnits(userID);
+		bool isEmpty = false;
+		int currentSchedule = db.getCurrentSID(userID, isEmpty);
+		int bill = db.getEstimatedBill(userID, currentSchedule);
 		label1->Text = units.ToString();
 		label2->Text = bill.ToString();
 		int start = 0;
 		int end = 0;
 		string meter;
 		db.getpeakhoursandmeter(userID, start, end, meter);
-		label4->Text = start.ToString() + ":00-" + end.ToString() + ":00(24-hr format)";
+		label4->Text = start.ToString() + ":00-" + end.ToString() + ":00(24-hr)";
 		label3->Text = gcnew System::String(meter.c_str());
 
+		int currentUnits = db.getConsumedUnits(userID);
+		label5->Text = currentUnits.ToString();
 
 		db.close();
 	}

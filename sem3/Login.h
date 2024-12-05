@@ -60,6 +60,11 @@ namespace sem3 {
 		Login() 
 		{
 			InitializeComponent();
+
+			dbManager db;
+			db.open("test.db");
+			db.initialize();
+			db.close();
 		}
 
 	protected:
@@ -158,16 +163,18 @@ namespace sem3 {
 			// SIGNUP_PANEL
 			// 
 			this->SIGNUP_PANEL->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"SIGNUP_PANEL.BackgroundImage")));
+			this->SIGNUP_PANEL->Controls->Add(this->panel1);
 			this->SIGNUP_PANEL->Controls->Add(this->linklabel2);
 			this->SIGNUP_PANEL->Controls->Add(this->SIGN_UP_BTN);
 			this->SIGNUP_PANEL->Controls->Add(this->P2_TB);
 			this->SIGNUP_PANEL->Controls->Add(this->P1_TB);
 			this->SIGNUP_PANEL->Controls->Add(this->UNAME_TB);
+			this->SIGNUP_PANEL->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->SIGNUP_PANEL->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->SIGNUP_PANEL->Location = System::Drawing::Point(0, 354);
+			this->SIGNUP_PANEL->Location = System::Drawing::Point(0, 0);
 			this->SIGNUP_PANEL->Name = L"SIGNUP_PANEL";
-			this->SIGNUP_PANEL->Size = System::Drawing::Size(547, 527);
+			this->SIGNUP_PANEL->Size = System::Drawing::Size(1424, 881);
 			this->SIGNUP_PANEL->TabIndex = 7;
 			this->SIGNUP_PANEL->Visible = false;
 			// 
@@ -328,7 +335,6 @@ namespace sem3 {
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
 			this->ClientSize = System::Drawing::Size(1424, 881);
-			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->SIGNUP_PANEL);
 			this->Controls->Add(this->L_PASS);
@@ -365,7 +371,6 @@ namespace sem3 {
 		if (db.authenticateUser(uname, pass))
 		{
 			loggedInUserID = db.readUserID(uname.c_str()); // Get the user's ID
-			db.initialize();
 
 			nav::initialize(loggedInUserID, this);
 
@@ -409,7 +414,7 @@ private: System::Void SIGN_UP_BTN_Click(System::Object^ sender, System::EventArg
 	db.createUsersTable();
 	std::string uname = msclr::interop::marshal_as<std::string>(username);
 	std::string pass = msclr::interop::marshal_as<std::string>(password);
-	db.addUser(uname.c_str(), pass.c_str(), 3, 9, "single");
+	db.addUser(uname.c_str(), pass.c_str(), db.getAdminPeakHourStart(), db.getAdminPeakHourEnd(), "Single");
 	db.close();
 }
 
@@ -439,8 +444,7 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 	if (db.authenticateAdmin(uname, pass))
 	{
 		loggedInAdminID = db.readAdminID(uname.c_str()); // Get the user's ID
-		Admin^ adminForm = gcnew Admin(loggedInAdminID);
-		db.initialize();
+		Admin^ adminForm = gcnew Admin(loggedInAdminID, this);
 		this->Hide();
 		adminForm->Show();
 	}
